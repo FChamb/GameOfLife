@@ -5,6 +5,8 @@ import java.util.Scanner;
 
 public class Board {
     private Cell[][] board;
+    private int x = 2;
+    private int y = 3;
 
     public Board() {
         this.board = new Cell[50][50];
@@ -15,8 +17,10 @@ public class Board {
         }
     }
 
-    public Board(int rows, int cols) {
+    public Board(int rows, int cols, int x, int y) {
         this.board = new Cell[rows][cols];
+        this.x = x;
+        this.y = y;
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
                 this.board[i][j] = new Cell();
@@ -32,14 +36,20 @@ public class Board {
             Scanner fileRead = new Scanner(new File(file));
             while (fileRead.hasNext()) {
                 String line = fileRead.nextLine();
-                String[] rowVals = new String[line.length()];
-                cols = 0;
-                for (int i = 0; i < line.length(); i++) {
-                    rowVals[i] = String.valueOf(line.charAt(i));
-                    cols++;
+                if (line.startsWith("#:")) {
+                    String[] comments = line.split(" ");
+                    this.x = Integer.parseInt(comments[1]);
+                    this.y = Integer.parseInt(comments[2]);
+                } else if (line.startsWith(".") || line.startsWith("o")){
+                    String[] rowVals = new String[line.length()];
+                    cols = 0;
+                    for (int i = 0; i < line.length(); i++) {
+                        rowVals[i] = String.valueOf(line.charAt(i));
+                        cols++;
+                    }
+                    boardTemp.add(rowVals);
+                    rows++;
                 }
-                boardTemp.add(rowVals);
-                rows++;
             }
         } catch (FileNotFoundException e) {
             System.out.println("That game state does not exist: " + e.getMessage());
@@ -61,7 +71,6 @@ public class Board {
     }
 
     public int countNeighbors(int row, int col) {
-        int neighbors = 0;
         int up, down, left, right;
         if (row > 0) {
             up = row - 1;
@@ -125,7 +134,18 @@ public class Board {
         for (int i = 0; i < this.board.length; i++) {
             for (int j = 0; j < this.board[0].length; j++) {
                 Cell check = this.board[i][j];
+                boolean isAlive = checkRules(check, countNeighbors(i, j));
+                tempBoard[i][j] = new Cell(isAlive);
             }
+        }
+        this.board = tempBoard;
+    }
+
+    public boolean checkRules(Cell check, int neighbors) {
+        if (neighbors == this.y || (check.isAlive() && neighbors == this.x)) {
+            return true;
+        } else {
+            return false;
         }
     }
 
@@ -149,6 +169,7 @@ public class Board {
     public static void main(String[] args) {
         Board test = new Board(args[0]);
         System.out.println(test);
-        System.out.println(test.countNeighbors(7, 0));
+        test.nextGeneration();
+        System.out.println(test);
     }
 }
