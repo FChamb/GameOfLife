@@ -60,6 +60,75 @@ public class Board {
         return this.board;
     }
 
+    public int countNeighbors(int row, int col) {
+        int neighbors = 0;
+        int up, down, left, right;
+        if (row > 0) {
+            up = row - 1;
+        } else  {
+            up = this.board.length - 1;
+        }
+        if (row < (this.board.length - 1)) {
+            down = row + 1;
+        } else {
+            down = 0;
+        }
+        if (col > 0) {
+            left = col - 1;
+        } else {
+            left = this.board[0].length - 1;
+        }
+        if (col < (this.board[0].length - 1)) {
+            right = col + 1;
+        } else {
+            right = 0;
+        }
+        return checkNeighbors(row, col, up, down, left, right);
+    }
+
+    public int checkNeighbors(int row, int col, int up, int down, int left, int right) {
+        int neighbors = 0;
+        if (this.board[up][left].isAlive()) {
+            neighbors++;
+        }
+        if (this.board[up][col].isAlive()) {
+            neighbors++;
+        }
+        if (this.board[up][right].isAlive()) {
+            neighbors++;
+        }
+        if (this.board[row][left].isAlive()) {
+            neighbors++;
+        }
+        if (this.board[row][right].isAlive()) {
+            neighbors++;
+        }
+        if (this.board[down][left].isAlive()) {
+            neighbors++;
+        }
+        if (this.board[down][col].isAlive()) {
+            neighbors++;
+        }
+        if (this.board[down][right].isAlive()) {
+            neighbors++;
+        }
+        return neighbors;
+    }
+
+    public void nextGeneration() {
+        Cell[][] tempBoard = new Cell[this.board.length][this.board[0].length];
+        for (int i = 0; i < tempBoard.length; i++) {
+            for (int j = 0; j < tempBoard[0].length; j++) {
+                tempBoard[i][j] = new Cell();
+            }
+        }
+        for (int i = 0; i < this.board.length; i++) {
+            for (int j = 0; j < this.board[0].length; j++) {
+                Cell check = this.board[i][j];
+            }
+        }
+    }
+
     public String toString() {
         String board = "";
         for (int i = 0; i < this.board.length; i++) {
@@ -77,8 +146,9 @@ public class Board {
      * A testing method to see how the board works in terminal view.
      * @param args - the command line arguments, a game state
      */
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         Board test = new Board(args[0]);
         System.out.println(test);
+        System.out.println(test.countNeighbors(7, 0));
     }
 }
