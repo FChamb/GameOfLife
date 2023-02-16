@@ -5,19 +5,23 @@ import java.util.Scanner;
 
 public class Board {
     private Cell[][] board;
+    private int width, height;
+
     private int x = 2;
     private int y = 3;
 
     public Board() {
-        this.board = new Cell[50][50];
-        for (int i = 0; i < 50; i++) {
-            for (int j = 0; j < 50; j++) {
+        width = 50; height = 50;
+        this.board = new Cell[width][height];
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
                 this.board[i][j] = new Cell();
             }
         }
     }
 
     public Board(int rows, int cols, int x, int y) {
+        width = rows; height = cols;
         this.board = new Cell[rows][cols];
         this.x = x;
         this.y = y;
@@ -54,6 +58,7 @@ public class Board {
         } catch (FileNotFoundException e) {
             System.out.println("That game state does not exist: " + e.getMessage());
         }
+        width = rows; height = cols;
         this.board = new Cell[rows][cols];
         for (int i = 0; i < rows; i ++) {
             for (int j = 0; j < cols; j++) {
@@ -71,57 +76,21 @@ public class Board {
     }
 
     public int countNeighbors(int row, int col) {
-        int up, down, left, right;
-        if (row > 0) {
-            up = row - 1;
-        } else  {
-            up = this.board.length - 1;
-        }
-        if (row < (this.board.length - 1)) {
-            down = row + 1;
-        } else {
-            down = 0;
-        }
-        if (col > 0) {
-            left = col - 1;
-        } else {
-            left = this.board[0].length - 1;
-        }
-        if (col < (this.board[0].length - 1)) {
-            right = col + 1;
-        } else {
-            right = 0;
-        }
-        return checkNeighbors(row, col, up, down, left, right);
-    }
+        int neighbours = 0;
+        int i,j,x,y;
+        for(j = -1; j < 2; j++)
+            for(i = -1; i < 2; i++)
+                if(j != 0 || i != 0) {
+                    x = (col+i) % width;
+                    y = (row+j) % height;
 
-    public int checkNeighbors(int row, int col, int up, int down, int left, int right) {
-        int neighbors = 0;
-        if (this.board[up][left].isAlive()) {
-            neighbors++;
-        }
-        if (this.board[up][col].isAlive()) {
-            neighbors++;
-        }
-        if (this.board[up][right].isAlive()) {
-            neighbors++;
-        }
-        if (this.board[row][left].isAlive()) {
-            neighbors++;
-        }
-        if (this.board[row][right].isAlive()) {
-            neighbors++;
-        }
-        if (this.board[down][left].isAlive()) {
-            neighbors++;
-        }
-        if (this.board[down][col].isAlive()) {
-            neighbors++;
-        }
-        if (this.board[down][right].isAlive()) {
-            neighbors++;
-        }
-        return neighbors;
+                    if(x < 0) x += width;
+                    if(y < 0) y += height;
+
+                    if(board[y][x].isAlive()) neighbours++;
+                }
+        
+        return neighbours;
     }
 
     public void nextGeneration() {
