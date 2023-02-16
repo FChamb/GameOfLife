@@ -1,10 +1,10 @@
 import javax.swing.*;
 import java.awt.*;
 
-public class boardGUI {
+public class BoardGUI {
     private JFrame gameFrame;
     private JMenu gameMenu;
-    public boardGUI(Board board) {
+    public BoardGUI(Board board) {
         gameFrame = new JFrame();
         gameFrame.setTitle("Game of Life");
         gameFrame.setSize(new Dimension(1000, 1000));

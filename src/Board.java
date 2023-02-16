@@ -1,5 +1,7 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -7,13 +9,10 @@ public class Board {
     private Cell[][] board;
     private int width = 50;
     private int height = 50;
-
     private int x = 2;
     private int y = 3;
 
     public Board() {
-        this.width = 50;
-        this.height = 50;
         this.board = new Cell[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -77,6 +76,26 @@ public class Board {
 
     public Cell[][] getBoard() {
         return this.board;
+    }
+
+    public void saveGameState(String filePath) {
+        try {
+            FileWriter write = new FileWriter(filePath);
+            for (int i = 0; i < this.height; i++) {
+                for (int j = 0; j < this.width; j++) {
+                    if (this.board[i][j].isAlive()) {
+                        write.write("o");
+                    } else {
+                        write.write(".");
+                    }
+                }
+                write.write("\n");
+            }
+            write.write("#: " + this.x + " " + this.y);
+            write.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     public int getWidth() {
@@ -157,5 +176,6 @@ public class Board {
         System.out.println(test);
         test.nextGeneration();
         System.out.println(test);
+        test.saveGameState("test_nextGen.gol");
     }
 }
