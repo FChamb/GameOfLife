@@ -5,13 +5,15 @@ import java.util.Scanner;
 
 public class Board {
     private Cell[][] board;
-    private int width, height;
+    private int width = 50;
+    private int height = 50;
 
     private int x = 2;
     private int y = 3;
 
     public Board() {
-        width = 50; height = 50;
+        this.width = 50;
+        this.height = 50;
         this.board = new Cell[width][height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -21,7 +23,8 @@ public class Board {
     }
 
     public Board(int rows, int cols, int x, int y) {
-        width = rows; height = cols;
+        this.width = rows;
+        this.height = cols;
         this.board = new Cell[rows][cols];
         this.x = x;
         this.y = y;
@@ -58,7 +61,8 @@ public class Board {
         } catch (FileNotFoundException e) {
             System.out.println("That game state does not exist: " + e.getMessage());
         }
-        width = rows; height = cols;
+        this.width = rows;
+        this.height = cols;
         this.board = new Cell[rows][cols];
         for (int i = 0; i < rows; i ++) {
             for (int j = 0; j < cols; j++) {
@@ -75,21 +79,34 @@ public class Board {
         return this.board;
     }
 
+    public int getWidth() {
+        return this.width;
+    }
+
+    public int getHeight() {
+        return this.height;
+    }
+
     public int countNeighbors(int row, int col) {
         int neighbours = 0;
-        int i,j,x,y;
-        for(j = -1; j < 2; j++)
-            for(i = -1; i < 2; i++)
-                if(j != 0 || i != 0) {
-                    x = (col+i) % width;
-                    y = (row+j) % height;
-
-                    if(x < 0) x += width;
-                    if(y < 0) y += height;
-
-                    if(board[y][x].isAlive()) neighbours++;
+        int x,y;
+        for(int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                if (i != 0 || j != 0) {
+                    x = (col + j) % width;
+                    y = (row + i) % height;
+                    if (x < 0) {
+                        x += width;
+                    }
+                    if (y < 0) {
+                        y += height;
+                    }
+                    if (board[y][x].isAlive()) {
+                        neighbours++;
+                    }
                 }
-        
+            }
+        }
         return neighbours;
     }
 
