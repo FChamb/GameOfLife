@@ -7,32 +7,34 @@ public class BoardGUI {
     private Board board;
 
     public BoardGUI(Board board) {
+        Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         gameFrame = new JFrame();
         this.board = board;
         gameFrame.setTitle("Game of Life");
+        gameFrame.setSize(screen);
+        gameFrame.setResizable(false);
         gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        gameFrame.setLayout(new GridLayout(board.getBoard().length, board.getBoard()[0].length));
-        addButtons(gameFrame, board.getBoard().length);
-        gameFrame.pack();
+        gameFrame.setLayout(new GridLayout(this.board.getWidth(), this.board.getHeight()));
+        //JPanel frame = new JPanel();
+        //gameFrame.add(frame, BorderLayout.SOUTH);
+        addButtons(gameFrame);
         gameFrame.setVisible(true);
     }
 
-    public void addButtons(JFrame frame, int length) {
+    public void addButtons(JFrame grid) {
         JButton button;
-        for (int i = 0; i < length; i++) {
-            for (int j = 0; j < length; j++) {
+        for (int i = 0; i < this.board.getWidth(); i++) {
+            for (int j = 0; j < this.board.getHeight(); j++) {
                 button = new JButton();
-                button.setPreferredSize(new Dimension(20, 20));
+                button.setSize(new Dimension(10, 10));
                 button.setOpaque(true);
-                button.setBorderPainted(false);
+                //button.setBorderPainted(false);
                 if (this.board.getBoard()[i][j].isAlive()) {
                     button.setBackground(Color.WHITE);
-                    button.setForeground(Color.WHITE);
                 } else {
                     button.setBackground(Color.BLACK);
-                    button.setForeground(Color.BLACK);
                 }
-                frame.add(button);
+                grid.add(button);
             }
         }
     }
