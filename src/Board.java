@@ -7,7 +7,6 @@ import java.util.Scanner;
 
 public class Board {
     private Cell[][] board;
-    private BoardGUI boardGUI;
     private int width = 50;
     private int height = 50;
     private int x = 2;
@@ -20,7 +19,6 @@ public class Board {
                 this.board[i][j] = new Cell();
             }
         }
-        this.boardGUI = new BoardGUI(this);
     }
 
     public Board(int rows, int cols, int x, int y) {
@@ -34,7 +32,6 @@ public class Board {
                 this.board[i][j] = new Cell();
             }
         }
-        this.boardGUI = new BoardGUI(this);
     }
 
     public Board(String file) {
@@ -75,7 +72,6 @@ public class Board {
                 }
             }
         }
-        this.boardGUI = new BoardGUI(this);
     }
 
     public Cell[][] getBoard() {
@@ -108,14 +104,6 @@ public class Board {
 
     public int getHeight() {
         return this.height;
-    }
-
-    public void changeCell(int row, int col) {
-        if (this.board[row][col].isAlive()) {
-            this.board[row][col] = new Cell();
-        } else {
-            this.board[row][col] = new Cell(true);
-        }
     }
 
     public int countNeighbors(int row, int col) {
@@ -153,11 +141,9 @@ public class Board {
                 Cell check = this.board[i][j];
                 boolean isAlive = checkRules(check, countNeighbors(i, j));
                 tempBoard[i][j] = new Cell(isAlive);
-                this.boardGUI.changeCell(i, j);
             }
         }
         this.board = tempBoard;
-        System.out.println(this.board);
     }
 
     public boolean checkRules(Cell check, int neighbors) {

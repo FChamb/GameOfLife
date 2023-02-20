@@ -12,38 +12,61 @@ public class BoardGUI {
     private JButton[][] buttons;
 
     public BoardGUI(Board board) {
+        try{
+            UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+        }catch(Exception e){
+            e.printStackTrace();
+        }
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
-        gameFrame = new JFrame();
+        this.gameFrame = new JFrame();
         this.board = board;
-        gameFrame.setTitle("Game of Life");
-        gameFrame.setSize(new Dimension(screen.width, screen.height - gameFrame.getInsets().top));
-        gameFrame.setResizable(false);
-        gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        grid = new JPanel();
-        grid.setLayout(new GridLayout(this.board.getWidth(), this.board.getHeight()));
+        this.gameFrame.setTitle("Game of Life");
+        this.gameFrame.setSize(new Dimension((int) (screen.width * 0.7), (int) (screen.height * 0.7)));
+        this.gameFrame.setResizable(false);
+        this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.gameFrame.setLayout(new BorderLayout());
+        this.grid = new JPanel();
+        this.grid.setLayout(new GridLayout(this.board.getWidth(), this.board.getHeight()));
         this.buttons = new JButton[this.board.getWidth()][this.board.getHeight()];
+    }
+
+    public void run() {
+        generateGrid();
+        JPanel gameMenu = new JPanel();
+        gameMenu.setLayout(new FlowLayout());
+        JButton play = new JButton("Play");
+        JButton pause = new JButton("Pause");
+        gameMenu.add(play);
+        gameMenu.add(pause);
+        gameFrame.add(gameMenu, BorderLayout.SOUTH);
+        gameFrame.setVisible(true);
+    }
+
+    public void generateGrid() {
         for (int i = 0; i < this.board.getWidth(); i++) {
             for (int j = 0; j < this.board.getHeight(); j++) {
                 final int row = i;
                 final int col = j;
-                buttons[i][j] = new JButton();
+                this.buttons[i][j] = new JButton();
                 if (this.board.getBoard()[i][j].isAlive()) {
-                    buttons[i][j].setBackground(Color.WHITE);
+                    this.buttons[i][j].setBackground(Color.WHITE);
                 } else {
-                    buttons[i][j].setBackground(Color.BLACK);
+                    this.buttons[i][j].setBackground(Color.BLACK);
                 }
-                buttons[i][j].addActionListener(new ActionListener() {
+                this.buttons[i][j].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         changeCell(row, col);
-                        board.changeCell(row, col);
+                        if (board.getBoard()[row][col].isAlive()) {
+                            board.getBoard()[row][col] = new Cell();
+                        } else {
+                            board.getBoard()[row][col] = new Cell(true);
+                        }
                     }
                 });
-                grid.add(buttons[i][j]);
+                this.grid.add(buttons[i][j]);
             }
         }
-        grid.setBorder(new EmptyBorder(100, 100, 100, 100));
-        gameFrame.add(grid);
-        gameFrame.setVisible(true);
+        this.gameFrame.add(grid, BorderLayout.CENTER);
     }
 
     public void changeCell(int row, int col) {
