@@ -8,8 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public class BoardGUI {
     private JFrame gameFrame;
-    private JPanel gridPanel;
-    private JPanel optionsPanel;
+    private JPanel grid;
     private Board board;
     private JButton[][] buttons;
 
@@ -19,27 +18,21 @@ public class BoardGUI {
         }catch(Exception e){
             e.printStackTrace();
         }
-
-        // Create the Window
         Dimension screen = Toolkit.getDefaultToolkit().getScreenSize();
         this.gameFrame = new JFrame();
         this.board = board;
-        this.gridPanel = new JPanel();
-        this.optionsPanel = new JPanel();
         this.gameFrame.setTitle("Game of Life");
         this.gameFrame.setSize(new Dimension((int) (screen.width * 0.7), (int) (screen.height * 0.7)));
         this.gameFrame.setResizable(false);
         this.gameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.gameFrame.setLayout(new BorderLayout());
-        this.gridPanel.setLayout(new GridLayout(this.board.getWidth(), this.board.getHeight()));
+        this.grid = new JPanel();
+        this.grid.setLayout(new GridLayout(this.board.getWidth(), this.board.getHeight()));
         this.buttons = new JButton[this.board.getWidth()][this.board.getHeight()];
-        this.gameFrame.setVisible(true);
-
-        createGUI();
     }
 
     public void run() {
-        createGUI();
+        generateGrid();
         JPanel gameMenu = new JPanel();
         gameMenu.setLayout(new FlowLayout());
         JButton play = new JButton("Play");
@@ -65,45 +58,27 @@ public class BoardGUI {
         gameFrame.setVisible(true);
     }
 
-    private void createGUI() {
-        // Create the grid
-        generateGrid();
-
-        // Initialise Panes and Screen Elements
-        JSplitPane mySplitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT, gridPanel, optionsPanel);
-        JLabel xLabel = new JLabel("x:");
-        JLabel yLabel = new JLabel("y:");
-        JLabel zLabel = new JLabel("z:");
-        JButton saveSettingsButton = new JButton("Update Settings");
-
-        // Initialise the Combo Box
-        Integer[] comboBoxChoices = {0,1,2,3,4,5,6,7,8};
-        JComboBox<Integer> xComboBox = new JComboBox<>(comboBoxChoices);
-        JComboBox<Integer> yComboBox = new JComboBox<>(comboBoxChoices);
-        JComboBox<Integer> zComboBox = new JComboBox<>(comboBoxChoices);
-    }
-
     public void generateGrid() {
-        for (int widthIndex = 0; widthIndex < this.board.getWidth(); widthIndex++) {
-            for (int heightIndex = 0; heightIndex < this.board.getHeight(); heightIndex++) {
-                final int row = widthIndex;
-                final int col = heightIndex;
-                this.buttons[widthIndex][heightIndex] = new JButton();
-                if (this.board.getBoard()[widthIndex][heightIndex].isAlive()) {
-                    this.buttons[widthIndex][heightIndex].setBackground(Color.WHITE);
+        for (int i = 0; i < this.board.getWidth(); i++) {
+            for (int j = 0; j < this.board.getHeight(); j++) {
+                final int row = i;
+                final int col = j;
+                this.buttons[i][j] = new JButton();
+                if (this.board.getBoard()[i][j].isAlive()) {
+                    this.buttons[i][j].setBackground(Color.WHITE);
                 } else {
-                    this.buttons[widthIndex][heightIndex].setBackground(Color.BLACK);
+                    this.buttons[i][j].setBackground(Color.BLACK);
                 }
-                this.buttons[widthIndex][heightIndex].addActionListener(new ActionListener() {
+                this.buttons[i][j].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         changeCell(row, col);
                         board.changeCell(row, col);
                     }
                 });
-                this.gridPanel.add(buttons[widthIndex][heightIndex]);
+                this.grid.add(buttons[i][j]);
             }
         }
-        this.gameFrame.add(gridPanel, BorderLayout.CENTER);
+        this.gameFrame.add(grid, BorderLayout.CENTER);
     }
 
     public void changeCell(int row, int col) {
