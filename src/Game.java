@@ -1,29 +1,46 @@
 import java.awt.Color;
+import java.awt.event.MouseEvent;
 import java.awt.Graphics;
+import java.awt.Point;
 
 public class Game implements Runnable {
 
     private int width, height;
+    private Mouse mouse;
+    // private Keyboard keyboard;
     private Display display;
 
     private double fps;
+
+    private int grid_w, grid_h; 
+    private int cell_w, cell_h;
+    private Grid grid;
 
 
     public Game(int width, int height) {
         this.width = width; this.height = height;
 
-        display = new Display(width, height);
+        mouse = new Mouse();
+
+        display = new Display(width, height, mouse);
         fps = 60;
+
+
+        grid_w = 25; grid_h = 50;
+        cell_w = width/grid_w; cell_h = height/grid_h;
+        grid = new Grid(grid_w, grid_h, cell_w, cell_h);
     }
 
 
     public void update() {
-
+        if(mouse.isClicked(MouseEvent.BUTTON1)) {
+            Point location = mouse.getLocation();
+            grid.clicked(location.x, location.y);
+        }
     }
 
-    public void draw(Graphics g) {
-        g.setColor(new Color(85,85,85));
-        g.fillRect(10,10,50,50);
+    public void draw(Graphics graphics) {
+        grid.draw(graphics);
     }
 
 

@@ -7,11 +7,16 @@ import javax.swing.JFrame;
 public class Display extends JFrame {
 
     private int width, height;
+
+    private Mouse mouse;
+
     private Canvas canvas;
 
 
-    public Display(int width, int height) {
+    public Display(int width, int height, Mouse mouse) {
         this.width = width; this.height = height;
+
+        this.mouse = mouse;
         
         setTitle("Game of Life");
         setSize(width, height);
@@ -22,8 +27,12 @@ public class Display extends JFrame {
         canvas = new Canvas();
         canvas.setSize(width, height);
         canvas.setFocusable(false);
+        canvas.addMouseListener(mouse);
+        canvas.addMouseMotionListener(mouse);
 
         add(canvas);
+        addMouseListener(mouse);
+        addMouseMotionListener(mouse);
         pack();
 
         canvas.createBufferStrategy(3);
