@@ -17,6 +17,12 @@ public class Game implements Runnable {
     private int cell_w, cell_h;
     private Grid grid;
 
+    private byte sellectedState;
+    private boolean active;
+
+    private int tick;
+    private int ups;
+
 
     public Game(int width, int height) {
         this.width = width; this.height = height;
@@ -27,19 +33,64 @@ public class Game implements Runnable {
         fps = 60;
 
 
-        grid_w = 25; grid_h = 50;
+        grid_w = 50; grid_h = 50;
         cell_w = width/grid_w; cell_h = height/grid_h;
         grid = new Grid(grid_w, grid_h, cell_w, cell_h);
+
+        sellectedState = (byte)1;
+        active = false;
+
+        tick = 0; ups = 10;
+        // fpu = (int)(fps / ups);
     }
 
 
     public void update() {
         if(keyboard.isPressed(KeyEvent.VK_ESCAPE)) System.exit(0);
 
-        if(mouse.isClicked(MouseEvent.BUTTON1)) {
-            Point location = mouse.getLocation();
-            grid.clicked(location.x, location.y);
+        tick++;
+        if(tick % fps == 0) tick = 0;
+
+
+
+        if(keyboard.isClicked(KeyEvent.VK_SPACE)) {
+            active = !active;
+            // grid.update();
         }
+        if(keyboard.isClicked(KeyEvent.VK_UP)) {
+            ups++; if(ups > fps) ups = (int)fps;
+        }
+        if(keyboard.isClicked(KeyEvent.VK_DOWN)) {
+            ups--; if(ups < 1) ups = 1;
+        }
+
+        if(keyboard.isClicked(KeyEvent.VK_R)) {
+            grid.randomise();
+        }
+        if(keyboard.isClicked(KeyEvent.VK_C)) {
+            grid.clear();
+        }
+        if(keyboard.isClicked(KeyEvent.VK_G)) {
+            grid.draw_grid = !grid.draw_grid;
+        }
+
+        if(mouse.isPressed(MouseEvent.BUTTON1) && mouse.onScreen()) {
+            Point location = mouse.getLocation();
+            grid.setState(location.x, location.y, sellectedState);
+        }
+        else
+        if(mouse.isPressed(MouseEvent.BUTTON3) && mouse.onScreen()) {
+            Point location = mouse.getLocation();
+            grid.setState(location.x, location.y, (byte)0);
+        }
+        else
+        if(mouse.isPressed(MouseEvent.BUTTON2) && mouse.onScreen()) {
+            Point location = mouse.getLocation();
+            grid.toggleState(location.x, location.y);
+        }
+
+
+        if(active && tick % (int)(fps/ups) == 0) grid.update();
     }
 
     public void draw(Graphics graphics) {
@@ -59,11 +110,13 @@ public class Game implements Runnable {
             time_block += System.currentTimeMillis()/1000.0 - time_moment;
             time_moment = System.currentTimeMillis()/1000.0;
 
-            while(time_block > spf) {
-                time_block -= spf;
+            if(time_block >= spf) {
+                while(time_block >= spf) {
+                    time_block -= spf;
+                    update();
+                }
                 render();
             }
-            update();
         }
     }
 
