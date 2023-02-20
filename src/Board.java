@@ -11,6 +11,7 @@ public class Board {
     private int height = 50;
     private int x = 2;
     private int y = 3;
+    private BoardGUI gui;
 
     public Board() {
         this.board = new Cell[width][height];
@@ -19,6 +20,7 @@ public class Board {
                 this.board[i][j] = new Cell();
             }
         }
+        this.gui = new BoardGUI(this);
     }
 
     public Board(int rows, int cols, int x, int y) {
@@ -32,6 +34,7 @@ public class Board {
                 this.board[i][j] = new Cell();
             }
         }
+        this.gui = new BoardGUI(this);
     }
 
     public Board(String file) {
@@ -72,10 +75,19 @@ public class Board {
                 }
             }
         }
+        this.gui = new BoardGUI(this);
     }
 
     public Cell[][] getBoard() {
         return this.board;
+    }
+
+    public void changeCell(int row, int col) {
+        if (!this.board[row][col].isAlive()) {
+            this.board[row][col] = new Cell(true);
+        } else {
+            this.board[row][col] = new Cell();
+        }
     }
 
     public void saveGameState(String filePath) {
@@ -104,6 +116,10 @@ public class Board {
 
     public int getHeight() {
         return this.height;
+    }
+
+    public BoardGUI getGui() {
+        return this.gui;
     }
 
     public int countNeighbors(int row, int col) {
@@ -140,7 +156,11 @@ public class Board {
             for (int j = 0; j < this.board[0].length; j++) {
                 Cell check = this.board[i][j];
                 boolean isAlive = checkRules(check, countNeighbors(i, j));
-                tempBoard[i][j] = new Cell(isAlive);
+                //tempBoard[i][j] = new Cell(isAlive);
+                if (isAlive) {
+                    this.gui.changeCell(i, j);
+                    changeCell(i, j);
+                }
             }
         }
         this.board = tempBoard;
