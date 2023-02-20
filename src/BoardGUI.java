@@ -41,6 +41,7 @@ public class BoardGUI {
             public void actionPerformed(ActionEvent e) {
                 if (play.getText().equals("Play")) {
                     play.setText("Pause");
+                    board.severalGenerations();
                 } else {
                     play.setText("Play");
                 }
@@ -55,14 +56,6 @@ public class BoardGUI {
         gameMenu.add(nextGen);
         gameFrame.add(gameMenu, BorderLayout.SOUTH);
         gameFrame.setVisible(true);
-    }
-
-    public void nextGen() {
-        board.nextGeneration();
-        grid.removeAll();
-        grid.revalidate();
-        grid.repaint();
-        generateGrid();
     }
 
     public void generateGrid() {

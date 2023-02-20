@@ -145,6 +145,12 @@ public class Board {
         return neighbours;
     }
 
+    public void severalGenerations() {
+        while (true) {
+            nextGeneration();
+        }
+    }
+
     public void nextGeneration() {
         Cell[][] tempBoard = new Cell[this.board.length][this.board[0].length];
         for (int i = 0; i < tempBoard.length; i++) {
@@ -156,10 +162,9 @@ public class Board {
             for (int j = 0; j < this.board[0].length; j++) {
                 Cell check = this.board[i][j];
                 boolean isAlive = checkRules(check, countNeighbors(i, j));
-                //tempBoard[i][j] = new Cell(isAlive);
-                if (isAlive) {
+                tempBoard[i][j] = new Cell(isAlive);
+                if (check.isAlive() != isAlive) {
                     this.gui.changeCell(i, j);
-                    changeCell(i, j);
                 }
             }
         }
