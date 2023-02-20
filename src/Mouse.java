@@ -24,12 +24,12 @@ public class Mouse implements MouseListener, MouseMotionListener {
         return on_screen;
     }
 
-    public boolean isPressed(int index) {
-        return pressed[index];
+    public boolean isPressed(int button) {
+        return pressed[button];
     }
-    public boolean isClicked(int index) {
-        boolean state = clicked[index];
-        if(state) clicked[index] = false;
+    public boolean isClicked(int button) {
+        boolean state = clicked[button];
+        if(state) clicked[button] = false;
         return state;
     }
 

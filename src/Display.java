@@ -9,14 +9,15 @@ public class Display extends JFrame {
     private int width, height;
 
     private Mouse mouse;
+    private Keyboard keyboard;
 
     private Canvas canvas;
 
 
-    public Display(int width, int height, Mouse mouse) {
+    public Display(int width, int height, Mouse mouse, Keyboard keyboard) {
         this.width = width; this.height = height;
 
-        this.mouse = mouse;
+        this.mouse = mouse; this.keyboard = keyboard;
         
         setTitle("Game of Life");
         setSize(width, height);
@@ -29,10 +30,12 @@ public class Display extends JFrame {
         canvas.setFocusable(false);
         canvas.addMouseListener(mouse);
         canvas.addMouseMotionListener(mouse);
+        canvas.addKeyListener(keyboard);
 
         add(canvas);
         addMouseListener(mouse);
         addMouseMotionListener(mouse);
+        addKeyListener(keyboard);
         pack();
 
         canvas.createBufferStrategy(3);

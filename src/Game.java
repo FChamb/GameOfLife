@@ -1,4 +1,5 @@
 import java.awt.Color;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.Graphics;
 import java.awt.Point;
@@ -7,7 +8,7 @@ public class Game implements Runnable {
 
     private int width, height;
     private Mouse mouse;
-    // private Keyboard keyboard;
+    private Keyboard keyboard;
     private Display display;
 
     private double fps;
@@ -20,9 +21,9 @@ public class Game implements Runnable {
     public Game(int width, int height) {
         this.width = width; this.height = height;
 
-        mouse = new Mouse();
+        mouse = new Mouse(); keyboard = new Keyboard();
 
-        display = new Display(width, height, mouse);
+        display = new Display(width, height, mouse, keyboard);
         fps = 60;
 
 
@@ -33,6 +34,8 @@ public class Game implements Runnable {
 
 
     public void update() {
+        if(keyboard.isPressed(KeyEvent.VK_ESCAPE)) System.exit(0);
+
         if(mouse.isClicked(MouseEvent.BUTTON1)) {
             Point location = mouse.getLocation();
             grid.clicked(location.x, location.y);
