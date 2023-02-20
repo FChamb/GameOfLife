@@ -37,6 +37,11 @@ public class BoardGUI {
         JButton play = new JButton("Play");
         JButton pause = new JButton("Pause");
         gameMenu.add(play);
+        play.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                board.nextGeneration();
+            }
+        });
         gameMenu.add(pause);
         gameFrame.add(gameMenu, BorderLayout.SOUTH);
         gameFrame.setVisible(true);
@@ -56,11 +61,6 @@ public class BoardGUI {
                 this.buttons[i][j].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
                         changeCell(row, col);
-                        if (board.getBoard()[row][col].isAlive()) {
-                            board.getBoard()[row][col] = new Cell();
-                        } else {
-                            board.getBoard()[row][col] = new Cell(true);
-                        }
                     }
                 });
                 this.grid.add(buttons[i][j]);
@@ -70,10 +70,12 @@ public class BoardGUI {
     }
 
     public void changeCell(int row, int col) {
-        if (this.board.getBoard()[row][col].isAlive()) {
+        if (this.buttons[row][col].getBackground().equals(Color.BLACK)) {
             this.buttons[row][col].setBackground(Color.WHITE);
+            this.board.getBoard()[row][col] = new Cell(true);
         } else {
             this.buttons[row][col].setBackground(Color.BLACK);
+            this.board.getBoard()[row][col] = new Cell();
         }
     }
 }
