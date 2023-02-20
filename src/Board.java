@@ -11,8 +11,7 @@ public class Board {
     private int height = 50;
     private int x = 2;
     private int y = 3;
-    private boolean running = false;
-    private final BoardGUI gui;
+    private BoardGUI gui;
 
     public Board() {
         this.board = new Cell[width][height];
@@ -83,22 +82,6 @@ public class Board {
         return this.board;
     }
 
-    public int getWidth() {
-        return this.width;
-    }
-
-    public int getHeight() {
-        return this.height;
-    }
-
-    public BoardGUI getGui() {
-        return this.gui;
-    }
-
-    public void setRunning(boolean running) {
-        this.running = running;
-    }
-
     public void changeCell(int row, int col) {
         if (!this.board[row][col].isAlive()) {
             this.board[row][col] = new Cell(true);
@@ -127,58 +110,65 @@ public class Board {
         }
     }
 
-    public int countNeighbors(int row, int col) {
-        int up, down, left, right;
-        if (row > 0) {
-            up = row - 1;
-        } else  {
-            up = this.board.length - 1;
-        }
-        if (row < (this.board.length - 1)) {
-            down = row + 1;
-        } else {
-            down = 0;
-        }
-        if (col > 0) {
-            left = col - 1;
-        } else {
-            left = this.board[0].length - 1;
-        }
-        if (col < (this.board[0].length - 1)) {
-            right = col + 1;
-        } else {
-            right = 0;
-        }
-        return checkNeighbors(row, col, up, down, left, right);
+    public int getWidth() {
+        return this.width;
     }
 
-    public int checkNeighbors(int row, int col, int up, int down, int left, int right) {
-        int neighbors = 0;
-        if (this.board[up][left].isAlive()) {
-            neighbors++;
+    public int getHeight() {
+        return this.height;
+    }
+
+    public BoardGUI getGui() {
+        return this.gui;
+    }
+
+    public int countNeighbors(int row, int col) {
+        int neighbours = 0;
+        int x,y;
+        for(int i = -1; i < 2; i++) {
+            for (int j = -1; j < 2; j++) {
+                if (i != 0 || j != 0) {
+                    x = (col + j) % width;
+                    y = (row + i) % height;
+                    if (x < 0) {
+                        x += width;
+                    }
+                    if (y < 0) {
+                        y += height;
+                    }
+                    if (board[y][x].isAlive()) {
+                        neighbours++;
+                    }
+                }
+            }
         }
-        if (this.board[up][col].isAlive()) {
-            neighbors++;
+        return neighbours;
+    }
+
+    public void severalGenerations() {
+        while (true) {
+            nextGeneration();
         }
-        if (this.board[up][right].isAlive()) {
-            neighbors++;
+    }
+
+    public void nextGeneration() {
+        Cell[][] tempBoard = new Cell[this.board.length][this.board[0].length];
+        for (int i = 0; i < tempBoard.length; i++) {
+            for (int j = 0; j < tempBoard[0].length; j++) {
+                tempBoard[i][j] = new Cell();
+            }
         }
-        if (this.board[row][left].isAlive()) {
-            neighbors++;
+        for (int i = 0; i < this.board.length; i++) {
+            for (int j = 0; j < this.board[0].length; j++) {
+                Cell check = this.board[i][j];
+                boolean isAlive = checkRules(check, countNeighbors(i, j));
+                tempBoard[i][j] = new Cell(isAlive);
+                if (check.isAlive() != isAlive) {
+                    this.gui.changeCell(i, j);
+                }
+            }
         }
-        if (this.board[row][right].isAlive()) {
-            neighbors++;
-        }
-        if (this.board[down][left].isAlive()) {
-            neighbors++;
-        }
-        if (this.board[down][col].isAlive()) {
-            neighbors++;
-        }
-        if (this.board[down][right].isAlive()) {
-            neighbors++;
-        }
-        return neighbors;
+        this.board = tempBoard;
     }
 
     public boolean checkRules(Cell check, int neighbors) {
@@ -186,26 +176,6 @@ public class Board {
             return true;
         } else {
             return false;
-        }
-    }
-
-    public void nextGeneration() {
-        Cell[][] tempBoard = new Cell[this.board.length][this.board[0].length];
-        for (int i = 0; i < this.board.length; i++) {
-            for (int j = 0; j < this.board[0].length; j++) {
-                Cell check = this.board[i][j];
-                boolean isAlive = checkRules(check, countNeighbors(i, j));
-                tempBoard[i][j] = new Cell(isAlive);
-                this.gui.changeCell(i, j);
-            }
-        }
-        this.board = tempBoard;
-    }
-
-    public void play() throws InterruptedException {
-        while (running) {
-            nextGeneration();
-            Thread.sleep(1500);
         }
     }
 

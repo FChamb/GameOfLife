@@ -1,7 +1,10 @@
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.util.concurrent.TimeUnit;
 
 public class BoardGUI {
     private JFrame gameFrame;
@@ -40,42 +43,26 @@ public class BoardGUI {
         JPanel gameMenu = new JPanel();
         gameMenu.setLayout(new FlowLayout());
         JButton play = new JButton("Play");
-        JButton pause = new JButton("Pause");
         JButton nextGen = new JButton("Next");
-        /**
         play.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 if (play.getText().equals("Play")) {
                     play.setText("Pause");
-                    board.setRunning(true);
-                    try {
-                        board.play();
-                    } catch (InterruptedException ex) {
-                        throw new RuntimeException(ex);
-                    }
+                    board.severalGenerations();
                 } else {
                     play.setText("Play");
-                    board.setRunning(false);
                 }
             }
         });
-         */
         nextGen.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 board.nextGeneration();
             }
         });
         gameMenu.add(play);
-        gameMenu.add(pause);
         gameMenu.add(nextGen);
         gameFrame.add(gameMenu, BorderLayout.SOUTH);
         gameFrame.setVisible(true);
-        try {
-            this.board.setRunning(true);
-            this.board.play();
-        } catch (InterruptedException ex) {
-            throw new RuntimeException(ex);
-        }
     }
 
     private void createGUI() {
@@ -109,8 +96,8 @@ public class BoardGUI {
                 }
                 this.buttons[widthIndex][heightIndex].addActionListener(new ActionListener() {
                     public void actionPerformed(ActionEvent e) {
-                        board.changeCell(row, col);
                         changeCell(row, col);
+                        board.changeCell(row, col);
                     }
                 });
                 this.gridPanel.add(buttons[widthIndex][heightIndex]);
@@ -120,11 +107,10 @@ public class BoardGUI {
     }
 
     public void changeCell(int row, int col) {
-        boolean isAlive = this.board.getBoard()[row][col].isAlive();
-        if (!isAlive) {
-            this.buttons[row][col].setBackground(Color.BLACK);
-        } else {
+        if (this.buttons[row][col].getBackground().equals(Color.BLACK)) {
             this.buttons[row][col].setBackground(Color.WHITE);
+        } else {
+            this.buttons[row][col].setBackground(Color.BLACK);
         }
     }
 }
