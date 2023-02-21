@@ -1,7 +1,7 @@
 public class RunGame {
     public static void main(String[] args) throws InterruptedException {
-        Board gameBoard = new Board();
-        BoardGUI gameVisual = gameBoard.getGui();
+        Board gameBoard = new Board("test.gol");
+        BoardGUI gameVisual = new BoardGUI(gameBoard);
         gameVisual.run();
     }
 }
