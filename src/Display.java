@@ -2,6 +2,7 @@ import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.image.BufferStrategy;
+import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 public class Display extends JFrame {
@@ -57,6 +58,7 @@ public class Display extends JFrame {
 
         game.draw(g);
 
+        Toolkit.getDefaultToolkit().sync();
         g.dispose();
         bs.show();
     }

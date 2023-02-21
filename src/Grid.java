@@ -1,6 +1,10 @@
 import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.Graphics;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Scanner;
 
 public class Grid {
 
@@ -30,12 +34,14 @@ public class Grid {
     public void setState(int x, int y, byte state) {
         x /= cell_width;
         y /= cell_height;
+        if(x < 0 || x >= width || y < 0 || y >= height) return;
 
         cells[y][x] = state;
     }
     public void toggleState(int x, int y) {
         x /= cell_width;
         y /= cell_height;
+        if(x < 0 || x >= width || y < 0 || y >= height) return;
 
         if(cells[y][x] == 0) cells[y][x] = 1;
         else                 cells[y][x] = 0;
@@ -87,9 +93,10 @@ public class Grid {
             for(int x = 0; x < width; x++) {
                 cell = cells[y][x];
                 graphics.setColor(cell_states.colours[cell]);
-                graphics.fillRect(x*cell_width, y*cell_height, width*cell_width, height*cell_height);
+                graphics.fillRect(x*cell_width, y*cell_height, cell_width, cell_height);
             }
         }
+        
 
         if(!draw_grid) return;
         // draw grid
@@ -102,5 +109,47 @@ public class Grid {
             graphics.drawLine(x*cell_width,             0,     x*cell_width, height*cell_height);
         }
         graphics.drawLine(width*cell_width - 1, 0, width*cell_width-1, height*cell_height);
+    }
+
+
+    public void load(String filename) {
+        Scanner reader = null;
+        String line; int x,y;
+        try {
+            reader = new Scanner(new File("./savefiles",filename));
+            y = 0;
+            while(reader.hasNextLine()) {
+                line = reader.nextLine();
+                x = 0;
+                for(char c : line.toCharArray()) {
+                    cells[y][x] = (c == 'o' ? (byte)1 : (byte)0);
+                    x++;
+                }
+                y++;
+            }
+
+            reader.close();
+        } catch(IOException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
+    }
+
+    public void save(String filename) {
+        FileWriter writer = null;
+        try {
+            writer = new FileWriter(new File("./savefiles",filename));
+            for(byte[] row : cells) {
+                for(byte state : row) {
+                    writer.write(state == 0 ? "." : "o");
+                }
+                writer.write("\n");
+            }
+
+            writer.close();
+        } catch(IOException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
     }
 }

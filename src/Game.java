@@ -13,6 +13,7 @@ public class Game implements Runnable {
 
     private double fps;
 
+    private int grid_width, grid_height;
     private int grid_w, grid_h; 
     private int cell_w, cell_h;
     private Grid grid;
@@ -33,8 +34,9 @@ public class Game implements Runnable {
         fps = 60;
 
 
-        grid_w = 50; grid_h = 50;
-        cell_w = width/grid_w; cell_h = height/grid_h;
+        grid_width = width; grid_height = (int)(height * 0.85);
+        grid_w = 150; grid_h = 100;
+        cell_w = grid_width/grid_w; cell_h = grid_height/grid_h;
         grid = new Grid(grid_w, grid_h, cell_w, cell_h);
 
         sellectedState = (byte)1;
@@ -63,6 +65,9 @@ public class Game implements Runnable {
         if(keyboard.isClicked(KeyEvent.VK_DOWN)) {
             ups--; if(ups < 1) ups = 1;
         }
+        if(keyboard.isClicked(KeyEvent.VK_RIGHT)) {
+            grid.update();
+        }
 
         if(keyboard.isClicked(KeyEvent.VK_R)) {
             grid.randomise();
@@ -72,6 +77,12 @@ public class Game implements Runnable {
         }
         if(keyboard.isClicked(KeyEvent.VK_G)) {
             grid.draw_grid = !grid.draw_grid;
+        }
+        if(keyboard.isClicked(KeyEvent.VK_S)) {
+            grid.save("new.gol");
+        }
+        if(keyboard.isClicked(KeyEvent.VK_L)) {
+            grid.load("Swan$Boat.gol");
         }
 
         if(mouse.isPressed(MouseEvent.BUTTON1) && mouse.onScreen()) {
