@@ -10,12 +10,55 @@ import java.util.Hashtable;
 public class BoardGUI {
     private JFrame gameFrame;
     private JPanel grid;
+    private JPanel gameMenu;
     private Board board;
     private ArrayList<Cell[][]> previousBoards = new ArrayList<>();
     private int count = 0;
     private JButton[][] buttons;
     private boolean running = false;
     private int tickSpeed = 500;
+
+    private void createSettings() {
+        JPanel settings = new JPanel();
+        settings.setLayout(new BoxLayout(settings, BoxLayout.Y_AXIS));
+        JLabel xLabel = new JLabel("Game Rule X:");
+        JLabel yzLabel = new JLabel("Game Rule Y & Z:");
+        JLabel xAxis = new JLabel("X-Axis:");
+        JLabel yAxis = new JLabel("Y-Axis:");
+        JButton saveSettingsButton = new JButton("Update Settings");
+        Integer[] comboBoxChoices = {0,1,2,3,4,5,6,7,8,9,10};
+        Integer[] newComboBoxChoices = new Integer[46];
+        for (int i = 0; i < 46; i++) {
+            newComboBoxChoices[i] = i + 5;
+        }
+        JComboBox<Integer> xComboBox = new JComboBox<>(comboBoxChoices);
+        settings.add(xLabel);
+        settings.add(xComboBox);
+        JComboBox<Integer> yzComboBox = new JComboBox<>(comboBoxChoices);
+        settings.add(yzLabel);
+        settings.add(yzComboBox);
+        JComboBox<Integer> xAxisBox = new JComboBox<>(newComboBoxChoices);
+        settings.add(xAxis);
+        settings.add(xAxisBox);
+        JComboBox<Integer> yAxisBox = new JComboBox<>(newComboBoxChoices);
+        settings.add(yAxis);
+        settings.add(yAxisBox);
+        saveSettingsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int xRule = Integer.parseInt(xComboBox.getSelectedItem().toString());
+                int yzRule = Integer.parseInt(yzComboBox.getSelectedItem().toString());
+                int xAx = Integer.parseInt(xAxisBox.getSelectedItem().toString());
+                int yAx = Integer.parseInt(yAxisBox.getSelectedItem().toString());
+                board = new Board(xAx, yAx, xRule, yzRule);
+                grid.setLayout(new GridLayout(board.getWidth(), board.getHeight()));
+                buttons = new JButton[board.getWidth()][board.getHeight()];
+                generateGrid();
+            }
+        });
+        settings.add(saveSettingsButton);
+        this.gameFrame.add(settings, BorderLayout.EAST);
+    }
 
     public BoardGUI(Board board) {
         try{
@@ -35,12 +78,13 @@ public class BoardGUI {
         this.grid = new JPanel();
         this.grid.setLayout(new GridLayout(this.board.getWidth(), this.board.getHeight()));
         this.buttons = new JButton[this.board.getWidth()][this.board.getHeight()];
+        createSettings();
     }
 
     public void run() {
         generateGrid();
-        JPanel gameMenu = new JPanel();
-        gameMenu.setLayout(new FlowLayout());
+        this.gameMenu = new JPanel();
+        this.gameMenu.setLayout(new FlowLayout());
         JButton backGen = new JButton("Last");
         backGen.setBackground(Color.CYAN);
         JButton play = new JButton("Play");
@@ -62,8 +106,10 @@ public class BoardGUI {
                 if (!running) {
                     if (count >= 0) {
                         board.setBoard(previousBoards.get(count--));
-                        previousBoards.remove(count);
-                        count--;
+                        if (count > 0) {
+                            previousBoards.remove(count);
+                            count--;
+                        }
                         updateBoard();
                     }
                 }
@@ -115,13 +161,13 @@ public class BoardGUI {
                 tickSpeed = speed.getValue();
             }
         });
-        gameMenu.add(backGen);
-        gameMenu.add(play);
-        gameMenu.add(nextGen);
-        gameMenu.add(reset);
-        gameMenu.add(speed);
-        gameFrame.add(gameMenu, BorderLayout.SOUTH);
-        gameFrame.setVisible(true);
+        this.gameMenu.add(backGen);
+        this.gameMenu.add(play);
+        this.gameMenu.add(nextGen);
+        this.gameMenu.add(reset);
+        this.gameMenu.add(speed);
+        this.gameFrame.add(gameMenu, BorderLayout.SOUTH);
+        this.gameFrame.setVisible(true);
         beginGame();
     }
 
