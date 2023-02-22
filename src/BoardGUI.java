@@ -18,7 +18,7 @@ public class BoardGUI {
     private boolean running = false;
     private int tickSpeed = 500;
 
-    private void createSettings() {
+    private void createGameSettings() {
         JPanel settings = new JPanel();
         settings.setLayout(new BoxLayout(settings, BoxLayout.Y_AXIS));
         JLabel xLabel = new JLabel("Game Rule X:");
@@ -50,10 +50,7 @@ public class BoardGUI {
                 int yzRule = Integer.parseInt(yzComboBox.getSelectedItem().toString());
                 int xAx = Integer.parseInt(xAxisBox.getSelectedItem().toString());
                 int yAx = Integer.parseInt(yAxisBox.getSelectedItem().toString());
-                board = new Board(xAx, yAx, xRule, yzRule);
-                grid.setLayout(new GridLayout(board.getWidth(), board.getHeight()));
-                buttons = new JButton[board.getWidth()][board.getHeight()];
-                generateGrid();
+                saveSettingsButton(xRule, yzRule, xAx, yAx);
             }
         });
         settings.add(saveSettingsButton);
@@ -78,7 +75,7 @@ public class BoardGUI {
         this.grid = new JPanel();
         this.grid.setLayout(new GridLayout(this.board.getWidth(), this.board.getHeight()));
         this.buttons = new JButton[this.board.getWidth()][this.board.getHeight()];
-        createSettings();
+        createGameSettings();
     }
 
     public void run() {
@@ -103,56 +100,25 @@ public class BoardGUI {
         backGen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!running) {
-                    if (count >= 0) {
-                        board.setBoard(previousBoards.get(count--));
-                        if (count > 0) {
-                            previousBoards.remove(count);
-                            count--;
-                        }
-                        updateBoard();
-                    }
-                }
+                backGenButton();
             }
         });
         play.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (play.getText().equals("Play")) {
-                    play.setText("Pause");
-                    changeRun();
-                    backGen.setBackground(Color.DARK_GRAY);
-                    play.setBackground(Color.RED);
-                    nextGen.setBackground(Color.DARK_GRAY);
-                    reset.setBackground(Color.DARK_GRAY);
-                } else {
-                    play.setText("Play");
-                    changeRun();
-                    backGen.setBackground(Color.CYAN);
-                    play.setBackground(Color.GREEN);
-                    nextGen.setBackground(Color.CYAN);
-                    reset.setBackground(Color.PINK);
-                }
+                playButton(play, backGen, nextGen, reset);
             }
         });
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!running) {
-                    board.setBoard(previousBoards.get(0));
-                    updateBoard();
-                }
+                resetButton();
             }
         });
         nextGen.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (!running) {
-                    previousBoards.add(board.getBoard());
-                    board.nextGeneration();
-                    updateBoard();
-                    count++;
-                }
+                nextGenButton();
             }
         });
         speed.addChangeListener(new ChangeListener() {
@@ -236,6 +202,68 @@ public class BoardGUI {
             this.buttons[row][col].setBackground(Color.WHITE);
         } else {
             this.buttons[row][col].setBackground(Color.BLACK);
+        }
+    }
+
+    public void saveSettingsButton(int xRule, int yzRule, int xAx, int yAx) {
+        board = new Board(yAx, xAx, xRule, yzRule);
+        gameFrame.remove(grid);
+        grid.removeAll();
+        grid.setLayout(new GridLayout(board.getWidth(), board.getHeight()));
+        buttons = new JButton[board.getWidth()][board.getHeight()];
+        generateGrid();
+        gameFrame.repaint();
+        gameFrame.revalidate();
+    }
+
+    public void backGenButton() {
+        if (!running) {
+            if (count > 0) {
+                board.setBoard(previousBoards.get(count - 1));
+                if (count > 0) {
+                    previousBoards.remove(count);
+                    count--;
+                }
+                updateBoard();
+            }
+        }
+    }
+
+    public void playButton(JButton play, JButton backGen, JButton nextGen, JButton reset) {
+        if (play.getText().equals("Play")) {
+            play.setText("Pause");
+            changeRun();
+            backGen.setBackground(Color.DARK_GRAY);
+            play.setBackground(Color.RED);
+            nextGen.setBackground(Color.DARK_GRAY);
+            reset.setBackground(Color.DARK_GRAY);
+        } else {
+            play.setText("Play");
+            changeRun();
+            backGen.setBackground(Color.CYAN);
+            play.setBackground(Color.GREEN);
+            nextGen.setBackground(Color.CYAN);
+            reset.setBackground(Color.PINK);
+        }
+    }
+
+    public void resetButton() {
+        if (!running) {
+            board.setBoard(previousBoards.get(0));
+            updateBoard();
+            Cell[][] first = previousBoards.get(0);
+            previousBoards.clear();
+            previousBoards.add(first);
+            count = 0;
+        }
+    }
+
+    public void nextGenButton() {
+        if (!running) {
+            previousBoards.add(board.getBoard());
+            board.nextGeneration();
+            updateBoard();
+            count++;
         }
     }
 }
