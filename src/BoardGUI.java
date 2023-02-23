@@ -134,7 +134,7 @@ public class BoardGUI {
         this.gameMenu.add(speed);
         this.gameFrame.add(gameMenu, BorderLayout.SOUTH);
         this.gameFrame.setVisible(true);
-        beginGame();
+        //beginGame();
     }
 
     public void changeRun() {
@@ -142,19 +142,16 @@ public class BoardGUI {
     }
 
     public void beginGame() {
-        while (true) {
-            System.out.print("");
-            while (running) {
-                previousBoards.add(board.getBoard());
-                this.board.nextGeneration();
-                updateBoard();
-                try {
-                    Thread.sleep(this.tickSpeed);
-                } catch (InterruptedException e) {
-                    throw new RuntimeException(e);
-                }
-                this.count++;
+        while (running) {
+            previousBoards.add(board.getBoard());
+            this.board.nextGeneration();
+            updateBoard();
+            try {
+                Thread.sleep(this.tickSpeed);
+            } catch (InterruptedException e) {
+                throw new RuntimeException(e);
             }
+            this.count++;
         }
     }
 
@@ -230,6 +227,12 @@ public class BoardGUI {
     }
 
     public void playButton(JButton play, JButton backGen, JButton nextGen, JButton reset) {
+        Thread game = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                beginGame();
+            }
+        });
         if (play.getText().equals("Play")) {
             play.setText("Pause");
             changeRun();
@@ -237,6 +240,7 @@ public class BoardGUI {
             play.setBackground(Color.RED);
             nextGen.setBackground(Color.DARK_GRAY);
             reset.setBackground(Color.DARK_GRAY);
+            game.start();
         } else {
             play.setText("Play");
             changeRun();
@@ -244,6 +248,7 @@ public class BoardGUI {
             play.setBackground(Color.GREEN);
             nextGen.setBackground(Color.CYAN);
             reset.setBackground(Color.PINK);
+            game.stop();
         }
     }
 
