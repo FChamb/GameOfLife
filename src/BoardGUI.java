@@ -26,6 +26,7 @@ public class BoardGUI {
         JLabel xAxis = new JLabel("X-Axis:");
         JLabel yAxis = new JLabel("Y-Axis:");
         JButton saveSettingsButton = new JButton("Update Settings");
+        saveSettingsButton.setBackground(Color.YELLOW);
         Integer[] comboBoxChoices = {0,1,2,3,4,5,6,7,8,9,10};
         Integer[] newComboBoxChoices = new Integer[46];
         for (int i = 0; i < 46; i++) {
@@ -162,9 +163,9 @@ public class BoardGUI {
                 final int col = j;
                 this.buttons[i][j] = new JButton();
                 if (this.board.getBoard()[i][j].isAlive()) {
-                    this.buttons[i][j].setBackground(Color.WHITE);
-                } else {
                     this.buttons[i][j].setBackground(Color.BLACK);
+                } else {
+                    this.buttons[i][j].setBackground(Color.WHITE);
                 }
                 this.buttons[i][j].addActionListener(new ActionListener() {
                     @Override
@@ -185,9 +186,9 @@ public class BoardGUI {
         for (int i = 0; i < this.board.getWidth(); i++) {
             for (int j = 0; j < this.board.getHeight(); j++) {
                 if (this.board.getBoard()[i][j].isAlive()) {
-                    this.buttons[i][j].setBackground(Color.WHITE);
-                } else {
                     this.buttons[i][j].setBackground(Color.BLACK);
+                } else {
+                    this.buttons[i][j].setBackground(Color.WHITE);
                 }
             }
         }
@@ -196,21 +197,23 @@ public class BoardGUI {
     public void changeButton(int row, int col) {
         boolean isAlive = this.board.getBoard()[row][col].isAlive();
         if (isAlive) {
-            this.buttons[row][col].setBackground(Color.WHITE);
-        } else {
             this.buttons[row][col].setBackground(Color.BLACK);
+        } else {
+            this.buttons[row][col].setBackground(Color.WHITE);
         }
     }
 
     public void saveSettingsButton(int xRule, int yzRule, int xAx, int yAx) {
-        board = new Board(yAx, xAx, xRule, yzRule);
-        gameFrame.remove(grid);
-        grid.removeAll();
-        grid.setLayout(new GridLayout(board.getWidth(), board.getHeight()));
-        buttons = new JButton[board.getWidth()][board.getHeight()];
-        generateGrid();
-        gameFrame.repaint();
-        gameFrame.revalidate();
+        if (!running) {
+            board = new Board(yAx, xAx, xRule, yzRule);
+            gameFrame.remove(grid);
+            grid.removeAll();
+            grid.setLayout(new GridLayout(board.getWidth(), board.getHeight()));
+            buttons = new JButton[board.getWidth()][board.getHeight()];
+            generateGrid();
+            gameFrame.repaint();
+            gameFrame.revalidate();
+        }
     }
 
     public void backGenButton() {
@@ -248,7 +251,7 @@ public class BoardGUI {
             play.setBackground(Color.GREEN);
             nextGen.setBackground(Color.CYAN);
             reset.setBackground(Color.PINK);
-            game.stop();
+            game.interrupt();
         }
     }
 
