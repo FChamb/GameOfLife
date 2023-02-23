@@ -20,6 +20,22 @@ public class Keyboard implements KeyListener {
         return state;
     }
 
+    public boolean ctrl() {
+        return pressed[KeyEvent.VK_CONTROL];
+    }
+    public boolean shift() {
+        return pressed[KeyEvent.VK_SHIFT];
+    }
+    public boolean alt() {
+        return pressed[KeyEvent.VK_ALT];
+    }
+    public boolean altgr() {
+        return pressed[KeyEvent.VK_ALT_GRAPH];
+    }
+    public boolean alts() {
+        return alt() | altgr();
+    }
+
 
     @Override
     public void keyPressed(KeyEvent e) {

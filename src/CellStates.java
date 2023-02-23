@@ -21,8 +21,8 @@ public class CellStates {
 
 
     public CellStates() {
-        colours[0] = new Color(  0,  0,  0);
-        colours[1] = new Color(255,255,255);
+        colours[0] = new Color(255,255,255);
+        colours[1] = new Color(  0,  0,  0);
     }
 
 
