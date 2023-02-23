@@ -12,6 +12,7 @@ public class Grid {
 
     private CellStates cell_states;
 
+    private int x, y;
     private int width, height;
     private int cell_width, cell_height;
 
@@ -20,7 +21,8 @@ public class Grid {
     public boolean draw_grid;
 
 
-    public Grid(int width, int height, int cell_width, int cell_height) {
+    public Grid(int x, int y, int width, int height, int cell_width, int cell_height) {
+        this.x = x; this.y = y;
         this.width = width; this.height = height;
         this.cell_width = cell_width; this.cell_height = cell_height;
 
@@ -31,16 +33,30 @@ public class Grid {
     }
 
 
-    public void setState(int x, int y, byte state) {
+    private int fixX(int x) {
+        x -= this.x;
         x /= cell_width;
+
+        return x;
+    }
+    private int fixY(int y) {
+        y -= this.y;
         y /= cell_height;
+
+        return y;
+    }
+
+    public void setState(int x, int y, byte state) {
+        x = fixX(x);
+        y = fixY(y);
+        // System.out.println(x+" : "+y);
         if(x < 0 || x >= width || y < 0 || y >= height) return;
 
         cells[y][x] = state;
     }
     public void toggleState(int x, int y) {
-        x /= cell_width;
-        y /= cell_height;
+        x = fixX(x);
+        y = fixY(y);
         if(x < 0 || x >= width || y < 0 || y >= height) return;
 
         if(cells[y][x] == 0) cells[y][x] = 1;
@@ -87,13 +103,18 @@ public class Grid {
 
 
     public void draw(Graphics graphics) {
+        int off_x = x, off_y = y;
+        int x,y;
+
         // draw cells
         byte cell;
-        for(int y = 0; y < height; y++) {
-            for(int x = 0; x < width; x++) {
-                cell = cells[y][x];
+        for(int j = 0; j < height; j++) {
+            for(int i = 0; i < width; i++) {
+                cell = cells[j][i];
+                x = off_x + i*cell_width; y = off_y + j*cell_height;
+
                 graphics.setColor(cell_states.colours[cell]);
-                graphics.fillRect(x*cell_width, y*cell_height, cell_width, cell_height);
+                graphics.fillRect(x, y, cell_width, cell_height);
             }
         }
         
@@ -101,14 +122,17 @@ public class Grid {
         if(!draw_grid) return;
         // draw grid
         graphics.setColor(GRID_COLOUR);
-        for(int y = 0; y < height; y++) {
-            graphics.drawLine(           0, y*cell_height, width*cell_width,      y*cell_height);
+        for(int j = 0; j < height; j++) {
+            y = off_y + j*cell_height;
+            graphics.drawLine(off_x, y, off_x + width*cell_width, y);
         }
-        graphics.drawLine(0, height*cell_height - 1, width*cell_width, height*cell_height - 1);
-        for(int x = 0; x < width; x++) {
-            graphics.drawLine(x*cell_width,             0,     x*cell_width, height*cell_height);
+        graphics.drawLine(off_x, off_y + height*cell_height, off_x + width*cell_width, off_y + height*cell_height);
+
+        for(int i = 0; i < width; i++) {
+            x = off_x + i*cell_width;
+            graphics.drawLine(x, off_y, x, off_y + height*cell_height);
         }
-        graphics.drawLine(width*cell_width - 1, 0, width*cell_width-1, height*cell_height);
+        graphics.drawLine(off_x + width*cell_width, off_y, off_x + width*cell_width, off_y + height*cell_height);
     }
 
 

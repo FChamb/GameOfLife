@@ -14,7 +14,7 @@ public class Game implements Runnable {
     private double fps;
 
     private int grid_width, grid_height;
-    private int grid_w, grid_h; 
+    private int grid_x, grid_y, grid_w, grid_h; 
     private int cell_w, cell_h;
     private Grid grid;
 
@@ -34,10 +34,12 @@ public class Game implements Runnable {
         fps = 60;
 
 
-        grid_width = width; grid_height = (int)(height * 0.85);
-        grid_w = 150; grid_h = 100;
+        // grid_width = 500; grid_height = 500;
+        // grid_x = 100; grid_y = 100; grid_w = 50; grid_h = 50;
+        grid_width = 900; grid_height = 900;
+        grid_x = 0; grid_y = 0; grid_w = 15; grid_h = 30;
         cell_w = grid_width/grid_w; cell_h = grid_height/grid_h;
-        grid = new Grid(grid_w, grid_h, cell_w, cell_h);
+        grid = new Grid(grid_x, grid_y, grid_w, grid_h, cell_w, cell_h);
 
         sellectedState = (byte)1;
         active = false;
@@ -78,10 +80,10 @@ public class Game implements Runnable {
         if(keyboard.isClicked(KeyEvent.VK_G)) {
             grid.draw_grid = !grid.draw_grid;
         }
-        if(keyboard.isClicked(KeyEvent.VK_S)) {
+        if(keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_S)) {
             grid.save("new.gol");
         }
-        if(keyboard.isClicked(KeyEvent.VK_L)) {
+        if(keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_O)) {
             grid.load("Swan$Boat.gol");
         }
 
@@ -117,7 +119,7 @@ public class Game implements Runnable {
     public void run() {
         double spf = 1/fps;
         double time_moment = System.currentTimeMillis()/1000.0, time_block = 0;
-        while(true) {
+        while(!Thread.interrupted()) {
             time_block += System.currentTimeMillis()/1000.0 - time_moment;
             time_moment = System.currentTimeMillis()/1000.0;
 
