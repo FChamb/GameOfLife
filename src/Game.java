@@ -1,4 +1,3 @@
-import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.Graphics;
@@ -81,6 +80,9 @@ public class Game implements Runnable {
             grid.draw_grid = !grid.draw_grid;
         }
         if(keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_S)) {
+            grid.save("new.gol");
+        }
+        if(keyboard.isClicked(KeyEvent.VK_S)) {
             grid.save("new.gol");
         }
         if(keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_O)) {
