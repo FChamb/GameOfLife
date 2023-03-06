@@ -2,6 +2,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.Graphics;
 import java.awt.Point;
+import java.io.IOException;
 
 public class Game implements Runnable {
 
@@ -20,6 +21,8 @@ public class Game implements Runnable {
     private byte sellectedState;
     private boolean active;
 
+    private GUI gui;
+
     private int tick;
     private int ups;
 
@@ -35,13 +38,20 @@ public class Game implements Runnable {
 
         // grid_width = 500; grid_height = 500;
         // grid_x = 100; grid_y = 100; grid_w = 50; grid_h = 50;
-        grid_width = 900; grid_height = 900;
-        grid_x = 0; grid_y = 0; grid_w = 15; grid_h = 30;
+        grid_width = 500; grid_height = 500;
+        grid_x = 100; grid_y = 100; grid_w = 50; grid_h = 50;
         cell_w = grid_width/grid_w; cell_h = grid_height/grid_h;
         grid = new Grid(grid_x, grid_y, grid_w, grid_h, cell_w, cell_h);
 
         sellectedState = (byte)1;
         active = false;
+
+        try {
+            gui = new GUI("./assets");
+        } catch(IOException e) {
+            e.printStackTrace();
+            System.exit(0);
+        }
 
         tick = 0; ups = 10;
         // fpu = (int)(fps / ups);
@@ -86,7 +96,7 @@ public class Game implements Runnable {
             grid.save("new.gol");
         }
         if(keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_O)) {
-            grid.load("Swan$Boat.gol");
+            grid.load("p15 pre-pulsar spaceship.gol");
         }
 
         if(mouse.isPressed(MouseEvent.BUTTON1) && mouse.onScreen()) {
@@ -109,7 +119,11 @@ public class Game implements Runnable {
     }
 
     public void draw(Graphics graphics) {
+
+        gui.draw(graphics);
+
         grid.draw(graphics);
+
     }
 
 
