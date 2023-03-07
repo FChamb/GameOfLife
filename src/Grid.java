@@ -2,8 +2,10 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.Graphics;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Grid {
@@ -137,6 +139,32 @@ public class Grid {
 
 
     public void load(String filename) {
+        // VVV This is needed to change the board size post start. Still needs implementation.
+        /**
+        ArrayList<String[]> boardTemp = new ArrayList<>();
+        int rows = 0;
+        int cols = 0;
+        try {
+            Scanner fileRead = new Scanner(new File(filename));
+            while (fileRead.hasNext()) {
+                String line = fileRead.nextLine();
+                if (line.startsWith("#:")) {
+                    String comments = line.substring(line.indexOf("#:") + 1);
+                } else if (line.startsWith(".") || line.startsWith("o")){
+                    String[] rowVals = new String[line.length()];
+                    cols = 0;
+                    for (int i = 0; i < line.length(); i++) {
+                        rowVals[i] = String.valueOf(line.charAt(i));
+                        cols++;
+                    }
+                    boardTemp.add(rowVals);
+                    rows++;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("That game state does not exist: " + e.getMessage());
+        }
+        */
         Scanner reader = null;
         String line; int x,y;
         try {
