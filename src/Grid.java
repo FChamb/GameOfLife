@@ -8,7 +8,7 @@ import java.util.Scanner;
 
 public class Grid {
 
-    public static final Color GRID_COLOUR = new Color(63,63,63);
+    public static final Color GRID_COLOUR = Color.DARK_GRAY;
 
     private CellStates cell_states;
 
@@ -175,5 +175,9 @@ public class Grid {
             e.printStackTrace();
             System.exit(0);
         }
+    }
+
+    public CellStates getCell_states() {
+        return this.cell_states;
     }
 }

@@ -1,7 +1,9 @@
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.awt.Graphics;
-import java.awt.Point;
 import java.io.IOException;
 
 public class Game implements Runnable {
@@ -90,13 +92,13 @@ public class Game implements Runnable {
             grid.draw_grid = !grid.draw_grid;
         }
         if(keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_S)) {
-            grid.save("new.gol");
-        }
-        if(keyboard.isClicked(KeyEvent.VK_S)) {
-            grid.save("new.gol");
+            saveGame();
         }
         if(keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_O)) {
-            grid.load("p15 pre-pulsar spaceship.gol");
+            loadGame();
+        }
+        if (keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_H)) {
+            updateGame();
         }
 
         if(mouse.isPressed(MouseEvent.BUTTON1) && mouse.onScreen()) {
@@ -124,6 +126,90 @@ public class Game implements Runnable {
 
         grid.draw(graphics);
 
+    }
+
+    public void saveGame() {
+        final String[] fileName = {"default.gol"};
+        JFrame saveGamePopUP= new JFrame("Save Game");
+        saveGamePopUP.setLayout(new FlowLayout());
+        JLabel prompt = new JLabel("Enter File Name:");
+        saveGamePopUP.setSize(new Dimension(150, 150));
+        JTextField userInput = new JTextField("default.gol");
+        JButton save = new JButton("Enter");
+        save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fileName[0] = userInput.getText();
+                if (fileName[0].contains(".gol")) {
+                    grid.save(fileName[0]);
+                } else {
+                    grid.save(fileName[0] + ".gol");
+                }
+                saveGamePopUP.dispose();
+            }
+        });
+        saveGamePopUP.add(prompt);
+        saveGamePopUP.add(userInput);
+        saveGamePopUP.add(save);
+        saveGamePopUP.setVisible(true);
+    }
+
+    public void loadGame() {
+        final String[] fileName = {"default.gol"};
+        JFrame saveGamePopUP= new JFrame("Load Save File");
+        saveGamePopUP.setLayout(new FlowLayout());
+        JLabel prompt = new JLabel("Enter File Name:");
+        saveGamePopUP.setSize(new Dimension(150, 150));
+        JTextField userInput = new JTextField("default.gol");
+        JButton save = new JButton("Load Game");
+        save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                fileName[0] = userInput.getText();
+                if (fileName[0].contains(".gol")) {
+                    grid.load(fileName[0]);
+                } else {
+                    grid.load(fileName[0] + ".gol");
+                }
+                saveGamePopUP.dispose();
+            }
+        });
+        saveGamePopUP.add(prompt);
+        saveGamePopUP.add(userInput);
+        saveGamePopUP.add(save);
+        saveGamePopUP.setVisible(true);
+    }
+
+    public void updateGame() {
+        JFrame saveGamePopUP= new JFrame("Change Game Rules");
+        saveGamePopUP.setLayout(new FlowLayout());
+        saveGamePopUP.setSize(new Dimension(250, 200));
+        JLabel xLabel = new JLabel("Game Rule X:");
+        JLabel yLabel = new JLabel("Game Rule Y:");
+        JLabel zLabel = new JLabel("Game Rule Z:");
+        Integer[] comboBoxChoices = {0,1,2,3,4,5,6,7,8,9,10};
+        JComboBox<Integer> xComboBox = new JComboBox<>(comboBoxChoices);
+        JComboBox<Integer> yComboBox = new JComboBox<>(comboBoxChoices);
+        JComboBox<Integer> zComboBox = new JComboBox<>(comboBoxChoices);
+        JButton save = new JButton("Save Rules");
+        save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int x = xComboBox.getSelectedIndex();
+                int y = yComboBox.getSelectedIndex();
+                int z = zComboBox.getSelectedIndex();
+                grid.getCell_states().updateRules(x, y, z);
+                saveGamePopUP.dispose();
+            }
+        });
+        saveGamePopUP.add(xLabel);
+        saveGamePopUP.add(xComboBox);
+        saveGamePopUP.add(yLabel);
+        saveGamePopUP.add(yComboBox);
+        saveGamePopUP.add(zLabel);
+        saveGamePopUP.add(zComboBox);
+        saveGamePopUP.add(save);
+        saveGamePopUP.setVisible(true);
     }
 
 
