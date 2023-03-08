@@ -4,8 +4,10 @@ import java.awt.Color;
 import java.awt.event.MouseEvent;
 import java.awt.Graphics;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Grid {
@@ -161,6 +163,27 @@ public class Grid {
             e.printStackTrace();
             System.exit(0);
         }
+    }
+
+    public int[] findLoadWH(String filename) {
+        String file = "savefiles/" + filename;
+        int rows = 0;
+        int cols = 0;
+        try {
+            Scanner fileRead = new Scanner(new File(file));
+            while (fileRead.hasNext()) {
+                String line = fileRead.nextLine();
+                if (line.startsWith("#:")) {
+                    String comments = line;
+                } else if (line.startsWith(".") || line.startsWith("o")){
+                    cols = line.length();
+                    rows++;
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("That game state does not exist: " + e.getMessage());
+        }
+        return new int[]{rows, cols};
     }
 
     public void save(String filename) {
