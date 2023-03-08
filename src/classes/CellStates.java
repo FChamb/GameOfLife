@@ -26,8 +26,8 @@ public class CellStates {
 
 
     public CellStates() {
-        colours[0] = Color.BLACK;
-        colours[1] = Color.WHITE;
+        colours[0] = Color.WHITE;
+        colours[1] = Color.BLACK;
     }
 
     public void updateRules(int xRule, int yRule, int zRule) {
