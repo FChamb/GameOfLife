@@ -9,7 +9,9 @@ import javax.imageio.ImageIO;
 public class Button {
     
     public enum Type {
-        PLAY(Atlas.PLAY_UP);
+                PLAY(Atlas.PLAY_UP        ),
+                STOP(Atlas.STOP_UP        ),
+        FAST_FORWARD(Atlas.FAST_FORWARD_UP);
 
 
 
@@ -41,7 +43,7 @@ public class Button {
     public Button(String asset_path, Type type, int x, int y) throws IOException {
         this.asset_path = asset_path;
         this.type = type;
-        this.x = y; this.y = y;
+        this.x = x; this.y = y;
 
         pointer = 0;
 

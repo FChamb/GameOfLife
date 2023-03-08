@@ -22,9 +22,11 @@ public class GUI {
     }
 
     private void constructButtons() throws IOException {
-        buttons = new Button[1];
+        buttons = new Button[3];
 
-        buttons[0] = new Button(asset_path, Button.Type.PLAY, 0, 0);
+        buttons[0] = new Button(asset_path, Button.Type.PLAY        ,  0, 0);
+        buttons[1] = new Button(asset_path, Button.Type.STOP        , 46, 0);
+        buttons[2] = new Button(asset_path, Button.Type.FAST_FORWARD, 92, 0);
     }
 
 

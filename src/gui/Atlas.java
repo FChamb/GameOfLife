@@ -1,9 +1,14 @@
 package gui;
 
 public enum Atlas {
-    DEFAULT(46,0,50,50),
-    
-    PLAY_UP(0,0,45,106);
+            DEFAULT( 0,103,50, 50),
+
+            PLAY_UP( 0,  0,45,103),
+
+            STOP_UP(45,  0,45,103),
+
+    FAST_FORWARD_UP(90,  0,45,103)
+    ;
 
 
 
