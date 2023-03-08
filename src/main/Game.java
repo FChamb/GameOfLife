@@ -1,11 +1,15 @@
+package main;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
-import java.io.File;
 import java.io.IOException;
+
+import classes.Grid;
+import gui.GUI;
 
 public class Game implements Runnable {
 
@@ -135,9 +139,8 @@ public class Game implements Runnable {
         saveGamePopUP.setLayout(new FlowLayout());
         JLabel prompt = new JLabel("Enter File Name:");
         saveGamePopUP.setSize(new Dimension(150, 150));
-        saveGamePopUP.setLocationRelativeTo(null);
         JTextField userInput = new JTextField("default.gol");
-        JButton save = new JButton("Save");
+        JButton save = new JButton("Enter");
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -157,25 +160,27 @@ public class Game implements Runnable {
     }
 
     public void loadGame() {
-        File saved = new File("savefiles");
-        String[] fileNames = saved.list();
+        final String[] fileName = {"default.gol"};
         JFrame saveGamePopUP= new JFrame("Load Save File");
         saveGamePopUP.setLayout(new FlowLayout());
-        JLabel prompt = new JLabel("Choose Saved File:");
-        saveGamePopUP.setSize(new Dimension(300, 150));
-        saveGamePopUP.setLocationRelativeTo(null);
-        JComboBox<String> files = new JComboBox<>(fileNames);
-        JButton save = new JButton("Load");
+        JLabel prompt = new JLabel("Enter File Name:");
+        saveGamePopUP.setSize(new Dimension(150, 150));
+        JTextField userInput = new JTextField("default.gol");
+        JButton save = new JButton("Load Game");
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String fileName = files.getSelectedItem().toString();
-                grid.load(fileName);
+                fileName[0] = userInput.getText();
+                if (fileName[0].contains(".gol")) {
+                    grid.load(fileName[0]);
+                } else {
+                    grid.load(fileName[0] + ".gol");
+                }
                 saveGamePopUP.dispose();
             }
         });
         saveGamePopUP.add(prompt);
-        saveGamePopUP.add(files);
+        saveGamePopUP.add(userInput);
         saveGamePopUP.add(save);
         saveGamePopUP.setVisible(true);
     }
@@ -184,7 +189,6 @@ public class Game implements Runnable {
         JFrame saveGamePopUP= new JFrame("Change Game Rules");
         saveGamePopUP.setLayout(new FlowLayout());
         saveGamePopUP.setSize(new Dimension(250, 200));
-        saveGamePopUP.setLocationRelativeTo(null);
         JLabel xLabel = new JLabel("Game Rule X:");
         JLabel yLabel = new JLabel("Game Rule Y:");
         JLabel zLabel = new JLabel("Game Rule Z:");
