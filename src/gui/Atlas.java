@@ -1,6 +1,8 @@
 package gui;
 
 public enum Atlas {
+    DEFAULT(46,0,50,50),
+    
     PLAY_UP(0,0,45,106);
 
 
