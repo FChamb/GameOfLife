@@ -71,6 +71,13 @@ public class Game implements Runnable {
         // fpu = (int)(fps / ups);
     }
 
+    public void updateGrid(int grid_w, int grid_h) {
+        grid_width = 500; grid_height = 500;
+        grid_x = 100; grid_y = 100; this.grid_w = grid_w; this.grid_h = grid_h;
+        cell_w = grid_width/this.grid_w; cell_h = grid_height/this.grid_h;
+        grid = new Grid(grid_x, grid_y, this.grid_w, this.grid_h, cell_w, cell_h);
+    }
+
 
     public void update() {
         // ----- KEYBOARD AND MOUSE REGISTRY -----
@@ -112,6 +119,9 @@ public class Game implements Runnable {
         }
         if (keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_H)) {
             updateGame();
+        }
+        if (keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_U)) {
+            changeGrid();
         }
 
         if(mouse.isPressed(MouseEvent.BUTTON1) && mouse.onScreen()) {
@@ -168,27 +178,23 @@ public class Game implements Runnable {
     }
 
     public void loadGame() {
-        final String[] fileName = {"default.gol"};
+        File files = new File("savefiles");
+        final String[] fileNames = files.list();
         JFrame saveGamePopUP= new JFrame("Load Save File");
         saveGamePopUP.setLayout(new FlowLayout());
-        JLabel prompt = new JLabel("Enter File Name:");
-        saveGamePopUP.setSize(new Dimension(150, 150));
-        JTextField userInput = new JTextField("default.gol");
+        JLabel prompt = new JLabel("Pick Save File:");
+        saveGamePopUP.setSize(new Dimension(250, 150));
+        JComboBox<String> saves = new JComboBox<>(fileNames);
         JButton save = new JButton("Load Game");
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                fileName[0] = userInput.getText();
-                if (fileName[0].contains(".gol")) {
-                    grid.load(fileName[0]);
-                } else {
-                    grid.load(fileName[0] + ".gol");
-                }
+                grid.load(saves.getSelectedItem().toString());
                 saveGamePopUP.dispose();
             }
         });
         saveGamePopUP.add(prompt);
-        saveGamePopUP.add(userInput);
+        saveGamePopUP.add(saves);
         saveGamePopUP.add(save);
         saveGamePopUP.setVisible(true);
     }
@@ -221,6 +227,30 @@ public class Game implements Runnable {
         saveGamePopUP.add(yComboBox);
         saveGamePopUP.add(zLabel);
         saveGamePopUP.add(zComboBox);
+        saveGamePopUP.add(save);
+        saveGamePopUP.setVisible(true);
+    }
+
+    public void changeGrid() {
+        JFrame saveGamePopUP= new JFrame("Update Board Size");
+        saveGamePopUP.setLayout(new FlowLayout());
+        JLabel xPrompt = new JLabel("Enter Width:");
+        JLabel yPrompt = new JLabel("Enter Height:");
+        saveGamePopUP.setSize(new Dimension(150, 150));
+        JTextField xUserInput = new JTextField(String.valueOf(this.grid_w));
+        JTextField yUserInput = new JTextField(String.valueOf(this.grid_h));
+        JButton save = new JButton("Enter");
+        save.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                updateGrid(Integer.parseInt(xUserInput.getText()), Integer.parseInt(yUserInput.getText()));
+                saveGamePopUP.dispose();
+            }
+        });
+        saveGamePopUP.add(xPrompt);
+        saveGamePopUP.add(xUserInput);
+        saveGamePopUP.add(yPrompt);
+        saveGamePopUP.add(yUserInput);
         saveGamePopUP.add(save);
         saveGamePopUP.setVisible(true);
     }
