@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
+import java.io.File;
 import java.io.IOException;
 
 import classes.Grid;
@@ -28,6 +29,7 @@ public class Game implements Runnable {
     private byte sellectedState;
     private boolean active;
 
+    private String asset_path;
     private GUI gui;
 
     private int tick;
@@ -53,10 +55,13 @@ public class Game implements Runnable {
         sellectedState = (byte)1;
         active = false;
 
+        asset_path = "./assets";
         try {
-            gui = new GUI("./assets");
+            gui = new GUI(asset_path);
         } catch(IOException e) {
-            e.printStackTrace();
+            System.out.println("Fatal Error: Failed to load asset files");
+            if(!new File(asset_path).isDirectory()) System.out.println("The directory \'"+asset_path+"\' does not exist");
+            else                                    System.out.println(e);
             System.exit(0);
         }
 
