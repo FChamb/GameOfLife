@@ -18,10 +18,12 @@ public class Display extends JFrame {
 
 
     public Display(int width, int height, Mouse mouse, Keyboard keyboard) {
+        // ----- INITIALISE VARIABLES -----
         this.width = width; this.height = height;
 
         this.mouse = mouse; this.keyboard = keyboard;
         
+        // ----- CONFIGURE JFRAME -----
         setTitle("Game of Life");
         setSize(width, height);
 

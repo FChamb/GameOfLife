@@ -37,6 +37,7 @@ public class Game implements Runnable {
 
 
     public Game(int width, int height) {
+        // ----- INITIALISE VARIABLES -----
         this.width = width; this.height = height;
 
         mouse = new Mouse(); keyboard = new Keyboard();
@@ -55,6 +56,7 @@ public class Game implements Runnable {
         sellectedState = (byte)1;
         active = false;
 
+        // ----- LOAD GUI -----
         asset_path = "./assets";
         try {
             gui = new GUI(asset_path);
@@ -71,6 +73,7 @@ public class Game implements Runnable {
 
 
     public void update() {
+        // ----- KEYBOARD AND MOUSE REGISTRY -----
         if(keyboard.isPressed(KeyEvent.VK_ESCAPE)) System.exit(0);
 
         tick++;
@@ -229,6 +232,7 @@ public class Game implements Runnable {
 
     @Override
     public void run() {
+        // ----- CAPTURE FRAME AND UPDATE RATE -----
         double spf = 1/fps;
         double time_moment = System.currentTimeMillis()/1000.0, time_block = 0;
         while(!Thread.interrupted()) {

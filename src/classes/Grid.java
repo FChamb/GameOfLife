@@ -24,6 +24,7 @@ public class Grid {
 
 
     public Grid(int x, int y, int width, int height, int cell_width, int cell_height) {
+        // ----- INITIALISE VARIABLES -----
         this.x = x; this.y = y;
         this.width = width; this.height = height;
         this.cell_width = cell_width; this.cell_height = cell_height;
@@ -36,12 +37,14 @@ public class Grid {
 
 
     private int fixX(int x) {
+        // ----- MAP X-COORDANITE -----
         x -= this.x;
         x /= cell_width;
 
         return x;
     }
     private int fixY(int y) {
+        // ----- MAP Y-COORDANITE -----
         y -= this.y;
         y /= cell_height;
 
@@ -51,7 +54,6 @@ public class Grid {
     public void setState(int x, int y, byte state) {
         x = fixX(x);
         y = fixY(y);
-        // System.out.println(x+" : "+y);
         if(x < 0 || x >= width || y < 0 || y >= height) return;
 
         cells[y][x] = state;
@@ -108,7 +110,7 @@ public class Grid {
         int off_x = x, off_y = y;
         int x,y;
 
-        // draw cells
+        // ----- DRAW CELLS -----
         byte cell;
         for(int j = 0; j < height; j++) {
             for(int i = 0; i < width; i++) {
@@ -122,7 +124,7 @@ public class Grid {
         
 
         if(!draw_grid) return;
-        // draw grid
+        // ----- DRAW GRID -----
         graphics.setColor(GRID_COLOUR);
         for(int j = 0; j < height; j++) {
             y = off_y + j*cell_height;
