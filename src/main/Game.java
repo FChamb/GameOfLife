@@ -71,6 +71,13 @@ public class Game implements Runnable {
         // fpu = (int)(fps / ups);
     }
 
+    public void updateGrid(int grid_w, int grid_h) {
+        grid_width = 500; grid_height = 500;
+        grid_x = 100; grid_y = 100; this.grid_w = grid_w; this.grid_h = grid_height;
+        cell_w = grid_width/this.grid_w; cell_h = grid_height/this.grid_h;
+        grid = new Grid(grid_x, grid_y, this.grid_w, this.grid_h, cell_w, cell_h);
+    }
+
 
     public void update() {
         // ----- KEYBOARD AND MOUSE REGISTRY -----
@@ -113,6 +120,7 @@ public class Game implements Runnable {
         if (keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_H)) {
             updateGame();
         }
+        //if (keyboard.ctrl() && keyboard.isClicked(KeyEvent.))
 
         if(mouse.isPressed(MouseEvent.BUTTON1) && mouse.onScreen()) {
             Point location = mouse.getLocation();
