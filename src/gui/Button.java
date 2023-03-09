@@ -11,7 +11,9 @@ public class Button {
     public enum Type {
                 PLAY(Atlas.PLAY_UP        ),
                 STOP(Atlas.STOP_UP        ),
-        FAST_FORWARD(Atlas.FAST_FORWARD_UP);
+        FAST_FORWARD(Atlas.FAST_FORWARD_UP),
+              REWIND(Atlas.REWIND_UP      ),
+                STEP(Atlas.STEP_UP        );
 
 
 
