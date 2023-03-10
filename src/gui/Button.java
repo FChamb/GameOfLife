@@ -13,17 +13,17 @@ public class Button {
                 STOP(Atlas.STOP_UP        ),
         FAST_FORWARD(Atlas.FAST_FORWARD_UP),
               REWIND(Atlas.REWIND_UP      ),
-                STEP(Atlas.STEP_UP        );
+                STEP(Atlas.STEP_UP        ),
+               EJECT(Atlas.EJECT_UP       ),
+               ADMIT(Atlas.ADMIT_UP       );
 
 
 
         public Atlas[] atlantes;
-        public int scale, maps;
+        public int maps;
 
 
-        private Type(           Atlas... atlantes) { this(1, atlantes); }
-        private Type(int scale, Atlas... atlantes) {
-            this.scale = scale;
+        private Type(Atlas... atlantes) {
             this.atlantes = atlantes;
             maps = atlantes.length;
         }
@@ -38,14 +38,17 @@ public class Button {
     private int pointer;
 
     private int x, y;
+    private double scale;
 
     private boolean pressed;
 
 
-    public Button(String asset_path, Type type, int x, int y) throws IOException {
+    public Button(String asset_path, Type type, int x, int y              ) throws IOException { this(asset_path, type, x, y, 1); }
+    public Button(String asset_path, Type type, int x, int y, double scale) throws IOException {
         this.asset_path = asset_path;
         this.type = type;
         this.x = x; this.y = y;
+        this.scale = scale;
 
         pointer = 0;
 
@@ -58,11 +61,24 @@ public class Button {
         int maps = type.maps;
 
         sprites = new BufferedImage[maps];
-        Atlas a;
+        Atlas a; BufferedImage img; Graphics g;
+        int sw, sh;
         for(int i = 0; i < maps; i++) {
             a = type.atlantes[i];
 
-            sprites[i] = atlas.getSubimage(a.x, a.y, a.w, a.h);
+            if(scale == 1) {
+                sprites[i] = atlas.getSubimage(a.x, a.y, a.w, a.h);
+                continue;
+            }
+
+            sw = (int)(a.w * scale); sh = (int)(a.h * scale);
+            sprites[i] = new BufferedImage(sw, sh, atlas.getType());
+            g = sprites[i].createGraphics();
+
+            img = atlas.getSubimage(a.x, a.y, a.w, a.h);
+            g.drawImage(img, 0, 0, sw, sh, 0, 0, a.w, a.h, null);
+
+            g.dispose();
         }
     }
 

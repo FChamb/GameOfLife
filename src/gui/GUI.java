@@ -22,19 +22,21 @@ public class GUI {
     }
 
     private void constructButtons() throws IOException {
-        buttons = new Button[5];
+        buttons = new Button[7];
 
         buttons[0] = new Button(asset_path, Button.Type.REWIND      , 100, 750);
         buttons[1] = new Button(asset_path, Button.Type.STOP        , 150, 750);
         buttons[2] = new Button(asset_path, Button.Type.PLAY        , 200, 750);
         buttons[3] = new Button(asset_path, Button.Type.STEP        , 250, 750);
         buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 300, 750);
+        buttons[5] = new Button(asset_path, Button.Type.EJECT       , 500, 750);
+        buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 556, 750);
     }
 
 
     public void draw(Graphics graphics) {
         graphics.drawImage(case_img, 0, 0, null);
 
-        for(Button b : buttons) b.draw(graphics);
+        for(Button b : buttons) if(b != null) b.draw(graphics);
     }
 }

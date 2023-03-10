@@ -3,6 +3,7 @@ package gui;
 public enum Atlas {
             DEFAULT(  0,103,50, 50),
 
+
             PLAY_UP(  0,  0,45,103),
 
             STOP_UP( 45,  0,45,103),
@@ -11,7 +12,12 @@ public enum Atlas {
 
           REWIND_UP(135,  0,45,103),
 
-            STEP_UP(180,  0,45,103)
+            STEP_UP(180,  0,45,103),
+
+
+           EJECT_UP(225,  0,51,103),
+
+           ADMIT_UP(276,  0,51,103)
     ;
 
 
