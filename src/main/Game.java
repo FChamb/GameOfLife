@@ -2,10 +2,7 @@ package main;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -136,8 +133,12 @@ public class Game implements Runnable {
 
         if(mouse.isClicked(MouseEvent.BUTTON1) && mouse.onScreen()) {
             Point location = mouse.getLocation();
+            gui.setState(location.x, location.y, this);
+        }
+        else
+        if(mouse.isPressed(MouseEvent.BUTTON1) && mouse.onScreen()) {
+            Point location = mouse.getLocation();
             grid.setState(location.x, location.y, sellectedState);
-            // gui.setState(location.x, location.y, this);
         }
         else
         if(mouse.isPressed(MouseEvent.BUTTON3) && mouse.onScreen()) {
@@ -149,8 +150,6 @@ public class Game implements Runnable {
             Point location = mouse.getLocation();
             grid.toggleState(location.x, location.y);
         }
-
-        gui.update(mouse, keyboard);
 
 
         if(active && tick % (int)(fps/ups) == 0) grid.update();
@@ -169,24 +168,29 @@ public class Game implements Runnable {
         JFrame saveGamePopUP= new JFrame("Save Game");
         saveGamePopUP.setLayout(new FlowLayout());
         JLabel prompt = new JLabel("Enter File Name:");
-        saveGamePopUP.setSize(new Dimension(150, 150));
+        JLabel prompt2 = new JLabel("Enter Comments:");
+        saveGamePopUP.setSize(new Dimension(130, 160));
         saveGamePopUP.setLocationRelativeTo(null);
         JTextField userInput = new JTextField("default.gol");
+        JTextField comments = new JTextField("comment");
         JButton save = new JButton("Enter");
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 fileName[0] = userInput.getText();
+                String comment = comments.getText();
                 if (fileName[0].contains(".gol")) {
-                    grid.save(fileName[0]);
+                    grid.save(fileName[0], comment);
                 } else {
-                    grid.save(fileName[0] + ".gol");
+                    grid.save(fileName[0] + ".gol", comment);
                 }
                 saveGamePopUP.dispose();
             }
         });
         saveGamePopUP.add(prompt);
         saveGamePopUP.add(userInput);
+        saveGamePopUP.add(prompt2);
+        saveGamePopUP.add(comments);
         saveGamePopUP.add(save);
         saveGamePopUP.setVisible(true);
     }
@@ -197,7 +201,7 @@ public class Game implements Runnable {
         JFrame saveGamePopUP= new JFrame("Load Save File");
         saveGamePopUP.setLayout(new FlowLayout());
         JLabel prompt = new JLabel("Pick Save File:");
-        saveGamePopUP.setSize(new Dimension(250, 150));
+        saveGamePopUP.setSize(new Dimension(250, 125));
         saveGamePopUP.setLocationRelativeTo(null);
         JComboBox<String> saves = new JComboBox<>(fileNames);
         JButton save = new JButton("Load Game");

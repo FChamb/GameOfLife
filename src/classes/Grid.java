@@ -19,6 +19,7 @@ public class Grid {
     private int x, y;
     private int width, height;
     private int cell_width, cell_height;
+    private String comments;
 
     private byte[][] cells;
 
@@ -180,7 +181,7 @@ public class Grid {
             while (fileRead.hasNext()) {
                 String line = fileRead.nextLine();
                 if (line.startsWith("#:")) {
-                    String comments = line;
+                    comments = line;
                 } else if (line.startsWith(".") || line.startsWith("o")){
                     cols = line.length();
                     rows++;
@@ -192,7 +193,7 @@ public class Grid {
         return new int[]{rows, cols};
     }
 
-    public void save(String filename) {
+    public void save(String filename, String comments) {
         FileWriter writer = null;
         try {
             writer = new FileWriter(new File("./savefiles",filename));
@@ -202,6 +203,7 @@ public class Grid {
                 }
                 writer.write("\n");
             }
+            writer.write("#:" + comments);
 
             writer.close();
         } catch(IOException e) {
@@ -212,5 +214,9 @@ public class Grid {
 
     public CellStates getCell_states() {
         return this.cell_states;
+    }
+
+    public String getComments() {
+        return this.comments;
     }
 }

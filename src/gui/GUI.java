@@ -5,7 +5,8 @@ import main.Game;
 import main.Mouse;
 import main.Keyboard;
 
-import java.awt.Graphics;
+import java.awt.*;
+import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +40,6 @@ public class GUI {
     }
     
     public void setState(int x, int y, Game game) {
-        System.out.println(x + " " + y);
         Button choice = null;
         for (Button button : buttons) {
             int bX = button.getX();
@@ -51,7 +51,6 @@ public class GUI {
         }
         if (choice != null) {
             Button.Type type = choice.getType();
-            System.out.println(type);
             switch (type) {
                 case REWIND:
                     System.out.println("Rewind");
@@ -76,14 +75,6 @@ public class GUI {
                     break;
             }
         }
-    }
-
-
-    public void update(Mouse mouse, Keyboard keyboard) {
-        Point loc = mouse.getLocation();
-        int x = loc.x, y = loc.y;
-
-        if()
     }
 
 
