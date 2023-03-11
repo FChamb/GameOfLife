@@ -9,13 +9,13 @@ import javax.imageio.ImageIO;
 public class Button {
     
     public enum Type {
-                PLAY(Atlas.PLAY_UP        ),
-                STOP(Atlas.STOP_UP        ),
-        FAST_FORWARD(Atlas.FAST_FORWARD_UP),
-              REWIND(Atlas.REWIND_UP      ),
-                STEP(Atlas.STEP_UP        ),
-               EJECT(Atlas.EJECT_UP       ),
-               ADMIT(Atlas.ADMIT_UP       );
+                PLAY(Atlas.PLAY_UP        , Atlas.PLAY_DOWN        ),
+                STOP(Atlas.STOP_UP        , Atlas.STOP_DOWN        ),
+        FAST_FORWARD(Atlas.FAST_FORWARD_UP, Atlas.FAST_FORWARD_DOWN),
+              REWIND(Atlas.REWIND_UP      , Atlas.REWIND_DOWN      ),
+                STEP(Atlas.STEP_UP        , Atlas.STEP_DOWN        ),
+               EJECT(Atlas.EJECT_UP                                ),
+               ADMIT(Atlas.ADMIT_UP                                );
 
 
 
@@ -35,7 +35,7 @@ public class Button {
     private Type type;
 
     private BufferedImage[] sprites;
-    private int pointer;
+    public int frames, pointer;
 
     private int x, y;
     private double scale;
@@ -58,12 +58,12 @@ public class Button {
     private void extractSprites() throws IOException {
         BufferedImage atlas = ImageIO.read(new File(asset_path,"atlas.png"));
 
-        int maps = type.maps;
+        frames = type.maps;
 
-        sprites = new BufferedImage[maps];
+        sprites = new BufferedImage[frames];
         Atlas a; BufferedImage img; Graphics g;
         int sw, sh;
-        for(int i = 0; i < maps; i++) {
+        for(int i = 0; i < frames; i++) {
             a = type.atlantes[i];
 
             if(scale == 1) {
