@@ -137,7 +137,7 @@ public class Game implements Runnable {
         if(mouse.isClicked(MouseEvent.BUTTON1) && mouse.onScreen()) {
             Point location = mouse.getLocation();
             grid.setState(location.x, location.y, sellectedState);
-            gui.setState(location.x, location.y, this);
+            // gui.setState(location.x, location.y, this);
         }
         else
         if(mouse.isPressed(MouseEvent.BUTTON3) && mouse.onScreen()) {
@@ -149,6 +149,8 @@ public class Game implements Runnable {
             Point location = mouse.getLocation();
             grid.toggleState(location.x, location.y);
         }
+
+        gui.update(mouse, keyboard);
 
 
         if(active && tick % (int)(fps/ups) == 0) grid.update();

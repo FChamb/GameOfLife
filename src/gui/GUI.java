@@ -2,6 +2,8 @@ package gui;
 
 import classes.Grid;
 import main.Game;
+import main.Mouse;
+import main.Keyboard;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
@@ -74,6 +76,14 @@ public class GUI {
                     break;
             }
         }
+    }
+
+
+    public void update(Mouse mouse, Keyboard keyboard) {
+        Point loc = mouse.getLocation();
+        int x = loc.x, y = loc.y;
+
+        if()
     }
 
 
