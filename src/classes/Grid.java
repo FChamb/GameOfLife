@@ -107,6 +107,12 @@ public class Grid {
         cells = buffer;
     }
 
+    public void update50() {
+        for (int i = 0; i < 50; i++) {
+            update();
+        }
+    }
+
 
     public void draw(Graphics graphics) {
         int off_x = x, off_y = y;

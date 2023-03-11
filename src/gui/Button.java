@@ -82,6 +82,22 @@ public class Button {
         }
     }
 
+    public int getX() {
+        return this.x;
+    }
+
+    public int getY() {
+        return this.y;
+    }
+
+    public double getScale() {
+        return this.scale;
+    }
+
+    public Type getType() {
+        return this.type;
+    }
+
 
     public void draw(Graphics graphics) {
         graphics.drawImage(sprites[pointer], x, y, null);

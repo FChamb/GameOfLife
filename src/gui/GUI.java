@@ -1,5 +1,8 @@
 package gui;
 
+import classes.Grid;
+import main.Game;
+
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -31,6 +34,46 @@ public class GUI {
         buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 300, 750);
         buttons[5] = new Button(asset_path, Button.Type.EJECT       , 500, 750);
         buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 556, 750);
+    }
+    
+    public void setState(int x, int y, Game game) {
+        System.out.println(x + " " + y);
+        Button choice = null;
+        for (Button button : buttons) {
+            int bX = button.getX();
+            int bY = button.getY();
+            if (x >= bX && x <= bX + 46 && y >= bY && y <= bY + 103) {
+                choice = button;
+                break;
+            }
+        }
+        if (choice != null) {
+            Button.Type type = choice.getType();
+            System.out.println(type);
+            switch (type) {
+                case REWIND:
+                    System.out.println("Rewind");
+                    break;
+                case STOP:
+                    game.setActive(false);
+                    break;
+                case PLAY:
+                    game.setActive(true);
+                    break;
+                case STEP:
+                    game.getGrid().update();
+                    break;
+                case FAST_FORWARD:
+                    game.getGrid().update50();
+                    break;
+                case EJECT:
+                    game.saveGame();
+                    break;
+                case ADMIT:
+                    game.loadGame();
+                    break;
+            }
+        }
     }
 
 

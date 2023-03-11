@@ -8,6 +8,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import classes.Grid;
 import gui.GUI;
@@ -34,6 +35,7 @@ public class Game implements Runnable {
 
     private int tick;
     private int ups;
+    private ArrayList<Grid> previousGrids = new ArrayList<>();
 
 
     public Game(int width, int height) {
@@ -69,6 +71,14 @@ public class Game implements Runnable {
 
         tick = 0; ups = 10;
         // fpu = (int)(fps / ups);
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Grid getGrid() {
+        return this.grid;
     }
 
     public void updateGrid(int grid_w, int grid_h) {
@@ -124,9 +134,10 @@ public class Game implements Runnable {
             changeGrid();
         }
 
-        if(mouse.isPressed(MouseEvent.BUTTON1) && mouse.onScreen()) {
+        if(mouse.isClicked(MouseEvent.BUTTON1) && mouse.onScreen()) {
             Point location = mouse.getLocation();
             grid.setState(location.x, location.y, sellectedState);
+            gui.setState(location.x, location.y, this);
         }
         else
         if(mouse.isPressed(MouseEvent.BUTTON3) && mouse.onScreen()) {
