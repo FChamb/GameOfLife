@@ -78,6 +78,41 @@ public class GUI {
     }
 
 
+    public void interact(Mouse mouse, Keyboard keyboard) {
+        Point loc = mouse.getLocation();
+        if(loc == null) return;
+        int x = loc.x, y = loc.y;
+
+        Button button; Button.Type type; Atlas area; int bx, by;
+        for(int b = 0; b < buttons.length; b++) {
+            if(buttons[b] == null) continue;
+            button = buttons[b]; bx = button.getX(); by = button.getY();
+            type = button.getType();
+            area = button.getCurrentFrameSize();
+            if(x >= bx && y >= by && x < bx+area.w && y < by+area.h) {
+                if(mouse.isPressed(MouseEvent.BUTTON1)) {
+                    // System.out.println("checking");
+                    // switch(button.getType()) {
+                    //     case PLAY:
+                    //         button.setFrame(1);
+                    //         break;
+                        
+                    //     default:
+                    //         continue;
+                    // }
+                    button.setFrame(1);
+                    if(type == Button.Type.STOP) buttons[2].setFrame(0);
+                } else if(!type.sticky){
+                    button.setFrame(0);
+                }
+            } else {
+                if(type.sticky) continue;
+                button.setFrame(0);
+            }
+        }
+    }
+
+
     public void draw(Graphics graphics) {
         graphics.drawImage(case_img, 0, 0, null);
 

@@ -192,6 +192,8 @@ public class Game implements Runnable {
             grid.toggleState(location.x, location.y);
         }
 
+        gui.interact(mouse, keyboard);
+
         // Continuously calls this update method while game is in play.
         if(active && tick % (int)(fps/ups) == 0) grid.update();
     }
