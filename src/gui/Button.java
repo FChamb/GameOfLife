@@ -9,23 +9,26 @@ import javax.imageio.ImageIO;
 public class Button {
     
     public enum Type {
-                PLAY(Atlas.PLAY_UP        , Atlas.PLAY_DOWN        ),
-                STOP(Atlas.STOP_UP        , Atlas.STOP_DOWN        ),
-        FAST_FORWARD(Atlas.FAST_FORWARD_UP, Atlas.FAST_FORWARD_DOWN),
-              REWIND(Atlas.REWIND_UP      , Atlas.REWIND_DOWN      ),
-                STEP(Atlas.STEP_UP        , Atlas.STEP_DOWN        ),
-               EJECT(Atlas.EJECT_UP                                ),
-               ADMIT(Atlas.ADMIT_UP                                );
+                PLAY(true, Atlas.PLAY_UP        , Atlas.PLAY_DOWN        ),
+                STOP(      Atlas.STOP_UP        , Atlas.STOP_DOWN        ),
+        FAST_FORWARD(      Atlas.FAST_FORWARD_UP, Atlas.FAST_FORWARD_DOWN),
+              REWIND(      Atlas.REWIND_UP      , Atlas.REWIND_DOWN      ),
+                STEP(      Atlas.STEP_UP        , Atlas.STEP_DOWN        ),
+               EJECT(      Atlas.EJECT_UP                                ),
+               ADMIT(      Atlas.ADMIT_UP                                );
 
 
 
         public Atlas[] atlantes;
         public int maps;
+        public boolean sticky;
 
 
-        private Type(Atlas... atlantes) {
+        private Type(                Atlas... atlantes) { this(false, atlantes); }
+        private Type(boolean sticky, Atlas... atlantes) {
             this.atlantes = atlantes;
             maps = atlantes.length;
+            this.sticky = sticky;
         }
     }
 
@@ -96,6 +99,20 @@ public class Button {
 
     public Type getType() {
         return this.type;
+    }
+
+    public Atlas getCurrentFrameSize() {
+        return type.atlantes[pointer];
+    }
+
+
+    public void shiftFrame(         ) { shiftFrame(1); }
+    public void shiftFrame(int steps) { setFrame(pointer + steps); }
+    public void   setFrame(int frame) {
+        pointer = frame;
+        while(pointer >= frames) pointer -= frames;
+        while(pointer <       0) pointer += frames;
+        // System.out.println(pointer);
     }
 
 
