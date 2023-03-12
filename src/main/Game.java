@@ -151,6 +151,8 @@ public class Game implements Runnable {
             grid.toggleState(location.x, location.y);
         }
 
+        gui.interact(mouse, keyboard);
+
 
         if(active && tick % (int)(fps/ups) == 0) grid.update();
     }
