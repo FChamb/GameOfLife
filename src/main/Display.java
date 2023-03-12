@@ -19,7 +19,7 @@ public class Display extends JFrame {
 
     private Canvas canvas;
 
-    /*
+    /**
      * The default constructor takes two integer parameters as well as a mouse and a keyboard input.
      * The width and height are used to determine the size of the grid. As this class extends JFrame,
      * it enables default JFrame methods to be called. The display sets the configurations in order to
