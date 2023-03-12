@@ -56,7 +56,11 @@ public class GUI {
     }
 
 
-    public void commitAction(Game game, Button.Type type){
+    public void commitAction(Game game, Button.Type type) {
+        for(Button b : buttons)
+            if(b != null && b.getType() == type)
+                b.setFrame(1);
+        
         switch (type) {
             case REWIND:
                 System.out.println("Rewind");
@@ -87,14 +91,14 @@ public class GUI {
     }
 
     public void interact(Game game, Mouse mouse, Keyboard keyboard) {
-        if(mouse.onScreen()) {
-            Point loc = mouse.getLocation();
-            if(loc == null) return;
-            int x = loc.x, y = loc.y;
+        Button button; Button.Type type; Atlas area; int bx, by; double bs;
+        for(int b = 0; b < buttons.length; b++) {
+            if(buttons[b] == null) continue;
 
-            Button button; Button.Type type; Atlas area; int bx, by; double bs;
-            for(int b = 0; b < buttons.length; b++) {
-                if(buttons[b] == null) continue;
+            Point loc = mouse.getLocation();
+            if(mouse.onScreen() && loc == null) {
+                int x = loc.x, y = loc.y;
+
                 button = buttons[b]; bx = button.getX(); by = button.getY(); bs = button.getScale();
                 type = button.getType();
                 area = button.getCurrentFrameSize();
@@ -109,7 +113,7 @@ public class GUI {
                         //     default:
                         //         continue;
                         // }
-                        button.setFrame(1);
+                        // button.setFrame(1);
                         commitAction(game, type);
                     } else if(!type.sticky) {
                         button.setFrame(0);
@@ -119,6 +123,10 @@ public class GUI {
                     button.setFrame(0);
                 }
             }
+        }
+
+        if(keyboard.isPressed(KeyEvent.VK_SPACE)) {
+            commitAction(game, Button.Type.PLAY);
         }
     }
 
