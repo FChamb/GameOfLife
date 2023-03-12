@@ -38,22 +38,6 @@ public class GUI {
         buttons[5] = new Button(asset_path, Button.Type.EJECT       , 600, 675, 2);
         buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 712, 675, 2);
     }
-    
-    public void setState(int x, int y, Game game) {
-        Button choice = null;
-        for (Button button : buttons) {
-            int bX = button.getX();
-            int bY = button.getY();
-            if (x >= bX && x <= bX + 46 && y >= bY && y <= bY + 103) {
-                choice = button;
-                break;
-            }
-        }
-        if (choice != null) {
-            Button.Type type = choice.getType();
-
-        }
-    }
 
 
     public void commitAction(Game game, Button.Type type) {

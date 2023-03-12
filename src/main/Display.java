@@ -19,7 +19,7 @@ public class Display extends JFrame {
 
     private Canvas canvas;
 
-    /*
+    /**
      * The default constructor takes two integer parameters as well as a mouse and a keyboard input.
      * The width and height are used to determine the size of the grid. As this class extends JFrame,
      * it enables default JFrame methods to be called. The display sets the configurations in order to
@@ -55,11 +55,9 @@ public class Display extends JFrame {
 
         // Create File Menu
         JMenu fileMenu = new JMenu("File");
-        JMenuItem openSaveItem = new JMenuItem("Open Save...");
-        JMenuItem overwriteSaveItem = new JMenuItem("Save");
-        JMenuItem createNewSaveItem = new JMenuItem("Save As...");
+        JMenuItem openSaveItem = new JMenuItem("Open Save");
+        JMenuItem createNewSaveItem = new JMenuItem("Save As");
         fileMenu.add(openSaveItem);
-        fileMenu.add(overwriteSaveItem);
         fileMenu.add(createNewSaveItem);
         myMenuBar.add(fileMenu);
 
@@ -67,7 +65,7 @@ public class Display extends JFrame {
         JMenu gameMenu = new JMenu("Game");
         JMenuItem playItem = new JMenuItem("Play");
         JMenuItem pauseItem = new JMenuItem("Pause");
-        JMenuItem stepItem = new JMenuItem("Step...");
+        JMenuItem stepItem = new JMenuItem("Step");
         JMenuItem fastForwardItem = new JMenuItem("Fast Forward");
         JMenuItem rewindItem = new JMenuItem("Rewind");
         gameMenu.add(playItem);
@@ -83,9 +81,9 @@ public class Display extends JFrame {
 
         // Create Edit Rule Menu
         JMenu editRulesMenu = new JMenu("Edit Rules");
-        JMenuItem editStepSizeItem = new JMenuItem("Edit Step Size...");
+        JMenuItem editStepSizeItem = new JMenuItem("Edit Step Size");
         JMenuItem editCellRulesItem = new JMenuItem("Edit Cell Rules");
-        JMenuItem editBoardItem = new JMenuItem("Edit Board Size...");
+        JMenuItem editBoardItem = new JMenuItem("Edit Board Size");
         editRulesMenu.add(editStepSizeItem);
         editRulesMenu.add(editCellRulesItem);
         editRulesMenu.add(editBoardItem);

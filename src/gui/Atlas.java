@@ -21,8 +21,10 @@ public enum Atlas {
 
 
            EJECT_UP(225,  0,51,103),
+      EJECT_DOWN(225, 103, 51, 103),
 
-           ADMIT_UP(276,  0,51,103)
+           ADMIT_UP(276,  0,51,103),
+      ADMIT_DOWN(276, 103, 51, 103)
     ;
 
 
