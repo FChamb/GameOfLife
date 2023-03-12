@@ -66,6 +66,20 @@ public class Display extends JFrame {
         gameMenu.add(rewindItem);
         myMenuBar.add(gameMenu);
 
+        // Create Cell Rule SubMenu
+        //JMenu cell
+
+
+        // Create Edit Rule Menu
+        JMenu editRulesMenu = new JMenu("Edit Rules");
+        JMenuItem editStepSizeItem = new JMenuItem("Edit Step Size...");
+        JMenuItem editCellRulesItem = new JMenuItem("Edit Cell Rules");
+        JMenuItem editBoardItem = new JMenuItem("Edit Board Size...");
+        editRulesMenu.add(editStepSizeItem);
+        editRulesMenu.add(editCellRulesItem);
+        editRulesMenu.add(editBoardItem);
+        myMenuBar.add(editRulesMenu);
+
         add(canvas);
         addMouseListener(mouse);
         addMouseMotionListener(mouse);
@@ -77,9 +91,6 @@ public class Display extends JFrame {
         setVisible(true);
         setLocationRelativeTo(null);
     }
-
-
-
 
     public void generateGraphics(Game game) {
         BufferStrategy bs = canvas.getBufferStrategy();
@@ -97,6 +108,7 @@ public class Display extends JFrame {
         g.dispose();
         bs.show();
     }
+
 
     
 }
