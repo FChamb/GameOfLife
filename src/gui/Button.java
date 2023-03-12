@@ -14,8 +14,8 @@ public class Button {
         FAST_FORWARD(      Atlas.FAST_FORWARD_UP, Atlas.FAST_FORWARD_DOWN),
               REWIND(      Atlas.REWIND_UP      , Atlas.REWIND_DOWN      ),
                 STEP(      Atlas.STEP_UP        , Atlas.STEP_DOWN        ),
-               EJECT(      Atlas.EJECT_UP                                ),
-               ADMIT(      Atlas.ADMIT_UP                                );
+               EJECT(      Atlas.EJECT_UP       , Atlas.EJECT_DOWN       ),
+               ADMIT(      Atlas.ADMIT_UP       , Atlas.ADMIT_DOWN       );
 
 
 

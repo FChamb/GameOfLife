@@ -57,11 +57,9 @@ public class Display extends JFrame{
 
         // Create File Menu
         JMenu fileMenu = new JMenu("File");
-        JMenuItem openSaveItem = new JMenuItem("Open Save...");
-        JMenuItem overwriteSaveItem = new JMenuItem("Save");
-        JMenuItem createNewSaveItem = new JMenuItem("Save As...");
+        JMenuItem openSaveItem = new JMenuItem("Open Save");
+        JMenuItem createNewSaveItem = new JMenuItem("Save As");
         fileMenu.add(openSaveItem);
-        fileMenu.add(overwriteSaveItem);
         fileMenu.add(createNewSaveItem);
         myMenuBar.add(fileMenu);
 
@@ -69,7 +67,7 @@ public class Display extends JFrame{
         JMenu gameMenu = new JMenu("Game");
         JMenuItem playItem = new JMenuItem("Play");
         JMenuItem pauseItem = new JMenuItem("Pause");
-        JMenuItem stepItem = new JMenuItem("Step...");
+        JMenuItem stepItem = new JMenuItem("Step");
         JMenuItem fastForwardItem = new JMenuItem("Fast Forward");
         JMenuItem rewindItem = new JMenuItem("Rewind");
         JMenuItem clearGridItem = new JMenuItem("Clear Grid");
@@ -96,8 +94,9 @@ public class Display extends JFrame{
 
         // Create Edit Rule Menu
         JMenu editRulesMenu = new JMenu("Edit Rules");
-        JMenuItem editStepSizeItem = new JMenuItem("Edit Step Size...");
-        JMenuItem editBoardItem = new JMenuItem("Edit Board Size...");
+        JMenuItem editStepSizeItem = new JMenuItem("Edit Step Size");
+        JMenuItem editCellRulesItem = new JMenuItem("Edit Cell Rules");
+        JMenuItem editBoardItem = new JMenuItem("Edit Board Size");
         editRulesMenu.add(editStepSizeItem);
         editRulesMenu.add(cellRuleSubMenu);
         editRulesMenu.add(editBoardItem);
