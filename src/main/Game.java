@@ -168,11 +168,7 @@ public class Game implements Runnable {
             changeGrid();
         }
 
-        // Mouse: left click while mouse is on panel checks to see if an on-screen button was clicked
-        // if(mouse.isClicked(MouseEvent.BUTTON1) && mouse.onScreen()) {
-        //     Point location = mouse.getLocation();
-        //     gui.setState(location.x, location.y, this);
-        // }
+
         // Mouse: left click (plus the option to drag) while mouse is on panel turns dead cells alive
         else
         if(mouse.isPressed(MouseEvent.BUTTON1) && mouse.onScreen()) {
@@ -192,6 +188,7 @@ public class Game implements Runnable {
             grid.toggleState(location.x, location.y);
         }
 
+        // Interact method which passes mouse and keyboard to GUI to enable clicking onscreen buttons
         gui.interact(this, mouse, keyboard);
 
         // Continuously calls this update method while game is in play.

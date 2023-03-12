@@ -51,35 +51,16 @@ public class GUI {
         }
         if (choice != null) {
             Button.Type type = choice.getType();
-            switch (type) {
-                case REWIND:
-                    System.out.println("Rewind");
-                    break;
-                case STOP:
-                    game.setActive(false);
-                    break;
-                case PLAY:
-                    game.setActive(true);
-                    break;
-                case STEP:
-                    game.getGrid().update();
-                    break;
-                case FAST_FORWARD:
-                    game.getGrid().update50();
-                    break;
-                case EJECT:
-                    game.saveGame();
-                    break;
-                case ADMIT:
-                    game.loadGame();
-                    break;
-            }
+
         }
     }
 
 
     public void commitAction(Game game, Button.Type type){
-        switch(type) {
+        switch (type) {
+            case REWIND:
+                System.out.println("Rewind");
+                break;
             case STOP:
                 game.setActive(false);
                 buttons[2].setFrame(0);
@@ -88,7 +69,18 @@ public class GUI {
                 game.setActive(true);
                 buttons[1].setFrame(0);
                 break;
-            
+            case STEP:
+                game.getGrid().update();
+                break;
+            case FAST_FORWARD:
+                game.getGrid().update50();
+                break;
+            case EJECT:
+                game.saveGame();
+                break;
+            case ADMIT:
+                game.loadGame();
+                break;
             default:
                 return;
         }
@@ -107,7 +99,7 @@ public class GUI {
                 type = button.getType();
                 area = button.getCurrentFrameSize();
                 if(x >= bx && y >= by && x < bx+area.w*bs && y < by+area.h*bs) {
-                    if(mouse.isPressed(MouseEvent.BUTTON1)) {
+                    if(mouse.isClicked(MouseEvent.BUTTON1)) {
                         // System.out.println("checking");
                         // switch(button.getType()) {
                         //     case PLAY:
