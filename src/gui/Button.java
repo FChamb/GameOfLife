@@ -10,7 +10,7 @@ public class Button {
     
     public enum Type {
                 PLAY(true, Atlas.PLAY_UP        , Atlas.PLAY_DOWN        ),
-                STOP(      Atlas.STOP_UP        , Atlas.STOP_DOWN        ),
+                STOP(true, Atlas.STOP_UP        , Atlas.STOP_DOWN        ),
         FAST_FORWARD(      Atlas.FAST_FORWARD_UP, Atlas.FAST_FORWARD_DOWN),
               REWIND(      Atlas.REWIND_UP      , Atlas.REWIND_DOWN      ),
                 STEP(      Atlas.STEP_UP        , Atlas.STEP_DOWN        ),

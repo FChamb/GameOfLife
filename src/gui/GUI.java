@@ -30,13 +30,13 @@ public class GUI {
     private void constructButtons() throws IOException {
         buttons = new Button[7];
 
-        buttons[0] = new Button(asset_path, Button.Type.REWIND      , 100, 750);
-        buttons[1] = new Button(asset_path, Button.Type.STOP        , 150, 750);
-        buttons[2] = new Button(asset_path, Button.Type.PLAY        , 200, 750);
-        buttons[3] = new Button(asset_path, Button.Type.STEP        , 250, 750);
-        buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 300, 750);
-        buttons[5] = new Button(asset_path, Button.Type.EJECT       , 500, 750);
-        buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 556, 750);
+        buttons[0] = new Button(asset_path, Button.Type.REWIND      ,  50, 675, 2);
+        buttons[1] = new Button(asset_path, Button.Type.STOP        , 150, 675, 2);
+        buttons[2] = new Button(asset_path, Button.Type.PLAY        , 250, 675, 2);
+        buttons[3] = new Button(asset_path, Button.Type.STEP        , 350, 675, 2);
+        buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 450, 675, 2);
+        buttons[5] = new Button(asset_path, Button.Type.EJECT       , 600, 675, 2);
+        buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 712, 675, 2);
     }
     
     public void setState(int x, int y, Game game) {
@@ -78,36 +78,54 @@ public class GUI {
     }
 
 
-    public void interact(Mouse mouse, Keyboard keyboard) {
-        Point loc = mouse.getLocation();
-        if(loc == null) return;
-        int x = loc.x, y = loc.y;
+    public void commitAction(Game game, Button.Type type){
+        switch(type) {
+            case STOP:
+                game.setActive(false);
+                buttons[2].setFrame(0);
+                break;
+            case PLAY:
+                game.setActive(true);
+                buttons[1].setFrame(0);
+                break;
+            
+            default:
+                return;
+        }
+    }
 
-        Button button; Button.Type type; Atlas area; int bx, by;
-        for(int b = 0; b < buttons.length; b++) {
-            if(buttons[b] == null) continue;
-            button = buttons[b]; bx = button.getX(); by = button.getY();
-            type = button.getType();
-            area = button.getCurrentFrameSize();
-            if(x >= bx && y >= by && x < bx+area.w && y < by+area.h) {
-                if(mouse.isPressed(MouseEvent.BUTTON1)) {
-                    // System.out.println("checking");
-                    // switch(button.getType()) {
-                    //     case PLAY:
-                    //         button.setFrame(1);
-                    //         break;
-                        
-                    //     default:
-                    //         continue;
-                    // }
-                    button.setFrame(1);
-                    if(type == Button.Type.STOP) buttons[2].setFrame(0);
-                } else if(!type.sticky){
+    public void interact(Game game, Mouse mouse, Keyboard keyboard) {
+        if(mouse.onScreen()) {
+            Point loc = mouse.getLocation();
+            if(loc == null) return;
+            int x = loc.x, y = loc.y;
+
+            Button button; Button.Type type; Atlas area; int bx, by; double bs;
+            for(int b = 0; b < buttons.length; b++) {
+                if(buttons[b] == null) continue;
+                button = buttons[b]; bx = button.getX(); by = button.getY(); bs = button.getScale();
+                type = button.getType();
+                area = button.getCurrentFrameSize();
+                if(x >= bx && y >= by && x < bx+area.w*bs && y < by+area.h*bs) {
+                    if(mouse.isPressed(MouseEvent.BUTTON1)) {
+                        // System.out.println("checking");
+                        // switch(button.getType()) {
+                        //     case PLAY:
+                        //         button.setFrame(1);
+                        //         break;
+                            
+                        //     default:
+                        //         continue;
+                        // }
+                        button.setFrame(1);
+                        commitAction(game, type);
+                    } else if(!type.sticky) {
+                        button.setFrame(0);
+                    }
+                } else {
+                    if(type.sticky) continue;
                     button.setFrame(0);
                 }
-            } else {
-                if(type.sticky) continue;
-                button.setFrame(0);
             }
         }
     }
