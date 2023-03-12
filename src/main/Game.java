@@ -169,10 +169,10 @@ public class Game implements Runnable {
         }
 
         // Mouse: left click while mouse is on panel checks to see if an on-screen button was clicked
-        if(mouse.isClicked(MouseEvent.BUTTON1) && mouse.onScreen()) {
-            Point location = mouse.getLocation();
-            gui.setState(location.x, location.y, this);
-        }
+        // if(mouse.isClicked(MouseEvent.BUTTON1) && mouse.onScreen()) {
+        //     Point location = mouse.getLocation();
+        //     gui.setState(location.x, location.y, this);
+        // }
         // Mouse: left click (plus the option to drag) while mouse is on panel turns dead cells alive
         else
         if(mouse.isPressed(MouseEvent.BUTTON1) && mouse.onScreen()) {
