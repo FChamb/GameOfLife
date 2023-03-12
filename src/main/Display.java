@@ -19,6 +19,17 @@ public class Display extends JFrame {
 
     private Canvas canvas;
 
+    /*
+     * The default constructor takes two integer parameters as well as a mouse and a keyboard input.
+     * The width and height are used to determine the size of the grid. As this class extends JFrame,
+     * it enables default JFrame methods to be called. The display sets the configurations in order to
+     * properly render our GUI.
+     * @param width - An integer with the size of the width of the current canvas.
+     * @param height - An integer with the size of the height of the current canvas.
+     * @param mouse - A mouse object which tracks the players mouse placement.
+     * @param keyboard - A keyboard object which tracks the players key inputs.
+     */
+     
     public Display(int width, int height, Mouse mouse, Keyboard keyboard) {
         // ----- INITIALISE VARIABLES -----
         this.width = width; this.height = height;
@@ -92,6 +103,11 @@ public class Display extends JFrame {
         setLocationRelativeTo(null);
     }
 
+    /**
+     * generateGraphics takes a game object and draws the overlay. A toolkit is synced to the program
+     * to enable fluidity on macOS as well as Linux.
+     * @param game - A game object in which the graphics are drawn to.
+     */
     public void generateGraphics(Game game) {
         BufferStrategy bs = canvas.getBufferStrategy();
         // if(bs == null) canvas.createBufferStrategy(3);

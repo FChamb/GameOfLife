@@ -35,6 +35,15 @@ public class Game implements Runnable {
     private ArrayList<Grid> previousGrids = new ArrayList<>();
 
 
+    /**
+     * The Game constructor takes two integer parameters and begins setting all the local private variables
+     * to the appropriate settings. The grid size is defaulted to a 50 by 50 square and the cell dimension
+     * sizes are found by dividing the grid's total width and height by number of columns and rows. The state of
+     * play, active, is set to false. Finally, the program takes the assets path and attempts to create a new GUI
+     * object with the graphical overlay. At the very end, tick speed and fps are set to default of 60 frames/sec.
+     * @param width - An integer variable containing the desired starting width of the game panel.
+     * @param height - An integer variable containing the desired starting height of the game panel.
+     */
     public Game(int width, int height) {
         // ----- INITIALISE VARIABLES -----
         this.width = width; this.height = height;
@@ -45,8 +54,6 @@ public class Game implements Runnable {
         fps = 60;
 
 
-        // grid_width = 500; grid_height = 500;
-        // grid_x = 100; grid_y = 100; grid_w = 50; grid_h = 50;
         grid_width = 500; grid_height = 500;
         grid_x = 100; grid_y = 100; grid_w = 50; grid_h = 50;
         cell_w = grid_width/grid_w; cell_h = grid_height/grid_h;
@@ -67,17 +74,32 @@ public class Game implements Runnable {
         }
 
         tick = 0; ups = 10;
-        // fpu = (int)(fps / ups);
     }
 
+    /**
+     * A setter method which changes the state of the private attribute, active.
+     * @param active - A boolean values to decide if the game is in play or paused.
+     */
     public void setActive(boolean active) {
         this.active = active;
     }
 
+    /**
+     * A getter method which returns the local private grid object i.e. the current state of the game.
+     * @return - A Grid object variable with the current state of play.
+     */
     public Grid getGrid() {
         return this.grid;
     }
 
+    /**
+     * updateGrid takes a new set of values, one for the new desired grid width and one for the
+     * new desired grid height. Then the appropriate dimensions for the board are calculated and
+     * the physical pixel size of the individual cells are found. The private variables grid is set
+     * to a new grid, matching the desired shape and size.
+     * @param grid_w - An integer value of the number of cells wide for a new grid.
+     * @param grid_h -  An integer value of the number of cell tall for the new grid.
+     */
     public void updateGrid(int grid_w, int grid_h) {
         grid_width = 500; grid_height = 500;
         grid_x = 100; grid_y = 100; this.grid_w = grid_w; this.grid_h = grid_h;
@@ -86,77 +108,97 @@ public class Game implements Runnable {
     }
 
 
+    /**
+     * This method contains a multitude of conditional statements, checking whether the user
+     * has clicked or pressed a key button/key. The appropriate action is called when a given
+     * input has been registered.
+     */
     public void update() {
         // ----- KEYBOARD AND MOUSE REGISTRY -----
+        // Keyboard: esc key clicked ends game
         if(keyboard.isPressed(KeyEvent.VK_ESCAPE)) System.exit(0);
 
         tick++;
         if(tick % fps == 0) tick = 0;
 
 
-
+        // Keyboard: space key clicked plays/pauses game
         if(keyboard.isClicked(KeyEvent.VK_SPACE)) {
             active = !active;
             // grid.update();
         }
+        // Keyboard: up arrow clicked increases play speed
         if(keyboard.isClicked(KeyEvent.VK_UP)) {
             ups++; if(ups > fps) ups = (int)fps;
         }
+        // Keyboard: down arrow clicked decreases play speed
         if(keyboard.isClicked(KeyEvent.VK_DOWN)) {
             ups--; if(ups < 1) ups = 1;
         }
+        // Keyboard: right arrow clicked performs a single generation step
         if(keyboard.isClicked(KeyEvent.VK_RIGHT)) {
             grid.update();
         }
-
+        // Keyboard: r key clicked randomises the alive and dead cell on board
         if(keyboard.isClicked(KeyEvent.VK_R)) {
             grid.randomise();
         }
+        // Keyboard: c key clicked clears the board
         if(keyboard.isClicked(KeyEvent.VK_C)) {
             grid.clear();
         }
+        // Keyboard: g key clicked toggles grid lines
         if(keyboard.isClicked(KeyEvent.VK_G)) {
             grid.draw_grid = !grid.draw_grid;
         }
+        // Keyboard: ctrl and s key clicked together open save game menu
         if(keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_S)) {
             saveGame();
         }
+        // Keyboard: ctrl and o key clicked together open load game menu
         if(keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_O)) {
             loadGame();
         }
+        // Keyboard: ctrl and h key clicked together open change game rule menu
         if (keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_H)) {
             updateGame();
         }
+        // Keyboard: ctrl and u key clicked together open change board size menu
         if (keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_U)) {
             changeGrid();
         }
 
-        if(mouse.isClicked(MouseEvent.BUTTON1) && mouse.onScreen()) {
-            Point location = mouse.getLocation();
-            gui.setState(location.x, location.y, this);
-        }
+
+        // Mouse: left click (plus the option to drag) while mouse is on panel turns dead cells alive
         else
         if(mouse.isPressed(MouseEvent.BUTTON1) && mouse.onScreen()) {
             Point location = mouse.getLocation();
             grid.setState(location.x, location.y, sellectedState);
         }
+        // Mouse: middle click (plus option to drag) while mouse is on panel changes alive to dead and vice-versa
         else
         if(mouse.isPressed(MouseEvent.BUTTON3) && mouse.onScreen()) {
             Point location = mouse.getLocation();
             grid.setState(location.x, location.y, (byte)0);
         }
+        // Mouse: right click (plus option to drag) while mouse is on panel turns alive cells dead
         else
         if(mouse.isPressed(MouseEvent.BUTTON2) && mouse.onScreen()) {
             Point location = mouse.getLocation();
             grid.toggleState(location.x, location.y);
         }
 
-        gui.interact(mouse, keyboard);
+        // Interact method which passes mouse and keyboard to GUI to enable clicking onscreen buttons
+        gui.interact(this, mouse, keyboard);
 
-
+        // Continuously calls this update method while game is in play.
         if(active && tick % (int)(fps/ups) == 0) grid.update();
     }
 
+    /**
+     * The draw method takes a parameter graphic and draws the gui/grid to the main panel.
+     * @param graphics - An object which contains the assets and graphics for the GUI overlay.
+     */
     public void draw(Graphics graphics) {
 
         gui.draw(graphics);
@@ -165,6 +207,12 @@ public class Game implements Runnable {
 
     }
 
+    /**
+     * Creates a new popup menu which provides the user with a text box to name their current board state
+     * as well as write any comments they might choose to add. A save button is created with an action listener
+     * that gets the text of filename and the comment and passes them to grid.save. Once the action is complete
+     * the menu disappears.
+     */
     public void saveGame() {
         final String[] fileName = {"default.gol"};
         JFrame saveGamePopUP= new JFrame("Save Game");
@@ -197,6 +245,12 @@ public class Game implements Runnable {
         saveGamePopUP.setVisible(true);
     }
 
+    /**
+     * Creates a new popup menu which provides the user with a combo box of different filenames. Each
+     * filename represents a different save state in the game. A save button is created with an action listener
+     * that finds the value selected by the user. Then grid.load is called. Finally, after all the actions have been
+     * performed, the menu disappears.
+     */
     public void loadGame() {
         File files = new File("savefiles");
         final String[] fileNames = files.list();
@@ -222,6 +276,12 @@ public class Game implements Runnable {
         saveGamePopUP.setVisible(true);
     }
 
+    /**
+     * Creates a new popup menu which provides the user with three combo boxes. Each box is labels as a
+     * different game of life game rule: x, y, and z. A save button is created with an action listener
+     * that gets the chosen value from the given boxes. grid.getCell_states.updateRules is called which
+     * changes the game rules for the current board.
+     */
     public void updateGame() {
         JFrame saveGamePopUP= new JFrame("Change Game Rules");
         saveGamePopUP.setLayout(new FlowLayout());
@@ -255,6 +315,12 @@ public class Game implements Runnable {
         saveGamePopUP.setVisible(true);
     }
 
+    /**
+     * Creates a new popup menu which provides the user with two text box options. The first box takes a user input
+     * of a grid width. The second box takes a user input of a grid height. A save button is created with an action
+     * listener that gets the two texts and calls updateGrid. After the button has been pressed and actions confirmed
+     * the menu disappears.
+     */
     public void changeGrid() {
         JFrame saveGamePopUP= new JFrame("Update Board Size");
         saveGamePopUP.setLayout(new FlowLayout());
@@ -281,10 +347,12 @@ public class Game implements Runnable {
     }
 
 
-
-
-
-
+    /**
+     * Run is the starting method in Game which uses the chosen fps and tick speed to
+     * continuously check for user input on the screen while the current thread
+     * is in play. This method also acts as a catalyst for the play/pause functionality of
+     * game of life to work.
+     */
     @Override
     public void run() {
         // ----- CAPTURE FRAME AND UPDATE RATE -----
@@ -304,6 +372,10 @@ public class Game implements Runnable {
         }
     }
 
+    /**
+     * Render calls generateGraphics in the display class which uses the assets and stage of the current
+     * game to display the proper output on the canvas.
+     */
     private void render() {
         display.generateGraphics(this);
     }
