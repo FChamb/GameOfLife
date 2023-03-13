@@ -8,6 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Grid {
@@ -19,12 +20,10 @@ public class Grid {
     private int x, y;
     private int width, height;
     private int cell_width, cell_height;
-    private String comments;
 
     private byte[][] cells;
 
     private ArrayList<byte[][]> previousGrids = new ArrayList<>();
-    private int index = 0;
 
     public boolean draw_grid;
 
@@ -110,10 +109,7 @@ public class Grid {
         }
 
         cells = buffer;
-        index++;
-        if (index % 10 == 0) {
-            previousGrids.add(buffer);
-        }
+        previousGrids.add(cells);
     }
 
     public void update50() {
@@ -123,20 +119,10 @@ public class Grid {
     }
 
     public void getPrevious() {
-        if (index == 0) {
-            if (previousGrids.size() > 1) {
-                byte[][] buffer = previousGrids.get(previousGrids.size() - 2);
-                previousGrids.remove(previousGrids.size() - 1);
-                cells = buffer;
-            }
-        } else {
-            if (previousGrids.size() > 1) {
-                byte[][] buffer = previousGrids.get(previousGrids.size() - 2);
-                cells = buffer;
-                for (int i = 0; i < index; i++) {
-                    update();
-                }
-            }
+        if (previousGrids.size() > 1) {
+            byte[][] buffer = previousGrids.get(previousGrids.size() - 2);
+            previousGrids.remove(previousGrids.size() - 1);
+            cells = buffer;
         }
     }
 
@@ -176,6 +162,7 @@ public class Grid {
 
 
     public void load(String filename) {
+        previousGrids.clear();
         Scanner reader = null;
         String line; int x,y;
         try {
@@ -183,6 +170,9 @@ public class Grid {
             y = 0;
             while(reader.hasNextLine()) {
                 line = reader.nextLine();
+                if (!line.startsWith(".") && !line.startsWith("o")) {
+                    break;
+                }
                 x = 0;
                 for(char c : line.toCharArray()) {
                     cells[y][x] = (c == 'o' ? (byte)1 : (byte)0);
@@ -208,9 +198,7 @@ public class Grid {
             Scanner fileRead = new Scanner(new File(file));
             while (fileRead.hasNext()) {
                 String line = fileRead.nextLine();
-                if (line.startsWith("#:")) {
-                    comments = line;
-                } else if (line.startsWith(".") || line.startsWith("o")){
+                if (line.startsWith(".") || line.startsWith("o")){
                     cols = line.length();
                     rows++;
                 }
@@ -219,6 +207,23 @@ public class Grid {
             System.out.println("That game state does not exist: " + e.getMessage());
         }
         return new int[]{rows, cols};
+    }
+
+    public String findComments(String filename) {
+        String file = "savefiles/" + filename;
+        String comments = null;
+        try {
+            Scanner fileRead = new Scanner(new File(file));
+            while (fileRead.hasNext()) {
+                String line = fileRead.nextLine();
+                if (line.startsWith("#:")) {
+                    comments = line.substring(line.indexOf("#:") + 2);
+                }
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("That game state does not exist: " + e.getMessage());
+        }
+        return comments;
     }
 
     public void save(String filename, String comments) {
@@ -242,9 +247,5 @@ public class Grid {
 
     public CellStates getCell_states() {
         return this.cell_states;
-    }
-
-    public String getComments() {
-        return this.comments;
     }
 }

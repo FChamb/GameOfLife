@@ -50,7 +50,7 @@ public class Game implements Runnable {
 
         mouse = new Mouse(); keyboard = new Keyboard();
 
-        display = new Display(width, height, mouse, keyboard);
+        display = new Display(width, height, this, mouse, keyboard);
         fps = 60;
 
 
@@ -94,6 +94,14 @@ public class Game implements Runnable {
      */
     public Grid getGrid() {
         return this.grid;
+    }
+
+    /**
+     * A getter method which returns the local private gui object i.e. the graphical interface of the game.
+     * @return - A GUI object variable with the current graphical interface.
+     */
+    public GUI getGui() {
+        return this.gui;
     }
 
     /**
@@ -232,10 +240,11 @@ public class Game implements Runnable {
         saveGamePopUP.setLayout(new FlowLayout());
         JLabel prompt = new JLabel("Enter File Name:");
         JLabel prompt2 = new JLabel("Enter Comments:");
-        saveGamePopUP.setSize(new Dimension(130, 160));
+        saveGamePopUP.setSize(new Dimension(250, 210));
         saveGamePopUP.setLocationRelativeTo(null);
         JTextField userInput = new JTextField("default.gol");
-        JTextField comments = new JTextField("comment");
+        JTextArea comments = new JTextArea(5, 18);
+        JScrollPane scroll = new JScrollPane(comments, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
         JButton save = new JButton("Enter");
         save.addActionListener(new ActionListener() {
             @Override
@@ -253,7 +262,7 @@ public class Game implements Runnable {
         saveGamePopUP.add(prompt);
         saveGamePopUP.add(userInput);
         saveGamePopUP.add(prompt2);
-        saveGamePopUP.add(comments);
+        saveGamePopUP.add(scroll);
         saveGamePopUP.add(save);
         saveGamePopUP.setVisible(true);
     }
@@ -281,13 +290,46 @@ public class Game implements Runnable {
                 updateGrid(vals[1], vals[0]);
                 grid.load(saves.getSelectedItem().toString());
                 saveGamePopUP.dispose();
+                showComments(saves.getSelectedItem().toString());
             }
         });
         saveGamePopUP.add(prompt);
         saveGamePopUP.add(saves);
         saveGamePopUP.add(save);
         saveGamePopUP.setVisible(true);
-        //previousGrids.clear();
+    }
+
+    public void showComments(String filename) {
+        JFrame comments = new JFrame("Save Comments");
+        comments.setLayout(new FlowLayout());
+        String lineInput = this.grid.findComments(filename);
+        if (lineInput == null || lineInput.length() == 0) {
+            return;
+        }
+        String[] comment = lineInput.split(" ");
+        String finalComment = comment[0];
+        for (int i = 1; i < comment.length; i++) {
+            if (i % 5 == 0) {
+                finalComment += "\n" + comment[i];
+            } else {
+                finalComment += " " + comment[i];
+            }
+        }
+        JTextArea prompt = new JTextArea(finalComment, 5, 18);
+        prompt.setEditable(false);
+        JScrollPane scroll = new JScrollPane(prompt, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+        comments.setSize(new Dimension(250, 150));
+        comments.setLocationRelativeTo(null);
+        JButton close = new JButton("Exit");
+        close.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                comments.dispose();
+            }
+        });
+        comments.add(scroll);
+        comments.add(close);
+        comments.setVisible(true);
     }
 
     /**
@@ -299,12 +341,12 @@ public class Game implements Runnable {
     public void updateGame() {
         JFrame saveGamePopUP= new JFrame("Change Game Rules");
         saveGamePopUP.setLayout(new FlowLayout());
-        saveGamePopUP.setSize(new Dimension(250, 200));
+        saveGamePopUP.setSize(new Dimension(150, 250));
         saveGamePopUP.setLocationRelativeTo(null);
         JLabel xLabel = new JLabel("Game Rule X:");
         JLabel yLabel = new JLabel("Game Rule Y:");
         JLabel zLabel = new JLabel("Game Rule Z:");
-        Integer[] comboBoxChoices = {0,1,2,3,4,5,6,7,8,9,10};
+        Integer[] comboBoxChoices = {0,1,2,3,4,5,6,7,8};
         JComboBox<Integer> xComboBox = new JComboBox<>(comboBoxChoices);
         JComboBox<Integer> yComboBox = new JComboBox<>(comboBoxChoices);
         JComboBox<Integer> zComboBox = new JComboBox<>(comboBoxChoices);
@@ -327,6 +369,13 @@ public class Game implements Runnable {
         saveGamePopUP.add(zComboBox);
         saveGamePopUP.add(save);
         saveGamePopUP.setVisible(true);
+    }
+
+    /**
+     * Resets the game rules back to original Game of Life format.
+     */
+    public void resetGameRules() {
+        this.grid.getCell_states().updateRules(2, 3, 3);
     }
 
     /**

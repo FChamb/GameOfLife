@@ -1,5 +1,7 @@
 package main;
 
+import gui.Button;
+
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -16,6 +18,7 @@ public class Display extends JFrame{
 
     private int width, height;
 
+    private Game game;
     private Mouse mouse;
     private Keyboard keyboard;
 
@@ -32,9 +35,10 @@ public class Display extends JFrame{
      * @param keyboard - A keyboard object which tracks the players key inputs.
      */
      
-    public Display(int width, int height, Mouse mouse, Keyboard keyboard) {
+    public Display(int width, int height, Game game, Mouse mouse, Keyboard keyboard) {
         // ----- INITIALISE VARIABLES -----
         this.width = width; this.height = height;
+        this.game = game;
         this.mouse = mouse; this.keyboard = keyboard;
         
         // ----- CONFIGURE JFRAME -----
@@ -58,7 +62,9 @@ public class Display extends JFrame{
         // Create File Menu
         JMenu fileMenu = new JMenu("File");
         JMenuItem openSaveItem = new JMenuItem("Open Save");
+        openSaveItem.addActionListener(new MenuBarActionListener());
         JMenuItem createNewSaveItem = new JMenuItem("Save As");
+        createNewSaveItem.addActionListener(new MenuBarActionListener());
         fileMenu.add(openSaveItem);
         fileMenu.add(createNewSaveItem);
         myMenuBar.add(fileMenu);
@@ -66,37 +72,46 @@ public class Display extends JFrame{
         // Create Game Menu
         JMenu gameMenu = new JMenu("Game");
         JMenuItem playItem = new JMenuItem("Play");
+        playItem.addActionListener(new MenuBarActionListener());
         JMenuItem pauseItem = new JMenuItem("Pause");
+        pauseItem.addActionListener(new MenuBarActionListener());
         JMenuItem stepItem = new JMenuItem("Step");
+        stepItem.addActionListener(new MenuBarActionListener());
         JMenuItem fastForwardItem = new JMenuItem("Fast Forward");
+        fastForwardItem.addActionListener(new MenuBarActionListener());
         JMenuItem rewindItem = new JMenuItem("Rewind");
+        rewindItem.addActionListener(new MenuBarActionListener());
+        JMenuItem randomizeItem = new JMenuItem("Randomize");
+        randomizeItem.addActionListener(new MenuBarActionListener());
         JMenuItem clearGridItem = new JMenuItem("Clear Grid");
+        clearGridItem.addActionListener(new MenuBarActionListener());
         gameMenu.add(playItem);
         gameMenu.add(pauseItem);
         gameMenu.add(stepItem);
         gameMenu.add(fastForwardItem);
         gameMenu.add(rewindItem);
+        gameMenu.add(randomizeItem);
         gameMenu.add(clearGridItem);
         myMenuBar.add(gameMenu);
 
         // Create Cell Rule SubMenu
         JMenu cellRuleSubMenu = new JMenu("Edit Cell Rules");
         JMenuItem definexyzItem = new JMenuItem("Show x, y, z definitions");
-        JMenuItem editxItem = new JMenuItem("Edit x value...");
-        JMenuItem edityItem = new JMenuItem("Edit y value...");
-        JMenuItem editzItem = new JMenuItem("Edit z value...");
+        definexyzItem.addActionListener(new MenuBarActionListener());
+        JMenuItem changexyzItem = new JMenuItem("Change x, y, z rules");
+        changexyzItem.addActionListener(new MenuBarActionListener());
         JMenuItem resetxyzItem = new JMenuItem("Reset x, y, z");
+        resetxyzItem.addActionListener(new MenuBarActionListener());
         cellRuleSubMenu.add(definexyzItem);
-        cellRuleSubMenu.add(editxItem);
-        cellRuleSubMenu.add(edityItem);
-        cellRuleSubMenu.add(editzItem);
+        cellRuleSubMenu.add(changexyzItem);
         cellRuleSubMenu.add(resetxyzItem);
 
         // Create Edit Rule Menu
         JMenu editRulesMenu = new JMenu("Edit Rules");
         JMenuItem editStepSizeItem = new JMenuItem("Edit Step Size");
-        JMenuItem editCellRulesItem = new JMenuItem("Edit Cell Rules");
+        editStepSizeItem.addActionListener(new MenuBarActionListener());
         JMenuItem editBoardItem = new JMenuItem("Edit Board Size");
+        editBoardItem.addActionListener(new MenuBarActionListener());
         editRulesMenu.add(editStepSizeItem);
         editRulesMenu.add(cellRuleSubMenu);
         editRulesMenu.add(editBoardItem);
@@ -142,53 +157,47 @@ public class Display extends JFrame{
         @Override
         public void actionPerformed(ActionEvent event) {
             switch(event.getActionCommand()){
-                case "openSaveItem":
+                case "Open Save":
+                    game.getGui().commitAction(game, Button.Type.ADMIT);
+                    break;
+                case "Save As":
+                    game.getGui().commitAction(game, Button.Type.EJECT);
+                    break;
+                case "Play":
+                    game.getGui().commitAction(game, Button.Type.PLAY);
+                    break;
+                case "Pause":
+                    game.getGui().commitAction(game, Button.Type.STOP);
+                    break;
+                case "Step":
+                    game.getGui().commitAction(game, Button.Type.STEP);
+                    break;
+                case "Fast Forward":
+                    game.getGui().commitAction(game, Button.Type.FAST_FORWARD);
+                    break;
+                case "Rewind":
+                    game.getGui().commitAction(game, Button.Type.REWIND);
+                    break;
+                case "Randomize":
+                    game.getGrid().randomise();
+                    break;
+                case "Clear Grid":
+                    game.getGrid().clear();
+                    break;
+                case "Show x, y, z definitions":
                     // TODO: Add Button Functionality
                     break;
-                case "overwriteSaveItem":
+                case "Change x, y, z rules":
+                    game.updateGame();
+                    break;
+                case "Reset x, y, z":
+                    game.resetGameRules();
+                    break;
+                case "Edit Step Size":
                     // TODO: Add Button Functionality
                     break;
-                case "createNewSaveItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "playItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "pauseItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "stepItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "fastForwardItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "rewindItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "clearGridItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "definexyzItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "editxItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "edityItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "editzItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "resetxyzItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "editStepSizeItem":
-                    // TODO: Add Button Functionality
-                    break;
-                case "editBoardItem":
-                    // TODO: Add Button Functionality
+                case "Edit Board Size":
+                    game.changeGrid();
                     break;
 
             }
