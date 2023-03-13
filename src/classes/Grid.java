@@ -23,6 +23,9 @@ public class Grid {
 
     private byte[][] cells;
 
+    private ArrayList<byte[][]> previousGrids = new ArrayList<>();
+    private int index = 0;
+
     public boolean draw_grid;
 
 
@@ -78,6 +81,7 @@ public class Grid {
     }
     public void clear() {
         cells = new byte[height][width];
+        previousGrids.clear();
     }
 
 
@@ -106,11 +110,33 @@ public class Grid {
         }
 
         cells = buffer;
+        index++;
+        if (index % 10 == 0) {
+            previousGrids.add(buffer);
+        }
     }
 
     public void update50() {
         for (int i = 0; i < 50; i++) {
             update();
+        }
+    }
+
+    public void getPrevious() {
+        if (index == 0) {
+            if (previousGrids.size() > 1) {
+                byte[][] buffer = previousGrids.get(previousGrids.size() - 2);
+                previousGrids.remove(previousGrids.size() - 1);
+                cells = buffer;
+            }
+        } else {
+            if (previousGrids.size() > 1) {
+                byte[][] buffer = previousGrids.get(previousGrids.size() - 2);
+                cells = buffer;
+                for (int i = 0; i < index; i++) {
+                    update();
+                }
+            }
         }
     }
 
@@ -170,6 +196,8 @@ public class Grid {
             e.printStackTrace();
             System.exit(0);
         }
+        byte[][] buffer = cells;
+        previousGrids.add(buffer);
     }
 
     public int[] findLoadWH(String filename) {

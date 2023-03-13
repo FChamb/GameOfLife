@@ -50,7 +50,7 @@ public class GUI {
         
         switch (type) {
             case REWIND:
-                System.out.println("Rewind");
+                game.getGrid().getPrevious();
                 break;
             case STOP:
                 game.setActive(false);
@@ -91,16 +91,6 @@ public class GUI {
                 area = button.getCurrentFrameSize();
                 if(x >= bx && y >= by && x < bx+area.w*bs && y < by+area.h*bs) {
                     if(mouse.isPressed(MouseEvent.BUTTON1)) {
-                        // System.out.println("checking");
-                        // switch(button.getType()) {
-                        //     case PLAY:
-                        //         button.setFrame(1);
-                        //         break;
-                            
-                        //     default:
-                        //         continue;
-                        // }
-                        // button.setFrame(1);
                         if(mouse.isClicked(MouseEvent.BUTTON1))
                             commitAction(game, type);
                     } else if(!type.sticky) {

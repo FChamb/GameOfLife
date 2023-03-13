@@ -33,7 +33,6 @@ public class Game implements Runnable {
 
     private int tick;
     private int ups;
-    private ArrayList<Grid> previousGrids = new ArrayList<>();
 
 
     /**
@@ -149,6 +148,9 @@ public class Game implements Runnable {
         if(keyboard.isClicked(KeyEvent.VK_RIGHT)) {
             // grid.update();
             gui.commitAction(this, Button.Type.STEP);
+        }
+        if(keyboard.isClicked(KeyEvent.VK_LEFT)) {
+            grid.getPrevious();
         }
         // Keyboard: r key clicked randomises the alive and dead cell on board
         if(keyboard.isClicked(KeyEvent.VK_R)) {
@@ -285,6 +287,7 @@ public class Game implements Runnable {
         saveGamePopUP.add(saves);
         saveGamePopUP.add(save);
         saveGamePopUP.setVisible(true);
+        //previousGrids.clear();
     }
 
     /**
