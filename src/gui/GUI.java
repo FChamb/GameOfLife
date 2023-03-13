@@ -6,6 +6,7 @@ import main.Mouse;
 import main.Keyboard;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -37,6 +38,8 @@ public class GUI {
         buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 450, 675, 2);
         buttons[5] = new Button(asset_path, Button.Type.EJECT       , 600, 675, 2);
         buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 712, 675, 2);
+
+        buttons[1].setFrame(1);
     }
 
 
@@ -76,18 +79,18 @@ public class GUI {
 
     public void interact(Game game, Mouse mouse, Keyboard keyboard) {
         Button button; Button.Type type; Atlas area; int bx, by; double bs;
-        for(int b = 0; b < buttons.length; b++) {
-            if(buttons[b] == null) continue;
-
-            Point loc = mouse.getLocation();
-            if(mouse.onScreen() && loc == null) {
-                int x = loc.x, y = loc.y;
+        Point loc = mouse.getLocation();
+        int x, y;
+        if(mouse.onScreen() && loc != null) {
+            x = loc.x; y = loc.y;
+            for(int b = 0; b < buttons.length; b++) {
+                if(buttons[b] == null) continue;
 
                 button = buttons[b]; bx = button.getX(); by = button.getY(); bs = button.getScale();
                 type = button.getType();
                 area = button.getCurrentFrameSize();
                 if(x >= bx && y >= by && x < bx+area.w*bs && y < by+area.h*bs) {
-                    if(mouse.isClicked(MouseEvent.BUTTON1)) {
+                    if(mouse.isPressed(MouseEvent.BUTTON1)) {
                         // System.out.println("checking");
                         // switch(button.getType()) {
                         //     case PLAY:
@@ -98,7 +101,8 @@ public class GUI {
                         //         continue;
                         // }
                         // button.setFrame(1);
-                        commitAction(game, type);
+                        if(mouse.isClicked(MouseEvent.BUTTON1))
+                            commitAction(game, type);
                     } else if(!type.sticky) {
                         button.setFrame(0);
                     }
@@ -107,10 +111,6 @@ public class GUI {
                     button.setFrame(0);
                 }
             }
-        }
-
-        if(keyboard.isPressed(KeyEvent.VK_SPACE)) {
-            commitAction(game, Button.Type.PLAY);
         }
     }
 

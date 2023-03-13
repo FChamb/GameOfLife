@@ -9,6 +9,7 @@ import java.util.ArrayList;
 
 import classes.Grid;
 import gui.GUI;
+import gui.Button;
 
 public class Game implements Runnable {
 
@@ -84,6 +85,10 @@ public class Game implements Runnable {
         this.active = active;
     }
 
+    public boolean getActive() {
+        return active;
+    }
+
     /**
      * A getter method which returns the local private grid object i.e. the current state of the game.
      * @return - A Grid object variable with the current state of play.
@@ -124,7 +129,12 @@ public class Game implements Runnable {
 
         // Keyboard: space key clicked plays/pauses game
         if(keyboard.isClicked(KeyEvent.VK_SPACE)) {
-            active = !active;
+            // active = !active;
+            if(active) {
+                gui.commitAction(this, Button.Type.STOP);
+            } else {
+                gui.commitAction(this, Button.Type.PLAY);
+            }
             // grid.update();
         }
         // Keyboard: up arrow clicked increases play speed
@@ -137,7 +147,8 @@ public class Game implements Runnable {
         }
         // Keyboard: right arrow clicked performs a single generation step
         if(keyboard.isClicked(KeyEvent.VK_RIGHT)) {
-            grid.update();
+            // grid.update();
+            gui.commitAction(this, Button.Type.STEP);
         }
         // Keyboard: r key clicked randomises the alive and dead cell on board
         if(keyboard.isClicked(KeyEvent.VK_R)) {
