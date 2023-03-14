@@ -7,16 +7,33 @@ public class Keyboard implements KeyListener {
 
     private boolean[] pressed, clicked, flutter;
 
+    /**
+     * Default constructor for a Keyboard object which implements KeyListener.
+     * This constructor sets two boolean array lists which 256 values which enables
+     * key support for most key types needed in this practical.
+     */
     public Keyboard() {
         pressed = new boolean[256];
         clicked = new boolean[256];
         flutter = new boolean[256];
     }
 
-
+    /**
+     * A simple getter method which takes a specific key and returns whether it has
+     * been pressed or not.
+     * @param key - A given key on the keyboard.
+     * @return - A boolean value denoting whether key has been pressed.
+     */
     public boolean isPressed(int key) {
         return pressed[key];
     }
+
+    /**
+     * A simple getter method which takes a specific key and returns whether it has
+     * been clicked or not.
+     * @param key - A given key on the keyboard.
+     * @return - A boolean value denoting whether the key has been pressed.
+     */
     public boolean isClicked(int key) {
         boolean state = clicked[key];
         if(state) clicked[key] = false;
@@ -28,6 +45,10 @@ public class Keyboard implements KeyListener {
         return state;
     }
 
+    /**
+     *
+     * @return
+     */
     public boolean ctrl() {
         return pressed[KeyEvent.VK_CONTROL];
     }

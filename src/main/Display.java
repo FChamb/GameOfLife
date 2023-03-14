@@ -151,7 +151,11 @@ public class Display extends JFrame{
         bs.show();
     }
 
-    // Implements the functionality for the Menu Bar Items
+    /**
+     * This class is a different version of an action listener which overrides actionPerformed.
+     * The method takes an ActionEvent and uses a switch case to decide which menu item has been
+     * selected. The appropriate action is then activated.
+     */
     class MenuBarActionListener implements ActionListener {
 
         @Override
