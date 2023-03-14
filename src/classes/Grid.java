@@ -25,6 +25,8 @@ public class Grid {
 
     private ArrayList<byte[][]> previousGrids = new ArrayList<>();
 
+    private int many = 50;
+
     public boolean draw_grid;
 
 
@@ -112,8 +114,8 @@ public class Grid {
         previousGrids.add(cells);
     }
 
-    public void update50() {
-        for (int i = 0; i < 50; i++) {
+    public void updateMany() {
+        for (int i = 0; i < this.many; i++) {
             update();
         }
     }
@@ -247,5 +249,13 @@ public class Grid {
 
     public CellStates getCell_states() {
         return this.cell_states;
+    }
+
+    public void setMany(int many) {
+        this.many = many;
+    }
+
+    public int getMany() {
+        return this.many;
     }
 }

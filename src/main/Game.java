@@ -332,6 +332,27 @@ public class Game implements Runnable {
         comments.setVisible(true);
     }
 
+    public void updateMany() {
+        JFrame ff = new JFrame("Fast Forward Size");
+        ff.setLayout(new FlowLayout());
+        JLabel prompt = new JLabel("Fast Forward Size:");
+        JTextField text = new JTextField(String.valueOf(grid.getMany()));
+        ff.setSize(new Dimension(150, 100));
+        ff.setLocationRelativeTo(null);
+        JButton close = new JButton("Save");
+        close.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                grid.setMany(Integer.parseInt(text.getText()));
+                ff.dispose();
+            }
+        });
+        ff.add(prompt);
+        ff.add(text);
+        ff.add(close);
+        ff.setVisible(true);
+    }
+
     /**
      * Creates a new popup menu which provides the user with three combo boxes. Each box is labels as a
      * different game of life game rule: x, y, and z. A save button is created with an action listener

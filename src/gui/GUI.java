@@ -64,7 +64,7 @@ public class GUI {
                 game.getGrid().update();
                 break;
             case FAST_FORWARD:
-                game.getGrid().update50();
+                game.getGrid().updateMany();
                 break;
             case EJECT:
                 game.saveGame();

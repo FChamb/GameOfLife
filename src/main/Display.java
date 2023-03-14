@@ -108,7 +108,7 @@ public class Display extends JFrame{
 
         // Create Edit Rule Menu
         JMenu editRulesMenu = new JMenu("Edit Rules");
-        JMenuItem editStepSizeItem = new JMenuItem("Edit Step Size");
+        JMenuItem editStepSizeItem = new JMenuItem("Edit Fast Forward Size");
         editStepSizeItem.addActionListener(new MenuBarActionListener());
         JMenuItem editBoardItem = new JMenuItem("Edit Board Size");
         editBoardItem.addActionListener(new MenuBarActionListener());
@@ -193,8 +193,8 @@ public class Display extends JFrame{
                 case "Reset x, y, z":
                     game.resetGameRules();
                     break;
-                case "Edit Step Size":
-                    // TODO: Add Button Functionality
+                case "Edit Fast Forward Size":
+                    game.updateMany();
                     break;
                 case "Edit Board Size":
                     game.changeGrid();
