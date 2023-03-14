@@ -23,35 +23,63 @@ public class GUI {
     private Button.Type mouse_pressed = null;
 
 
-    public GUI(String asset_path) throws IOException {
+    /**
+     * Default constructor for GUI object. Takes one parameter, a string path to the assets directory which
+     * contains all overlays for the canvas. The assets_path is set to the given path and the case
+     * object is set to the case.png in assets. Both construct buttons and messages is called which places
+     * the onscreen buttons and messages on the panel.
+     * @param asset_path
+     */
+    public GUI(String asset_path) {
         this.asset_path = asset_path;
 
-        case_img = ImageIO.read(new File(asset_path, "case.png"));
+        try {
+            case_img = ImageIO.read(new File(asset_path, "case.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         constructButtons();
         constructMessages();
     }
 
-    private void constructButtons() throws IOException {
+    /**
+     * Construct buttons takes the private array of buttons and initializes it to a length of 7.
+     * Then each button is set with a new Button object that corresponds to the correct function.
+     */
+    private void constructButtons() {
         buttons = new Button[7];
 
-        buttons[0] = new Button(asset_path, Button.Type.REWIND      ,  50, 675, 2);
-        buttons[1] = new Button(asset_path, Button.Type.STOP        , 150, 675, 2);
-        buttons[2] = new Button(asset_path, Button.Type.PLAY        , 250, 675, 2);
-        buttons[3] = new Button(asset_path, Button.Type.STEP        , 350, 675, 2);
-        buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 450, 675, 2);
-        buttons[5] = new Button(asset_path, Button.Type.EJECT       , 600, 675, 2);
-        buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 712, 675, 2);
+        try {
+            buttons[0] = new Button(asset_path, Button.Type.REWIND, 50, 675, 2);
+            buttons[1] = new Button(asset_path, Button.Type.STOP, 150, 675, 2);
+            buttons[2] = new Button(asset_path, Button.Type.PLAY, 250, 675, 2);
+            buttons[3] = new Button(asset_path, Button.Type.STEP, 350, 675, 2);
+            buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 450, 675, 2);
+            buttons[5] = new Button(asset_path, Button.Type.EJECT, 600, 675, 2);
+            buttons[6] = new Button(asset_path, Button.Type.ADMIT, 712, 675, 2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         pushButton(Button.Type.STOP);
     }
-    private void constructMessages() throws IOException {
+
+    /**
+     * Construct messages takes the private array of messages and initializes it to a length of 7.
+     * Then each message is set with a new message object that corresponds to the correct function.
+     */
+    private void constructMessages() {
         messages = new Message[7];
 
-        messages[0] = new Message(asset_path, Message.Type.REWIND      ,  31, 579, 2);
-        messages[1] = new Message(asset_path, Message.Type.STOP        , 131, 579, 2);
-        messages[2] = new Message(asset_path, Message.Type.PLAY        , 231, 579, 2);
-        messages[3] = new Message(asset_path, Message.Type.STEP        , 331, 579, 2);
-        messages[4] = new Message(asset_path, Message.Type.FAST_FORWARD, 422, 579, 2);
+        try {
+            messages[0] = new Message(asset_path, Message.Type.REWIND, 31, 579, 2);
+            messages[1] = new Message(asset_path, Message.Type.STOP, 131, 579, 2);
+            messages[2] = new Message(asset_path, Message.Type.PLAY, 231, 579, 2);
+            messages[3] = new Message(asset_path, Message.Type.STEP, 331, 579, 2);
+            messages[4] = new Message(asset_path, Message.Type.FAST_FORWARD, 422, 579, 2);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 
