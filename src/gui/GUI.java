@@ -39,15 +39,23 @@ public class GUI {
         buttons[5] = new Button(asset_path, Button.Type.EJECT       , 600, 675, 2);
         buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 712, 675, 2);
 
-        buttons[1].setFrame(1);
+        pushButton(Button.Type.STOP);
     }
 
 
-    public void commitAction(Game game, Button.Type type) {
+    public void pushButton(Button.Type type) {
         for(Button b : buttons)
             if(b != null && b.getType() == type)
                 b.setFrame(1);
-        
+    }
+    public void releaseButton(Button.Type type) {
+        for(Button b : buttons)
+            if(b != null && b.getType() == type)
+                b.setFrame(0);
+    }
+
+    public void commitAction(Game game, Button.Type type) {
+        pushButton(type);
         switch (type) {
             case REWIND:
                 game.getGrid().getPrevious();
@@ -93,12 +101,11 @@ public class GUI {
                     if(mouse.isPressed(MouseEvent.BUTTON1)) {
                         if(mouse.isClicked(MouseEvent.BUTTON1))
                             commitAction(game, type);
-                    } else if(!type.sticky) {
-                        button.setFrame(0);
-                    }
+                    } else if(!type.sticky)
+                        releaseButton(type);
                 } else {
-                    if(type.sticky) continue;
-                    button.setFrame(0);
+                    if(!type.sticky)
+                        releaseButton(type);
                 }
             }
         }

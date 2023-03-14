@@ -42,8 +42,8 @@ public class Keyboard implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() >= pressed.length) return;
+        if(!pressed[e.getKeyCode()]) clicked[e.getKeyCode()] = true;        // suppress the spam key presses when holding down a key
         pressed[e.getKeyCode()] = true;
-        clicked[e.getKeyCode()] = true;
     }
 
     @Override

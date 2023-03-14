@@ -126,13 +126,17 @@ public class Game implements Runnable {
      * input has been registered.
      */
     public void update() {
-        // ----- KEYBOARD AND MOUSE REGISTRY -----
         // Keyboard: esc key clicked ends game
         if(keyboard.isPressed(KeyEvent.VK_ESCAPE)) System.exit(0);
 
         tick++;
         if(tick % fps == 0) tick = 0;
 
+
+        // Interact method which passes mouse and keyboard to GUI to enable clicking onscreen buttons
+        gui.interact(this, mouse, keyboard);
+
+        // ----- KEYBOARD AND MOUSE REGISTRY -----
 
         // Keyboard: space key clicked plays/pauses game
         if(keyboard.isClicked(KeyEvent.VK_SPACE)) {
@@ -153,13 +157,20 @@ public class Game implements Runnable {
             ups--; if(ups < 1) ups = 1;
         }
         // Keyboard: right arrow clicked performs a single generation step
-        if(keyboard.isClicked(KeyEvent.VK_RIGHT)) {
+        if(keyboard.isPressed(KeyEvent.VK_RIGHT)) {
             // grid.update();
-            gui.commitAction(this, Button.Type.STEP);
-        }
-        if(keyboard.isClicked(KeyEvent.VK_LEFT)) {
-            grid.getPrevious();
-        }
+            gui.pushButton(Button.Type.STEP);
+            if(keyboard.isClicked(KeyEvent.VK_RIGHT))
+                gui.commitAction(this, Button.Type.STEP);
+        } else gui.releaseButton(Button.Type.STEP);
+
+        if(keyboard.isPressed(KeyEvent.VK_LEFT)) {
+            gui.pushButton(Button.Type.REWIND);
+            if(keyboard.isClicked(KeyEvent.VK_LEFT))
+                grid.getPrevious();
+        } else gui.releaseButton(Button.Type.REWIND);
+
+
         // Keyboard: r key clicked randomises the alive and dead cell on board
         if(keyboard.isClicked(KeyEvent.VK_R)) {
             grid.randomise();
@@ -208,9 +219,6 @@ public class Game implements Runnable {
             Point location = mouse.getLocation();
             grid.toggleState(location.x, location.y);
         }
-
-        // Interact method which passes mouse and keyboard to GUI to enable clicking onscreen buttons
-        gui.interact(this, mouse, keyboard);
 
         // Continuously calls this update method while game is in play.
         if(active && tick % (int)(fps/ups) == 0) grid.update();

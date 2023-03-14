@@ -20,11 +20,14 @@ public enum Atlas {
             STEP_DOWN(180,103,45,103),
 
 
-           EJECT_UP(225,  0,51,103),
-      EJECT_DOWN(225, 103, 51, 103),
+             EJECT_UP(225,  0,51,103),
+           EJECT_DOWN(225,103,51,103),
 
-           ADMIT_UP(276,  0,51,103),
-      ADMIT_DOWN(276, 103, 51, 103)
+             ADMIT_UP(276,  0,51,103),
+           ADMIT_DOWN(276,103,51,103),
+
+
+         PLAY_MESSAGE(327,  0,64, 44)
     ;
 
 
