@@ -5,11 +5,12 @@ import java.awt.event.KeyListener;
 
 public class Keyboard implements KeyListener {
 
-    private boolean[] pressed, clicked;
+    private boolean[] pressed, clicked, flutter;
 
     public Keyboard() {
         pressed = new boolean[256];
         clicked = new boolean[256];
+        flutter = new boolean[256];
     }
 
 
@@ -19,6 +20,11 @@ public class Keyboard implements KeyListener {
     public boolean isClicked(int key) {
         boolean state = clicked[key];
         if(state) clicked[key] = false;
+        return state;
+    }
+    public boolean isFlutter(int key) {
+        boolean state = flutter[key];
+        if(state) flutter[key] = false;
         return state;
     }
 
@@ -42,8 +48,9 @@ public class Keyboard implements KeyListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() >= pressed.length) return;
-        if(!pressed[e.getKeyCode()]) clicked[e.getKeyCode()] = true;        // suppress the spam key presses when holding down a key
+        if(!pressed[e.getKeyCode()]) clicked[e.getKeyCode()] = true;        // suppress the flutter when holding down a key
         pressed[e.getKeyCode()] = true;
+        flutter[e.getKeyCode()] = true;
     }
 
     @Override
@@ -51,6 +58,7 @@ public class Keyboard implements KeyListener {
         if(e.getKeyCode() >= pressed.length) return;
         pressed[e.getKeyCode()] = false;
         clicked[e.getKeyCode()] = false;
+        flutter[e.getKeyCode()] = false;
     }
 
     @Override
@@ -58,5 +66,6 @@ public class Keyboard implements KeyListener {
         if(e.getKeyCode() >= pressed.length) return;
         pressed[e.getKeyCode()] = true;
         clicked[e.getKeyCode()] = true;
+        flutter[e.getKeyCode()] = true;
     }
 }

@@ -149,11 +149,11 @@ public class Game implements Runnable {
             // grid.update();
         }
         // Keyboard: up arrow clicked increases play speed
-        if(keyboard.isClicked(KeyEvent.VK_UP)) {
+        if(keyboard.isFlutter(KeyEvent.VK_UP)) {
             ups++; if(ups > fps) ups = (int)fps;
         }
         // Keyboard: down arrow clicked decreases play speed
-        if(keyboard.isClicked(KeyEvent.VK_DOWN)) {
+        if(keyboard.isFlutter(KeyEvent.VK_DOWN)) {
             ups--; if(ups < 1) ups = 1;
         }
         // Keyboard: right arrow clicked performs a single generation step
@@ -166,7 +166,7 @@ public class Game implements Runnable {
 
         if(keyboard.isPressed(KeyEvent.VK_LEFT)) {
             gui.pushButton(Button.Type.REWIND);
-            if(keyboard.isClicked(KeyEvent.VK_LEFT))
+            if(keyboard.isFlutter(KeyEvent.VK_LEFT))
                 grid.getPrevious();
         } else gui.releaseButton(Button.Type.REWIND);
 
@@ -183,14 +183,21 @@ public class Game implements Runnable {
         if(keyboard.isClicked(KeyEvent.VK_G)) {
             grid.draw_grid = !grid.draw_grid;
         }
+
+
         // Keyboard: ctrl and s key clicked together open save game menu
-        if(keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_S)) {
-            saveGame();
-        }
+        if(keyboard.ctrl() && keyboard.isPressed(KeyEvent.VK_S)) {
+            gui.pushButton(Button.Type.EJECT);
+            if(keyboard.isClicked(KeyEvent.VK_S))
+                saveGame();
+        } else gui.releaseButton(Button.Type.EJECT);
+
         // Keyboard: ctrl and o key clicked together open load game menu
-        if(keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_O)) {
-            loadGame();
-        }
+        if(keyboard.ctrl() && keyboard.isPressed(KeyEvent.VK_O)) {
+            gui.pushButton(Button.Type.ADMIT);
+            if(keyboard.isClicked(KeyEvent.VK_O))
+                loadGame();
+        } else gui.releaseButton(Button.Type.EJECT);
         // Keyboard: ctrl and h key clicked together open change game rule menu
         if (keyboard.ctrl() && keyboard.isClicked(KeyEvent.VK_H)) {
             updateGame();
@@ -230,9 +237,9 @@ public class Game implements Runnable {
      */
     public void draw(Graphics graphics) {
 
-        gui.draw(graphics);
-
         grid.draw(graphics);
+
+        gui.draw(graphics);
 
     }
 

@@ -1,6 +1,7 @@
 ./gui/GUI.java
 ./gui/Atlas.java
 ./gui/Button.java
+./gui/Message.java
 ./main/Keyboard.java
 ./main/Game.java
 ./main/Display.java

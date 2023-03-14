@@ -19,6 +19,8 @@ public class GUI {
 
     private BufferedImage case_img;
     private Button[] buttons;
+    private Message[] messages;
+    private Button.Type mouse_pressed = null;
 
 
     public GUI(String asset_path) throws IOException {
@@ -26,6 +28,7 @@ public class GUI {
 
         case_img = ImageIO.read(new File(asset_path, "case.png"));
         constructButtons();
+        constructMessages();
     }
 
     private void constructButtons() throws IOException {
@@ -41,6 +44,15 @@ public class GUI {
 
         pushButton(Button.Type.STOP);
     }
+    private void constructMessages() throws IOException {
+        messages = new Message[7];
+
+        messages[0] = new Message(asset_path, Message.Type.REWIND      ,  31, 579, 2);
+        messages[1] = new Message(asset_path, Message.Type.STOP        , 131, 579, 2);
+        messages[2] = new Message(asset_path, Message.Type.PLAY        , 231, 579, 2);
+        messages[3] = new Message(asset_path, Message.Type.STEP        , 331, 579, 2);
+        messages[4] = new Message(asset_path, Message.Type.FAST_FORWARD, 422, 579, 2);
+    }
 
 
     public void pushButton(Button.Type type) {
@@ -49,9 +61,18 @@ public class GUI {
                 b.setFrame(1);
     }
     public void releaseButton(Button.Type type) {
+        // System.out.println(mouse_pressed);
+        if(mouse_pressed == type) return;
+
         for(Button b : buttons)
             if(b != null && b.getType() == type)
                 b.setFrame(0);
+    }
+
+    private void mousePushButton(Button.Type type) {
+        // System.out.println("pressed");
+        mouse_pressed = type;
+        pushButton(type);
     }
 
     public void commitAction(Game game, Button.Type type) {
@@ -88,9 +109,10 @@ public class GUI {
     public void interact(Game game, Mouse mouse, Keyboard keyboard) {
         Button button; Button.Type type; Atlas area; int bx, by; double bs;
         Point loc = mouse.getLocation();
-        int x, y;
+        int x, y; boolean gotone;
         if(mouse.onScreen() && loc != null) {
             x = loc.x; y = loc.y;
+            gotone = false;
             for(int b = 0; b < buttons.length; b++) {
                 if(buttons[b] == null) continue;
 
@@ -98,16 +120,21 @@ public class GUI {
                 type = button.getType();
                 area = button.getCurrentFrameSize();
                 if(x >= bx && y >= by && x < bx+area.w*bs && y < by+area.h*bs) {
+                    if(messages[b] != null) messages[b].show = true;            // show message
                     if(mouse.isPressed(MouseEvent.BUTTON1)) {
-                        if(mouse.isClicked(MouseEvent.BUTTON1))
+                        gotone = true;
+                        if(mouse.isClicked(MouseEvent.BUTTON1)) {
+                            mousePushButton(type);
                             commitAction(game, type);
+                        }
                     } else if(!type.sticky)
                         releaseButton(type);
                 } else {
+                    if(messages[b] != null) messages[b].show = false;           // hide message
                     if(!type.sticky)
                         releaseButton(type);
                 }
-            }
+            } if(!gotone) mouse_pressed = null;
         }
     }
 
@@ -115,6 +142,7 @@ public class GUI {
     public void draw(Graphics graphics) {
         graphics.drawImage(case_img, 0, 0, null);
 
-        for(Button b : buttons) if(b != null) b.draw(graphics);
+        for(Button  b :  buttons) if(b != null) b.draw(graphics);
+        for(Message m : messages) if(m != null) m.draw(graphics);
     }
 }
