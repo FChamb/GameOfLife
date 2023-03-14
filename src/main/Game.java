@@ -84,6 +84,11 @@ public class Game implements Runnable {
         this.active = active;
     }
 
+    /**
+     * A getter method which returns the local private active object i.e. the boolean key which decides
+     * if the game is in play.
+     * @return - A boolean variable with a true for in play and false otherwise.
+     */
     public boolean getActive() {
         return active;
     }
@@ -307,6 +312,13 @@ public class Game implements Runnable {
         saveGamePopUP.setVisible(true);
     }
 
+    /**
+     * Show comments takes a filename parameter and displays the comments for a given save file. This
+     * method is called immediately after a save state is loaded. It first checks to see if the file
+     * contains comments and if it does not the method ends. Otherwise, the comments are split up into
+     * lines of five words per and added to a non-editable text field.
+     * @param filename - A string value containing the name of the save file.
+     */
     public void showComments(String filename) {
         JFrame comments = new JFrame("Save Comments");
         comments.setLayout(new FlowLayout());
@@ -340,6 +352,12 @@ public class Game implements Runnable {
         comments.setVisible(true);
     }
 
+    /**
+     * updateMany displays a popup menu which a text box that enables the user to change
+     * the number of steps the fast-forward button activates. A save button is created with
+     * an action listener that gets the chosen value from the given text box. grid.setMany
+     * is called which changes the step count for the current grid.
+     */
     public void updateMany() {
         JFrame ff = new JFrame("Fast Forward Size");
         ff.setLayout(new FlowLayout());
