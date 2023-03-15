@@ -203,7 +203,6 @@ public class Game implements Runnable {
         // Keyboard: ctrl and o key clicked together open load game menu
         if(keyboard.ctrl() && keyboard.isPressed(KeyEvent.VK_O)) {
             gui.pushButton(Button.Type.ADMIT);
-            System.out.println("ctrl O");
             if(keyboard.isClicked(KeyEvent.VK_O))
                 loadGame();
         } else gui.releaseButton(Button.Type.EJECT);
