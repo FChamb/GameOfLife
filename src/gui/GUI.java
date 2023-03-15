@@ -18,8 +18,9 @@ public class GUI {
     private String asset_path;
 
     private BufferedImage case_img;
-    private Button[] buttons;
+    private  Button[] buttons;
     private Message[] messages;
+    private   Wheel[] wheels;
     private Button.Type mouse_pressed = null;
 
 
@@ -30,58 +31,57 @@ public class GUI {
      * the onscreen buttons and messages on the panel.
      * @param asset_path
      */
-    public GUI(String asset_path) {
+    public GUI(String asset_path) throws IOException {
         this.asset_path = asset_path;
 
-        try {
+        // try {
             case_img = ImageIO.read(new File(asset_path, "case.png"));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        constructButtons();
-        constructMessages();
+        // } catch (IOException e) {
+        //     throw new RuntimeException(e);
+        // }
+        constructComponents();
     }
 
     /**
      * Construct buttons takes the private array of buttons and initializes it to a length of 7.
      * Then each button is set with a new Button object that corresponds to the correct function.
      */
-    private void constructButtons() {
+    private void constructComponents() throws IOException {
         buttons = new Button[7];
 
-        try {
-            buttons[0] = new Button(asset_path, Button.Type.REWIND, 50, 675, 2);
-            buttons[1] = new Button(asset_path, Button.Type.STOP, 150, 675, 2);
-            buttons[2] = new Button(asset_path, Button.Type.PLAY, 250, 675, 2);
-            buttons[3] = new Button(asset_path, Button.Type.STEP, 350, 675, 2);
-            buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 450, 675, 2);
-            buttons[5] = new Button(asset_path, Button.Type.EJECT, 600, 675, 2);
-            buttons[6] = new Button(asset_path, Button.Type.ADMIT, 712, 675, 2);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        buttons[0] = new Button(asset_path, Button.Type.REWIND      ,  50, 675, 2);
+        buttons[1] = new Button(asset_path, Button.Type.STOP        , 150, 675, 2);
+        buttons[2] = new Button(asset_path, Button.Type.PLAY        , 250, 675, 2);
+        buttons[3] = new Button(asset_path, Button.Type.STEP        , 350, 675, 2);
+        buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 450, 675, 2);
+        buttons[5] = new Button(asset_path, Button.Type.EJECT       , 600, 675, 2);
+        buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 712, 675, 2);
 
         pushButton(Button.Type.STOP);
+
+
+        messages = new Message[7];
+
+        messages[0] = new Message(asset_path, Message.Type.REWIND      ,  31, 579, 2);
+        messages[1] = new Message(asset_path, Message.Type.STOP        , 131, 579, 2);
+        messages[2] = new Message(asset_path, Message.Type.PLAY        , 231, 579, 2);
+        messages[3] = new Message(asset_path, Message.Type.STEP        , 331, 579, 2);
+        messages[4] = new Message(asset_path, Message.Type.FAST_FORWARD, 367, 599, 2);
+        messages[5] = new Message(asset_path, Message.Type.EJECT       , 587, 579, 2);
+        messages[6] = new Message(asset_path, Message.Type.ADMIT       , 699, 579, 2);
+
+
+        wheels = new Wheel[1];
+
+        wheels[0] = new Wheel(asset_path, 654, 500, 2);
     }
 
     /**
      * Construct messages takes the private array of messages and initializes it to a length of 7.
      * Then each message is set with a new message object that corresponds to the correct function.
      */
-    private void constructMessages() {
-        messages = new Message[7];
+    private void constructMessages() throws IOException {
         
-        try {
-            messages[0] = new Message(asset_path, Message.Type.REWIND      ,  31, 579, 2);
-            messages[1] = new Message(asset_path, Message.Type.STOP        , 131, 579, 2);
-            messages[2] = new Message(asset_path, Message.Type.PLAY        , 231, 579, 2);
-            messages[3] = new Message(asset_path, Message.Type.STEP        , 331, 579, 2);
-            messages[4] = new Message(asset_path, Message.Type.FAST_FORWARD, 422, 579, 2);
-            messages[5] = new Message(asset_path, Message.Type.EJECT       , 587, 579, 2);
-            messages[6] = new Message(asset_path, Message.Type.ADMIT       , 699, 579, 2);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 
@@ -168,11 +168,17 @@ public class GUI {
         }
     }
 
+    public void spinWheel(int wheel           ) { spinWheel(wheel, 1); }
+    public void spinWheel(int wheel, int times) {
+        wheels[wheel].shiftFrame(times);
+    }
+
 
     public void draw(Graphics graphics) {
         graphics.drawImage(case_img, 0, 0, null);
 
         for(Button  b :  buttons) if(b != null) b.draw(graphics);
         for(Message m : messages) if(m != null) m.draw(graphics);
+        for(Wheel   w :   wheels) if(w != null) w.draw(graphics);
     }
 }

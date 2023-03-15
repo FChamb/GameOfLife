@@ -1,4 +1,5 @@
 ./gui/GUI.java
+./gui/Wheel.java
 ./gui/Atlas.java
 ./gui/Button.java
 ./gui/Message.java
