@@ -66,7 +66,7 @@ public class Game implements Runnable {
         asset_path = "./assets";
         try {
             gui = new GUI(asset_path);
-        } catch(IOException e) {
+        } catch(Exception e) {
             System.out.println("Fatal Error: Failed to load asset files");
             if(!new File(asset_path).isDirectory()) System.out.println("The directory \'"+asset_path+"\' does not exist");
             else                                    System.out.println(e);
@@ -114,14 +114,24 @@ public class Game implements Runnable {
      * new desired grid height. Then the appropriate dimensions for the board are calculated and
      * the physical pixel size of the individual cells are found. The private variables grid is set
      * to a new grid, matching the desired shape and size.
-     * @param grid_w - An integer value of the number of cells wide for a new grid.
-     * @param grid_h -  An integer value of the number of cell tall for the new grid.
+     * @param new_grid_w - An integer value of the number of cells wide for a new grid.
+     * @param new_grid_h -  An integer value of the number of cell tall for the new grid.
      */
-    public void updateGrid(int grid_w, int grid_h) {
+    public void updateGrid(int new_grid_w, int new_grid_h) {
         grid_width = 500; grid_height = 500;
-        grid_x = 100; grid_y = 100; this.grid_w = grid_w; this.grid_h = grid_h;
+
+        // Resizes the new width and height to a maximum of 250
+        if (new_grid_w > 250) {new_grid_w = 250;}
+        if (new_grid_h > 250) {new_grid_h = 250;}
+
+        grid_x = 100; grid_y = 100; this.grid_w = new_grid_w; this.grid_h = new_grid_h;
         cell_w = grid_width/this.grid_w; cell_h = grid_height/this.grid_h;
         grid = new Grid(grid_x, grid_y, this.grid_w, this.grid_h, cell_w, cell_h);
+
+        // Automatically turns off the grid lines when above 100 cells in either direction to increase visibility
+        if (new_grid_w > 100 || new_grid_h > 100) {
+            grid.draw_grid = !grid.draw_grid;
+        }
     }
 
 
@@ -387,24 +397,35 @@ public class Game implements Runnable {
     }
 
     /**
-     * Creates a new popup menu which provides the user with three combo boxes. Each box is labels as a
-     * different game of life game rule: x, y, and z. A save button is created with an action listener
-     * that gets the chosen value from the given boxes. grid.getCell_states.updateRules is called which
-     * changes the game rules for the current board.
+     * Creates a new popup menu which provides the user with the a text area with definitions 
+     * of each variable to edit the game rules. Also provides the user with 3 combo boxes, each
+     * to edit a different rule: x, y, or z. A save button is created with an action listener
+     * that gets the chosen value from the given boxes. grid.getCell_states.updateRules is called
+     * which changes the game rules for the current board. Similarly, a reset button is created
+     * to put the variables back to default values
      */
     public void updateGame() {
         JFrame saveGamePopUP= new JFrame("Change Game Rules");
         saveGamePopUP.setLayout(new FlowLayout());
-        saveGamePopUP.setSize(new Dimension(150, 250));
+        saveGamePopUP.setSize(new Dimension(450, 250));
         saveGamePopUP.setLocationRelativeTo(null);
-        JLabel xLabel = new JLabel("Game Rule X:");
-        JLabel yLabel = new JLabel("Game Rule Y:");
-        JLabel zLabel = new JLabel("Game Rule Z:");
+
+        // Creates the text box to show defintions of x, y, z
+        JTextArea definitionBox = new JTextArea("Any live cell with fewer than x live neighbours dies.\nAny live cell with x to y live neighbours lives on to the next generation.\nAny live cell with more than y live neighbours dies.\nAny dead cell with exactly z live neighbours becomes a live cell.");
+        definitionBox.setEditable(false);
+
+        // Creates the elements to allow user to edit x, y, z variables
+        JLabel xLabel = new JLabel("Game Rule x:");
+        JLabel yLabel = new JLabel("Game Rule y:");
+        JLabel zLabel = new JLabel("Game Rule z:");
         Integer[] comboBoxChoices = {0,1,2,3,4,5,6,7,8};
         JComboBox<Integer> xComboBox = new JComboBox<>(comboBoxChoices);
         JComboBox<Integer> yComboBox = new JComboBox<>(comboBoxChoices);
         JComboBox<Integer> zComboBox = new JComboBox<>(comboBoxChoices);
         JButton save = new JButton("Save Rules");
+        JButton reset = new JButton("Reset Rules");
+        
+        // Functionality for Save button
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -415,6 +436,19 @@ public class Game implements Runnable {
                 saveGamePopUP.dispose();
             }
         });
+
+        // Functionality for Reset button
+        reset.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                int x = 2; int y = 3; int z = 3;
+                xComboBox.setSelectedItem(x);
+                yComboBox.setSelectedItem(y);
+                zComboBox.setSelectedItem(z);
+            }
+        });
+
+        saveGamePopUP.add(definitionBox);
         saveGamePopUP.add(xLabel);
         saveGamePopUP.add(xComboBox);
         saveGamePopUP.add(yLabel);
@@ -422,14 +456,8 @@ public class Game implements Runnable {
         saveGamePopUP.add(zLabel);
         saveGamePopUP.add(zComboBox);
         saveGamePopUP.add(save);
+        saveGamePopUP.add(reset);
         saveGamePopUP.setVisible(true);
-    }
-
-    /**
-     * Resets the game rules back to original Game of Life format.
-     */
-    public void resetGameRules() {
-        this.grid.getCell_states().updateRules(2, 3, 3);
     }
 
     /**
@@ -439,52 +467,35 @@ public class Game implements Runnable {
      * the menu disappears.
      */
     public void changeGrid() {
-        JFrame saveGamePopUP= new JFrame("Update Board Size");
-        saveGamePopUP.setLayout(new FlowLayout());
+        JFrame saveGamePopUP = new JFrame("Update Board Size");
         JLabel xPrompt = new JLabel("Enter Width:");
         JLabel yPrompt = new JLabel("Enter Height:");
-        saveGamePopUP.setSize(new Dimension(150, 150));
-        saveGamePopUP.setLocationRelativeTo(null);
+        JLabel maxPromt = new JLabel("(Max size 250 by 250)");
         JTextField xUserInput = new JTextField(String.valueOf(this.grid_w));
         JTextField yUserInput = new JTextField(String.valueOf(this.grid_h));
         JButton save = new JButton("Enter");
+
+        saveGamePopUP.setLayout(new FlowLayout());
+        saveGamePopUP.setSize(new Dimension(150, 150));
+        saveGamePopUP.setLocationRelativeTo(null);
+
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                updateGrid(Integer.parseInt(xUserInput.getText()), Integer.parseInt(yUserInput.getText()));
+                int width = Integer.parseInt(xUserInput.getText());
+                int height = Integer.parseInt(yUserInput.getText());
+
+                updateGrid(width, height);
                 saveGamePopUP.dispose();
             }
         });
+        
         saveGamePopUP.add(xPrompt);
         saveGamePopUP.add(xUserInput);
         saveGamePopUP.add(yPrompt);
         saveGamePopUP.add(yUserInput);
         saveGamePopUP.add(save);
         saveGamePopUP.setVisible(true);
-    }
-
-    /**
-     * Creates a new popup menu which provides the user with an uneditable text box. The text box contains the
-     * basic information pertaining to game rules and what each variable represents. An Exit button is creates
-     * which disposes of the frame when clicked.
-     */
-    public void showGameRules() {
-        JFrame gr = new JFrame("x, y, z definitions");
-        gr.setLayout(new FlowLayout());
-        JTextArea prompt = new JTextArea("Any live cell with fewer than x live neighbours dies.\nAny live cell with x to y live neighbours lives on to the next generation.\nAny live cell with more than y live neighbours dies.\nAny dead cell with exactly z live neighbours becomes a live cell.");
-        prompt.setEditable(false);
-        gr.setSize(new Dimension(450, 150));
-        gr.setLocationRelativeTo(null);
-        JButton close = new JButton("Exit");
-        close.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                gr.dispose();
-            }
-        });
-        gr.add(prompt);
-        gr.add(close);
-        gr.setVisible(true);
     }
 
 

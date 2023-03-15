@@ -62,8 +62,8 @@ public class Display extends JFrame{
         // Create File Menu
         JMenu fileMenu = new JMenu("File");
         JMenuItem openSaveItem = new JMenuItem("Open Save");
-        openSaveItem.addActionListener(new MenuBarActionListener());
         JMenuItem createNewSaveItem = new JMenuItem("Save As");
+        openSaveItem.addActionListener(new MenuBarActionListener());
         createNewSaveItem.addActionListener(new MenuBarActionListener());
         fileMenu.add(openSaveItem);
         fileMenu.add(createNewSaveItem);
@@ -72,18 +72,18 @@ public class Display extends JFrame{
         // Create Game Menu
         JMenu gameMenu = new JMenu("Game");
         JMenuItem playItem = new JMenuItem("Play");
-        playItem.addActionListener(new MenuBarActionListener());
         JMenuItem pauseItem = new JMenuItem("Pause");
-        pauseItem.addActionListener(new MenuBarActionListener());
         JMenuItem stepItem = new JMenuItem("Step");
-        stepItem.addActionListener(new MenuBarActionListener());
         JMenuItem fastForwardItem = new JMenuItem("Fast Forward");
-        fastForwardItem.addActionListener(new MenuBarActionListener());
         JMenuItem rewindItem = new JMenuItem("Rewind");
-        rewindItem.addActionListener(new MenuBarActionListener());
         JMenuItem randomizeItem = new JMenuItem("Randomize");
-        randomizeItem.addActionListener(new MenuBarActionListener());
         JMenuItem clearGridItem = new JMenuItem("Clear Grid");
+        playItem.addActionListener(new MenuBarActionListener());
+        pauseItem.addActionListener(new MenuBarActionListener());
+        stepItem.addActionListener(new MenuBarActionListener());
+        fastForwardItem.addActionListener(new MenuBarActionListener());
+        rewindItem.addActionListener(new MenuBarActionListener());
+        randomizeItem.addActionListener(new MenuBarActionListener());
         clearGridItem.addActionListener(new MenuBarActionListener());
         gameMenu.add(playItem);
         gameMenu.add(pauseItem);
@@ -94,26 +94,16 @@ public class Display extends JFrame{
         gameMenu.add(clearGridItem);
         myMenuBar.add(gameMenu);
 
-        // Create Cell Rule SubMenu
-        JMenu cellRuleSubMenu = new JMenu("Edit Cell Rules");
-        JMenuItem definexyzItem = new JMenuItem("Show x, y, z definitions");
-        definexyzItem.addActionListener(new MenuBarActionListener());
-        JMenuItem changexyzItem = new JMenuItem("Change x, y, z rules");
-        changexyzItem.addActionListener(new MenuBarActionListener());
-        JMenuItem resetxyzItem = new JMenuItem("Reset x, y, z");
-        resetxyzItem.addActionListener(new MenuBarActionListener());
-        cellRuleSubMenu.add(definexyzItem);
-        cellRuleSubMenu.add(changexyzItem);
-        cellRuleSubMenu.add(resetxyzItem);
-
         // Create Edit Rule Menu
         JMenu editRulesMenu = new JMenu("Edit Rules");
         JMenuItem editStepSizeItem = new JMenuItem("Edit Fast Forward Size");
-        editStepSizeItem.addActionListener(new MenuBarActionListener());
+        JMenuItem changexyzItem = new JMenuItem("Change x, y, z rules");
         JMenuItem editBoardItem = new JMenuItem("Edit Board Size");
+        editStepSizeItem.addActionListener(new MenuBarActionListener());
+        changexyzItem.addActionListener(new MenuBarActionListener());
         editBoardItem.addActionListener(new MenuBarActionListener());
         editRulesMenu.add(editStepSizeItem);
-        editRulesMenu.add(cellRuleSubMenu);
+        editRulesMenu.add(changexyzItem);
         editRulesMenu.add(editBoardItem);
         myMenuBar.add(editRulesMenu);
 
@@ -122,9 +112,7 @@ public class Display extends JFrame{
         addMouseMotionListener(mouse);
         addKeyListener(keyboard);
         pack();
-
         canvas.createBufferStrategy(3);
-
         setVisible(true);
         setLocationRelativeTo(null);
     }
@@ -135,26 +123,27 @@ public class Display extends JFrame{
      * @param game - A game object in which the graphics are drawn to.
     */
     public void generateGraphics(Game game) {
-        BufferStrategy bs = canvas.getBufferStrategy();
-        // if(bs == null) canvas.createBufferStrategy(3);
-        // bs = canvas.getBufferStrategy();
+        BufferStrategy bufferStrategy = canvas.getBufferStrategy();
+        // if(bufferStrategy == null) canvas.createBufferStrategy(3);
+        // bufferStrategy = canvas.getBufferStrategy();
 
-        Graphics g = bs.getDrawGraphics();
+        Graphics graphics = bufferStrategy.getDrawGraphics();
 
-        g.setColor(Color.BLACK);
-        g.fillRect(0,0,width,height);
+        graphics.setColor(Color.BLACK);
+        graphics.fillRect(0,0,width,height);
 
-        game.draw(g);
+        game.draw(graphics);
 
         Toolkit.getDefaultToolkit().sync();
-        g.dispose();
-        bs.show();
+        graphics.dispose();
+        bufferStrategy.show();
     }
 
     /**
      * This class is a different version of an action listener which overrides actionPerformed.
      * The method takes an ActionEvent and uses a switch case to decide which menu item has been
-     * selected. The appropriate action is then activated.
+     * selected. The appropriate action is then activated. Some of the options also pause
+     * the game to make the board state static, particularly for when saving/opening files
      */
     class MenuBarActionListener implements ActionListener {
 
@@ -162,9 +151,11 @@ public class Display extends JFrame{
         public void actionPerformed(ActionEvent event) {
             switch(event.getActionCommand()){
                 case "Open Save":
+                    game.getGui().commitAction(game, Button.Type.STOP);
                     game.getGui().commitAction(game, Button.Type.ADMIT);
                     break;
                 case "Save As":
+                    game.getGui().commitAction(game, Button.Type.STOP);
                     game.getGui().commitAction(game, Button.Type.EJECT);
                     break;
                 case "Play":
@@ -180,6 +171,7 @@ public class Display extends JFrame{
                     game.getGui().commitAction(game, Button.Type.FAST_FORWARD);
                     break;
                 case "Rewind":
+                    game.getGui().commitAction(game, Button.Type.STOP);
                     game.getGui().commitAction(game, Button.Type.REWIND);
                     break;
                 case "Randomize":
@@ -188,14 +180,9 @@ public class Display extends JFrame{
                 case "Clear Grid":
                     game.getGrid().clear();
                     break;
-                case "Show x, y, z definitions":
-                    game.showGameRules();
-                    break;
                 case "Change x, y, z rules":
+                    game.getGui().commitAction(game, Button.Type.STOP);
                     game.updateGame();
-                    break;
-                case "Reset x, y, z":
-                    game.resetGameRules();
                     break;
                 case "Edit Fast Forward Size":
                     game.updateMany();
@@ -206,7 +193,5 @@ public class Display extends JFrame{
 
             }
         }
-    }
-
-    
+    }    
 }
