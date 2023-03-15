@@ -474,6 +474,30 @@ public class Game implements Runnable {
         saveGamePopUP.setVisible(true);
     }
 
+    /**
+     * Creates a new popup menu which provides the user with an uneditable text box. The text box contains the
+     * basic information pertaining to game rules and what each variable represents. An Exit button is creates
+     * which disposes of the frame when clicked.
+     */
+    public void showGameRules() {
+        JFrame gr = new JFrame("x, y, z definitions");
+        gr.setLayout(new FlowLayout());
+        JTextArea prompt = new JTextArea("Any live cell with fewer than x live neighbours dies.\nAny live cell with x to y live neighbours lives on to the next generation.\nAny live cell with more than y live neighbours dies.\nAny dead cell with exactly z live neighbours becomes a live cell.");
+        prompt.setEditable(false);
+        gr.setSize(new Dimension(450, 150));
+        gr.setLocationRelativeTo(null);
+        JButton close = new JButton("Exit");
+        close.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                gr.dispose();
+            }
+        });
+        gr.add(prompt);
+        gr.add(close);
+        gr.setVisible(true);
+    }
+
 
     /**
      * Run is the starting method in Game which uses the chosen fps and tick speed to

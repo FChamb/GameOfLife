@@ -39,6 +39,13 @@ public class Keyboard implements KeyListener {
         if(state) clicked[key] = false;
         return state;
     }
+
+    /**
+     * A simple getter method which takes a specific key and returns whether the key
+     * object flutters or not.
+     * @param key - A given key on the Keyboard.
+     * @return - A boolean value denoting whether the key flutters.
+     */
     public boolean isFlutter(int key) {
         boolean state = flutter[key];
         if(state) flutter[key] = false;
@@ -46,15 +53,28 @@ public class Keyboard implements KeyListener {
     }
 
     /**
-     *
-     * @return
+     * ctrl() is a specific getter method which returns the state of if the
+     * ctrl key has been pressed.
+     * @return - A boolean value denoting whether the ctrl key has been pressed.
      */
     public boolean ctrl() {
         return pressed[KeyEvent.VK_CONTROL];
     }
+
+    /**
+     * shift() is a specific getter method which returns the state of if the
+     * shift key has been pressed.
+     * @return - A boolean value denoting whether the shift key has been pressed.
+     */
     public boolean shift() {
         return pressed[KeyEvent.VK_SHIFT];
     }
+
+    /**
+     * alt() is a specific getter method which returns the state of if the
+     * alt key has been pressed.
+     * @return - A boolean value denoting whether the alt key has been pressed.
+     */
     public boolean alt() {
         return pressed[KeyEvent.VK_ALT];
     }
@@ -66,6 +86,12 @@ public class Keyboard implements KeyListener {
     }
 
 
+    /**
+     * An override of KeyListener's keyPressed method. This method changes
+     * the boolean state of whether a key has been pressed or clicked depending
+     * on which key actually was altered.
+     * @param e the event to be processed
+     */
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() >= pressed.length) return;
@@ -74,6 +100,12 @@ public class Keyboard implements KeyListener {
         flutter[e.getKeyCode()] = true;
     }
 
+    /**
+     * An override of KeyListener's keyReleased method. This method changes
+     * the boolean state of whether a key has been released once it has been clicked
+     * or pressed.
+     * @param e the event to be processed
+     */
     @Override
     public void keyReleased(KeyEvent e) {
         if(e.getKeyCode() >= pressed.length) return;
@@ -82,6 +114,12 @@ public class Keyboard implements KeyListener {
         flutter[e.getKeyCode()] = false;
     }
 
+    /**
+     * An override of KeyListener's keyReleased method. This method changes
+     * the boolean state of whether a key has been typed i.e. continuously pressed
+     * down.
+     * @param e the event to be processed
+     */
     @Override
     public void keyTyped(KeyEvent e) {
         if(e.getKeyCode() >= pressed.length) return;

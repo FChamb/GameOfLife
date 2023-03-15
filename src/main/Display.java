@@ -189,7 +189,7 @@ public class Display extends JFrame{
                     game.getGrid().clear();
                     break;
                 case "Show x, y, z definitions":
-                    // TODO: Add Button Functionality
+                    game.showGameRules();
                     break;
                 case "Change x, y, z rules":
                     game.updateGame();
