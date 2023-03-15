@@ -31,7 +31,9 @@ public enum Atlas {
           STOP_MESSAGE(327,  44, 64,  44),
           STEP_MESSAGE(327,  88, 64,  44),
   FAST_FORWARD_MESSAGE(327, 132, 73,  44),
-        REWIND_MESSAGE(391,   0, 64,  44)
+        REWIND_MESSAGE(391,   0, 64,  44),
+         EJECT_MESSAGE(391,  44, 64,  44),
+         ADMIT_MESSAGE(391,  88, 64,  44)
   ;
 
 

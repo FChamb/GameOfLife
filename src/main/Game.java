@@ -163,6 +163,7 @@ public class Game implements Runnable {
             }
             // grid.update();
         }
+
         // Keyboard: up arrow clicked increases play speed
         if(keyboard.isFlutter(KeyEvent.VK_UP)) {
             ups++; if(ups > fps) ups = (int)fps;
@@ -171,14 +172,23 @@ public class Game implements Runnable {
         if(keyboard.isFlutter(KeyEvent.VK_DOWN)) {
             ups--; if(ups < 1) ups = 1;
         }
+
         // Keyboard: right arrow clicked performs a single generation step
-        if(keyboard.isPressed(KeyEvent.VK_RIGHT)) {
+        if(!keyboard.shift() && keyboard.isPressed(KeyEvent.VK_RIGHT)) {
             // grid.update();
             gui.pushButton(Button.Type.STEP);
             if(keyboard.isClicked(KeyEvent.VK_RIGHT))
                 gui.commitAction(this, Button.Type.STEP);
         } else gui.releaseButton(Button.Type.STEP);
+        // Keyboard: shift and right arrow clicked together preforms multiple generation steps
+        if(keyboard.shift() && keyboard.isPressed(KeyEvent.VK_RIGHT)) {
+            // grid.update();
+            gui.pushButton(Button.Type.FAST_FORWARD);
+            if(keyboard.isClicked(KeyEvent.VK_RIGHT))
+                gui.commitAction(this, Button.Type.FAST_FORWARD);
+        } else gui.releaseButton(Button.Type.FAST_FORWARD);
 
+        // Keyboard: left arrow clicked recedes a single generation step
         if(keyboard.isPressed(KeyEvent.VK_LEFT)) {
             gui.pushButton(Button.Type.REWIND);
             if(keyboard.isFlutter(KeyEvent.VK_LEFT))
@@ -447,6 +457,11 @@ public class Game implements Runnable {
                 zComboBox.setSelectedItem(z);
             }
         });
+
+        // Sets the combo box values to automatically be the current values for x, y, z rules
+        xComboBox.setSelectedItem(grid.getCell_states().getxRule());
+        yComboBox.setSelectedItem(grid.getCell_states().getyRule());
+        zComboBox.setSelectedItem(grid.getCell_states().getzRule());
 
         saveGamePopUP.add(definitionBox);
         saveGamePopUP.add(xLabel);

@@ -36,6 +36,18 @@ public class CellStates {
         this.zRule = zRule;
     }
 
+    public int getxRule() {
+        return this.xRule;
+    }
+
+    public int getyRule() {
+        return this.yRule;
+    }
+
+    public int getzRule() {
+        return this.zRule;
+    }
+
 
     public byte newState(byte state, int[] neighbours) {
         switch(state){
