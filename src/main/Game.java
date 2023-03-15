@@ -167,10 +167,12 @@ public class Game implements Runnable {
         // Keyboard: up arrow clicked increases play speed
         if(keyboard.isFlutter(KeyEvent.VK_UP)) {
             ups++; if(ups > fps) ups = (int)fps;
+            else gui.spinWheel(0);
         }
         // Keyboard: down arrow clicked decreases play speed
         if(keyboard.isFlutter(KeyEvent.VK_DOWN)) {
             ups--; if(ups < 1) ups = 1;
+            else gui.spinWheel(0, -1);
         }
 
         // Keyboard: right arrow clicked performs a single generation step
