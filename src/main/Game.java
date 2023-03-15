@@ -64,14 +64,7 @@ public class Game implements Runnable {
 
         // ----- LOAD GUI -----
         asset_path = "./assets";
-        try {
-            gui = new GUI(asset_path);
-        } catch(IOException e) {
-            System.out.println("Fatal Error: Failed to load asset files");
-            if(!new File(asset_path).isDirectory()) System.out.println("The directory \'"+asset_path+"\' does not exist");
-            else                                    System.out.println(e);
-            System.exit(0);
-        }
+        gui = new GUI(asset_path);
 
         tick = 0; ups = 10;
     }
