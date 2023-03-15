@@ -13,9 +13,9 @@ public class Message {
                 STOP(Atlas.STOP_MESSAGE        ),
         FAST_FORWARD(Atlas.FAST_FORWARD_MESSAGE),
               REWIND(Atlas.REWIND_MESSAGE      ),
-                STEP(Atlas.STEP_MESSAGE        )
-        //        EJECT(      Atlas.EJECT_UP       , Atlas.EJECT_DOWN       ),
-        //        ADMIT(      Atlas.ADMIT_UP       , Atlas.ADMIT_DOWN       )
+                STEP(Atlas.STEP_MESSAGE        ),
+               EJECT(Atlas.EJECT_MESSAGE       ),
+               ADMIT(Atlas.ADMIT_MESSAGE       )
         ;
 
 

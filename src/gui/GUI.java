@@ -52,6 +52,8 @@ public class GUI {
         messages[2] = new Message(asset_path, Message.Type.PLAY        , 231, 579, 2);
         messages[3] = new Message(asset_path, Message.Type.STEP        , 331, 579, 2);
         messages[4] = new Message(asset_path, Message.Type.FAST_FORWARD, 422, 579, 2);
+        messages[5] = new Message(asset_path, Message.Type.EJECT       , 587, 579, 2);
+        messages[6] = new Message(asset_path, Message.Type.ADMIT       , 699, 579, 2);
     }
 
 
