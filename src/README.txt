@@ -14,7 +14,7 @@ Run the following commands in order to operate game:
 Keyboard Inputs:
 Space ( ) - play/pause
 Right Arrow (->) - step one generation
-Shift + Right Arrow (↑ + ->) - fast forward skip
+Shift + Right Arrow (↑ + ->) - fast-forward skip
 Left Arrow (<-) - step one generation backwards {hold to continuously move}
 Up Arrow (↑) - increase speed {hold for continuous increase}
 Down Arrow (↓) - decrease speed {hold for continuous decrease}
@@ -27,3 +27,11 @@ Ctrl + H (Ctrl + H) - change game rule menu
 Ctrl + U (Ctrl + U) - change board size menu
 Left Click Mouse - press on screen button or change dead cell alive
 Right Click Mouse - change alive cell dead
+
+Button Types:
+Grey Two Left Arrows - step one generation backwards
+Red Square - pause
+Red Right Arrow - play
+Grey Right Square + Line - step one generation
+Grey Two Right Arrows - fast-forward skip
+Grey Upwards Arrow
