@@ -80,14 +80,6 @@ public class GUI {
         messages[7] = new Message(asset_path, Message.Type.UPDATE_RATE , 599, 424, 2);
     }
 
-    /**
-     * Construct messages takes the private array of messages and initializes it to a length of 7.
-     * Then each message is set with a new message object that corresponds to the correct function.
-     */
-    private void constructMessages() throws IOException {
-        
-    }
-
 
     public void pushButton(Button.Type type) {
         for(Button b : buttons)

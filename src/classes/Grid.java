@@ -1,14 +1,12 @@
 package classes;
 
 import java.awt.Color;
-import java.awt.event.MouseEvent;
 import java.awt.Graphics;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
 public class Grid {
@@ -30,6 +28,18 @@ public class Grid {
     public boolean draw_grid;
 
 
+    /**
+     * Constructor for Grid object. The width and height of the grid are used
+     * to determine how big each cell can be, by dividing the total length by number.
+     * A new CellStates attribute is called and set to cell_states. Finally, the 2D
+     * array is created and grid lines are turned on.
+     * @param x - number of cells wide
+     * @param y - number of cells tall
+     * @param width - width of grid
+     * @param height - height of grid
+     * @param cell_width - cell width
+     * @param cell_height - cell height
+     */
     public Grid(int x, int y, int width, int height, int cell_width, int cell_height) {
         // ----- INITIALISE VARIABLES -----
         this.x = x; this.y = y;
@@ -74,18 +84,36 @@ public class Grid {
         else                 cells[y][x] = 0;
     }
 
+    /**
+     * Randomise checks every cell in the board and gives it a 50/50
+     * change of being alive or dead.
+     */
     public void randomise() {
         cells = new byte[height][width];
         for(int y = 0; y < height; y++)
             for(int x = 0; x < width; x++)
                 cells[y][x] = (byte)(Math.random()*2);
     }
+
+    /**
+     * Clear sets the private cells attribute to a new 2D array of
+     * bytes, therein clearing the board.
+     */
     public void clear() {
         cells = new byte[height][width];
         previousGrids.clear();
     }
 
 
+    /**
+     * Count neighbors takes an x and y coordinate for which cell to look at.
+     * Using that information all eight cells surrounding the chosen one are
+     * found. For each alive cell the count goes up. Finally, count is returned.
+     * @param x - x coord of cell
+     * @param y - y coord of cell
+     * @return int[] an array with the first value containing the number of
+     * alive cells around a specific one
+     */
     public int[] countNeighbours(int x, int y) {
         int i,j,k,l, neighbours[] = new int[256];
         for(j = -1; j < 2; j++) {
@@ -102,6 +130,11 @@ public class Grid {
         return neighbours;
     }
 
+    /**
+     * update() determines the state of every cell by individually counting its
+     * neighbors and applying game rules. Then this grid object is set to the new
+     * state.
+     */
     public void update() {
         byte[][] buffer = new byte[height][width];
         for(int y = 0; y < height; y++) {
@@ -114,12 +147,21 @@ public class Grid {
         previousGrids.add(cells);
     }
 
+    /**
+     * Functionality for the fast-forward key. This class looks at the private
+     * many object and runs update() that many times.
+     */
     public void updateMany() {
         for (int i = 0; i < this.many; i++) {
             update();
         }
     }
 
+    /**
+     * getPrevious updates the 2D array of bytes to be equal to the last save in
+     * this.previousGrids only if the size of the arraylist is greater than 1.
+     * Lastly the arraylist removes the updated save.
+     */
     public void getPrevious() {
         if (previousGrids.size() > 1) {
             byte[][] buffer = previousGrids.get(previousGrids.size() - 2);
@@ -129,6 +171,12 @@ public class Grid {
     }
 
 
+    /**
+     * Draw takes a graphic object and draws the individual cells and grid lines on
+     * the grid. This method is called at the initialization stage of a game when all
+     * the assets are drawn to the canvas.
+     * @param graphics - Graphics containing all the assets for the game of life
+     */
     public void draw(Graphics graphics) {
         int off_x = x, off_y = y;
         int x,y;
@@ -163,6 +211,10 @@ public class Grid {
     }
 
 
+    /**
+     * Loads a game state by using a reader object and finding all instances of . or o.
+     * @param filename - String value containing the name of the save
+     */
     public void load(String filename) {
         previousGrids.clear();
         Scanner reader = null;
@@ -192,6 +244,13 @@ public class Grid {
         previousGrids.add(buffer);
     }
 
+    /**
+     * findLoadWH takes a filename and returns an array of integers which contain
+     * the width and the height of a save state. The enables loading a file by
+     * updating the grid size beforehand.
+     * @param filename - A string value containing the name of the save
+     * @return int[] - an array of integers with the width and height of a save state
+     */
     public int[] findLoadWH(String filename) {
         String file = "savefiles/" + filename;
         int rows = 0;
@@ -211,6 +270,13 @@ public class Grid {
         return new int[]{rows, cols};
     }
 
+    /**
+     * findComments reads a save file and attempts to find any comments at the bottom of the
+     * save. Comments are labeled with #:. If there are no comments null will be returned
+     * rather than the string of comments.
+     * @param filename - A string value containing the name of the save state
+     * @return String - a string value with the comments of a save state
+     */
     public String findComments(String filename) {
         String file = "savefiles/" + filename;
         String comments = null;
@@ -228,6 +294,13 @@ public class Grid {
         return comments;
     }
 
+    /**
+     * save takes both a filename and comments and save the current state of the
+     * board game. Using a writer object the file has . and o written to represent
+     * dead and alive cells.
+     * @param filename - a string value containing the name of the file
+     * @param comments - a string value containing any save comments
+     */
     public void save(String filename, String comments) {
         FileWriter writer = null;
         try {
