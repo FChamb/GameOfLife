@@ -1,9 +1,6 @@
 package gui;
 
 public enum Atlas {
-               DEFAULT(  0,206,50, 50),
- 
- 
                PLAY_UP(  0,   0,  45, 103),
              PLAY_DOWN(  0, 103,  45, 103),
  
@@ -34,12 +31,13 @@ public enum Atlas {
         REWIND_MESSAGE(391,   0,  64,  44),
          EJECT_MESSAGE(391,  44,  64,  44),
          ADMIT_MESSAGE(391,  88,  64,  44),
+   UPDATE_RATE_MESSAGE(327, 168, 128,  36),
 
 
-               WHEEL_1(327, 168,  73,  15),
-               WHEEL_2(327, 183,  73,  15),
-               WHEEL_3(327, 198,  73,  15),
-               WHEEL_4(327, 213,  73,  15)
+               WHEEL_1(  0, 206,  73,  15),
+               WHEEL_2( 73, 206,  73,  15),
+               WHEEL_3(146, 206,  73,  15),
+               WHEEL_4(219, 206,  73,  15)
   ;
 
 

@@ -134,6 +134,15 @@ public class Game implements Runnable {
         }
     }
 
+    public void changeUpdateRate(int steps) {
+        ups += steps;
+
+             if(ups > fps) ups = (int)fps;
+        else if(steps > 0) gui.spinWheel(0    );
+             if(ups <   0) ups =        0;
+        else if(steps < 0) gui.spinWheel(0, -1);
+    }
+
 
     /**
      * This method contains a multitude of conditional statements, checking whether the user
@@ -166,13 +175,11 @@ public class Game implements Runnable {
 
         // Keyboard: up arrow clicked increases play speed
         if(keyboard.isFlutter(KeyEvent.VK_UP)) {
-            ups++; if(ups > fps) ups = (int)fps;
-            else gui.spinWheel(0);
+            changeUpdateRate(1);
         }
         // Keyboard: down arrow clicked decreases play speed
         if(keyboard.isFlutter(KeyEvent.VK_DOWN)) {
-            ups--; if(ups < 1) ups = 1;
-            else gui.spinWheel(0, -1);
+            changeUpdateRate(-1);
         }
 
         // Keyboard: right arrow clicked performs a single generation step

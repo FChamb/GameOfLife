@@ -18,9 +18,15 @@ public class GUI {
     private String asset_path;
 
     private BufferedImage case_img;
+
     private  Button[] buttons;
-    private Message[] messages;
     private   Wheel[] wheels;
+    private Message[] messages;
+
+    private final static int BUTTON_INDEX = 0,
+                              WHEEL_INDEX = 7;
+
+
     private Button.Type mouse_pressed = null;
 
 
@@ -33,12 +39,8 @@ public class GUI {
      */
     public GUI(String asset_path) throws IOException {
         this.asset_path = asset_path;
-
-        // try {
-            case_img = ImageIO.read(new File(asset_path, "case.png"));
-        // } catch (IOException e) {
-        //     throw new RuntimeException(e);
-        // }
+        
+        case_img = ImageIO.read(new File(asset_path, "case.png"));
         constructComponents();
     }
 
@@ -60,7 +62,12 @@ public class GUI {
         pushButton(Button.Type.STOP);
 
 
-        messages = new Message[7];
+        wheels = new Wheel[1];
+
+        wheels[0] = new Wheel(asset_path, 654, 500, 2);
+
+
+        messages = new Message[8];
 
         messages[0] = new Message(asset_path, Message.Type.REWIND      ,  31, 579, 2);
         messages[1] = new Message(asset_path, Message.Type.STOP        , 131, 579, 2);
@@ -70,10 +77,7 @@ public class GUI {
         messages[5] = new Message(asset_path, Message.Type.EJECT       , 587, 579, 2);
         messages[6] = new Message(asset_path, Message.Type.ADMIT       , 699, 579, 2);
 
-
-        wheels = new Wheel[1];
-
-        wheels[0] = new Wheel(asset_path, 654, 500, 2);
+        messages[7] = new Message(asset_path, Message.Type.UPDATE_RATE , 599, 424, 2);
     }
 
 
@@ -128,12 +132,28 @@ public class GUI {
         }
     }
 
+    public void commitWheelAction(Game game, int wheel, int steps) {
+        switch(wheel) {
+            case 0:
+                game.changeUpdateRate(steps);
+                break;
+            
+            default:
+                return;
+        }
+    }
+
     public void interact(Game game, Mouse mouse, Keyboard keyboard) {
-        Button button; Button.Type type; Atlas area; int bx, by; double bs;
+        Button button; Button.Type type; int bx, by; double bs;
+        Wheel wheel; int wx, wy; double ws;
+        Atlas area;
+
         Point loc = mouse.getLocation();
         int x, y; boolean gotone;
         if(mouse.onScreen() && loc != null) {
             x = loc.x; y = loc.y;
+
+            // check buttons
             gotone = false;
             for(int b = 0; b < buttons.length; b++) {
                 if(buttons[b] == null) continue;
@@ -142,7 +162,7 @@ public class GUI {
                 type = button.getType();
                 area = button.getCurrentFrameSize();
                 if(x >= bx && y >= by && x < bx+area.w*bs && y < by+area.h*bs) {
-                    if(messages[b] != null) messages[b].show = true;            // show message
+                    if(messages[BUTTON_INDEX+b] != null) messages[BUTTON_INDEX+b].show = true;              // show message
                     if(mouse.isPressed(MouseEvent.BUTTON1)) {
                         gotone = true;
                         if(mouse.isClicked(MouseEvent.BUTTON1)) {
@@ -152,11 +172,29 @@ public class GUI {
                     } else if(!type.sticky)
                         releaseButton(type);
                 } else {
-                    if(messages[b] != null) messages[b].show = false;           // hide message
+                    if(messages[BUTTON_INDEX+b] != null) messages[BUTTON_INDEX+b].show = false;                                       // hide message
                     if(!type.sticky)
                         releaseButton(type);
                 }
             } if(!gotone) mouse_pressed = null;
+
+            // check wheels
+            for(int w = 0; w < wheels.length; w++) {
+                if(wheels[w] == null) continue;
+
+                wheel = wheels[w]; wx = wheel.getX(); wy = wheel.getY(); ws = wheel.getScale();
+                area = wheel.getCurrentFrameSize();
+                if(x >= wx && y >= wy && x < wx+area.w*ws && y < wy+area.h*ws) {
+                    if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = true;                // show message
+                    if(mouse.isPressed(MouseEvent.BUTTON1)) {
+                        if(x < wx + (area.w*ws)/2) {
+                            commitWheelAction(game, w, -1);
+                        } else commitWheelAction(game, w, 1);
+                    }
+                } else {
+                    if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = false;                                       // hide message
+                }
+            }
         }
     }
 
