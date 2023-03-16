@@ -278,12 +278,12 @@ public class Game implements Runnable {
      */
     public void saveGame() {
         final String[] fileName = {"default.gol"};
-        JFrame saveGamePopUP= new JFrame("Save Game");
-        saveGamePopUP.setLayout(new FlowLayout());
+        JFrame saveGamePopUp= new JFrame("Save Game");
+        saveGamePopUp.setLayout(new FlowLayout());
         JLabel prompt = new JLabel("Enter File Name:");
         JLabel prompt2 = new JLabel("Enter Comments:");
-        saveGamePopUP.setSize(new Dimension(250, 210));
-        saveGamePopUP.setLocationRelativeTo(null);
+        saveGamePopUp.setSize(new Dimension(250, 210));
+        saveGamePopUp.setLocationRelativeTo(null);
         JTextField userInput = new JTextField("default.gol");
         JTextArea comments = new JTextArea(5, 18);
         JScrollPane scroll = new JScrollPane(comments, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
@@ -298,15 +298,15 @@ public class Game implements Runnable {
                 } else {
                     grid.save(fileName[0] + ".gol", comment);
                 }
-                saveGamePopUP.dispose();
+                saveGamePopUp.dispose();
             }
         });
-        saveGamePopUP.add(prompt);
-        saveGamePopUP.add(userInput);
-        saveGamePopUP.add(prompt2);
-        saveGamePopUP.add(scroll);
-        saveGamePopUP.add(save);
-        saveGamePopUP.setVisible(true);
+        saveGamePopUp.add(prompt);
+        saveGamePopUp.add(userInput);
+        saveGamePopUp.add(prompt2);
+        saveGamePopUp.add(scroll);
+        saveGamePopUp.add(save);
+        saveGamePopUp.setVisible(true);
     }
 
     /**
@@ -318,11 +318,11 @@ public class Game implements Runnable {
     public void loadGame() {
         File files = new File("savefiles");
         final String[] fileNames = files.list();
-        JFrame saveGamePopUP= new JFrame("Load Save File");
-        saveGamePopUP.setLayout(new FlowLayout());
+        JFrame loadGamePopUp= new JFrame("Load Save File");
+        loadGamePopUp.setLayout(new FlowLayout());
         JLabel prompt = new JLabel("Pick Save File:");
-        saveGamePopUP.setSize(new Dimension(250, 125));
-        saveGamePopUP.setLocationRelativeTo(null);
+        loadGamePopUp.setSize(new Dimension(250, 125));
+        loadGamePopUp.setLocationRelativeTo(null);
         JComboBox<String> saves = new JComboBox<>(fileNames);
         JButton save = new JButton("Load Game");
         save.addActionListener(new ActionListener() {
@@ -331,14 +331,14 @@ public class Game implements Runnable {
                 int[] vals = grid.findLoadWH(saves.getSelectedItem().toString());
                 updateGrid(vals[1], vals[0]);
                 grid.load(saves.getSelectedItem().toString());
-                saveGamePopUP.dispose();
+                loadGamePopUp.dispose();
                 showComments(saves.getSelectedItem().toString());
             }
         });
-        saveGamePopUP.add(prompt);
-        saveGamePopUP.add(saves);
-        saveGamePopUP.add(save);
-        saveGamePopUP.setVisible(true);
+        loadGamePopUp.add(prompt);
+        loadGamePopUp.add(saves);
+        loadGamePopUp.add(save);
+        loadGamePopUp.setVisible(true);
     }
 
     /**
@@ -417,10 +417,10 @@ public class Game implements Runnable {
      * to put the variables back to default values
      */
     public void updateGame() {
-        JFrame saveGamePopUP= new JFrame("Change Game Rules");
-        saveGamePopUP.setLayout(new FlowLayout());
-        saveGamePopUP.setSize(new Dimension(450, 250));
-        saveGamePopUP.setLocationRelativeTo(null);
+        JFrame changeRulesPopUp = new JFrame("Change Game Rules");
+        changeRulesPopUp.setLayout(new FlowLayout());
+        changeRulesPopUp.setSize(new Dimension(450, 250));
+        changeRulesPopUp.setLocationRelativeTo(null);
 
         // Creates the text box to show defintions of x, y, z
         JTextArea definitionBox = new JTextArea("Any live cell with fewer than x live neighbours dies.\nAny live cell with x to y live neighbours lives on to the next generation.\nAny live cell with more than y live neighbours dies.\nAny dead cell with exactly z live neighbours becomes a live cell.");
@@ -445,7 +445,7 @@ public class Game implements Runnable {
                 int y = yComboBox.getSelectedIndex();
                 int z = zComboBox.getSelectedIndex();
                 grid.getCell_states().updateRules(x, y, z);
-                saveGamePopUP.dispose();
+                changeRulesPopUp.dispose();
             }
         });
 
@@ -465,16 +465,16 @@ public class Game implements Runnable {
         yComboBox.setSelectedItem(grid.getCell_states().getyRule());
         zComboBox.setSelectedItem(grid.getCell_states().getzRule());
 
-        saveGamePopUP.add(definitionBox);
-        saveGamePopUP.add(xLabel);
-        saveGamePopUP.add(xComboBox);
-        saveGamePopUP.add(yLabel);
-        saveGamePopUP.add(yComboBox);
-        saveGamePopUP.add(zLabel);
-        saveGamePopUP.add(zComboBox);
-        saveGamePopUP.add(save);
-        saveGamePopUP.add(reset);
-        saveGamePopUP.setVisible(true);
+        changeRulesPopUp.add(definitionBox);
+        changeRulesPopUp.add(xLabel);
+        changeRulesPopUp.add(xComboBox);
+        changeRulesPopUp.add(yLabel);
+        changeRulesPopUp.add(yComboBox);
+        changeRulesPopUp.add(zLabel);
+        changeRulesPopUp.add(zComboBox);
+        changeRulesPopUp.add(save);
+        changeRulesPopUp.add(reset);
+        changeRulesPopUp.setVisible(true);
     }
 
     /**
@@ -484,7 +484,7 @@ public class Game implements Runnable {
      * the menu disappears.
      */
     public void changeGrid() {
-        JFrame saveGamePopUP = new JFrame("Update Board Size");
+        JFrame changeGridPopUp = new JFrame("Update Board Size");
         JLabel xPrompt = new JLabel("Enter Width:");
         JLabel yPrompt = new JLabel("Enter Height:");
         JLabel maxPromt = new JLabel("(Max size 250 by 250)");
@@ -492,9 +492,9 @@ public class Game implements Runnable {
         JTextField yUserInput = new JTextField(String.valueOf(this.grid_h));
         JButton save = new JButton("Enter");
 
-        saveGamePopUP.setLayout(new FlowLayout());
-        saveGamePopUP.setSize(new Dimension(150, 150));
-        saveGamePopUP.setLocationRelativeTo(null);
+        changeGridPopUp.setLayout(new FlowLayout());
+        changeGridPopUp.setSize(new Dimension(150, 150));
+        changeGridPopUp.setLocationRelativeTo(null);
 
         save.addActionListener(new ActionListener() {
             @Override
@@ -503,16 +503,17 @@ public class Game implements Runnable {
                 int height = Integer.parseInt(yUserInput.getText());
 
                 updateGrid(width, height);
-                saveGamePopUP.dispose();
+                changeGridPopUp.dispose();
             }
         });
         
-        saveGamePopUP.add(xPrompt);
-        saveGamePopUP.add(xUserInput);
-        saveGamePopUP.add(yPrompt);
-        saveGamePopUP.add(yUserInput);
-        saveGamePopUP.add(save);
-        saveGamePopUP.setVisible(true);
+        changeGridPopUp.add(maxPromt);
+        changeGridPopUp.add(xPrompt);
+        changeGridPopUp.add(xUserInput);
+        changeGridPopUp.add(yPrompt);
+        changeGridPopUp.add(yUserInput);
+        changeGridPopUp.add(save);
+        changeGridPopUp.setVisible(true);
     }
 
 
