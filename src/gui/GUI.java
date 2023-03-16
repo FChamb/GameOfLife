@@ -76,14 +76,6 @@ public class GUI {
         wheels[0] = new Wheel(asset_path, 654, 500, 2);
     }
 
-    /**
-     * Construct messages takes the private array of messages and initializes it to a length of 7.
-     * Then each message is set with a new message object that corresponds to the correct function.
-     */
-    private void constructMessages() throws IOException {
-        
-    }
-
 
     public void pushButton(Button.Type type) {
         for(Button b : buttons)
