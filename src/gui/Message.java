@@ -15,7 +15,8 @@ public class Message {
               REWIND(Atlas.REWIND_MESSAGE      ),
                 STEP(Atlas.STEP_MESSAGE        ),
                EJECT(Atlas.EJECT_MESSAGE       ),
-               ADMIT(Atlas.ADMIT_MESSAGE       )
+               ADMIT(Atlas.ADMIT_MESSAGE       ),
+         UPDATE_RATE(Atlas.UPDATE_RATE_MESSAGE )
         ;
 
 
