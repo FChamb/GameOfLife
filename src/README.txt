@@ -34,4 +34,6 @@ Red Square - pause
 Red Right Arrow - play
 Grey Right Square + Line - step one generation
 Grey Two Right Arrows - fast-forward skip
-Grey Upwards Arrow
+Grey Upwards Arrow + Line - save game state menu
+Grey Downwards Arrow + Line - load game state menu
+Blue Scroll Dial - change game speed {left side click for slow, right side click for fast}
