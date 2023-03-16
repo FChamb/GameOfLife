@@ -142,7 +142,7 @@ public class Display extends JFrame{
     /**
      * This class is a different version of an action listener which overrides actionPerformed.
      * The method takes an ActionEvent and uses a switch case to decide which menu item has been
-     * selected. The appropriate action is then activated. Some of the options also pause
+     * selected. The appropriate action is then activated. Some options also pause
      * the game to make the board state static, particularly for when saving/opening files
      */
     class MenuBarActionListener implements ActionListener {
