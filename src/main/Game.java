@@ -371,10 +371,10 @@ public class Game implements Runnable {
                 finalComment += " " + comment[i];
             }
         }
-        JTextArea prompt = new JTextArea(finalComment, 5, 18);
+        JTextArea prompt = new JTextArea(finalComment, 5, 25);
         prompt.setEditable(false);
         JScrollPane scroll = new JScrollPane(prompt, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-        comments.setSize(new Dimension(250, 150));
+        comments.setSize(new Dimension(350, 150));
         comments.setLocationRelativeTo(null);
         JButton close = new JButton("Exit");
         close.addActionListener(new ActionListener() {
