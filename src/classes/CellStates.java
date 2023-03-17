@@ -4,7 +4,7 @@ import java.awt.Color;
 
 public class CellStates {
 
-    public Color[] colours = new Color[256];
+    public Color[] colors = new Color[256];
     private int xRule = 2;
     private int yRule = 3;
     private int zRule = 3;
@@ -26,8 +26,8 @@ public class CellStates {
 
 
     public CellStates() {
-        colours[0] = Color.WHITE;
-        colours[1] = Color.BLACK;
+        colors[0] = Color.WHITE;
+        colors[1] = Color.BLACK;
     }
 
     public void updateRules(int xRule, int yRule, int zRule) {
@@ -49,6 +49,14 @@ public class CellStates {
     }
 
 
+    /**
+     * newState defines the game rules for game of life. By using the number of
+     * neigbors, this method can decide if a state should die or be brought to
+     * life according to x,y, and z rules.
+     * @param state - a specific cell state
+     * @param neighbours - an array of the number of neighbors a cell has
+     * @return byte - returns the new byte object of the next cell
+     */
     public byte newState(byte state, int[] neighbours) {
         switch(state){
             case 0:

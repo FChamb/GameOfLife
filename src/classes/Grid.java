@@ -195,7 +195,7 @@ public class Grid {
                 cell = cells[j][i];
                 x = off_x + i*cell_width; y = off_y + j*cell_height;
 
-                graphics.setColor(cell_states.colours[cell]);
+                graphics.setColor(cell_states.colors[cell]);
                 graphics.fillRect(x, y, cell_width, cell_height);
             }
         }

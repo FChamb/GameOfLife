@@ -7,32 +7,6 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Wheel {
-    
-    // public enum Type {
-    //             PLAY(true, Atlas.PLAY_UP        , Atlas.PLAY_DOWN        ),
-    //             STOP(true, Atlas.STOP_UP        , Atlas.STOP_DOWN        ),
-    //     FAST_FORWARD(      Atlas.FAST_FORWARD_UP, Atlas.FAST_FORWARD_DOWN),
-    //           REWIND(      Atlas.REWIND_UP      , Atlas.REWIND_DOWN      ),
-    //             STEP(      Atlas.STEP_UP        , Atlas.STEP_DOWN        ),
-    //            EJECT(      Atlas.EJECT_UP       , Atlas.EJECT_DOWN       ),
-    //            ADMIT(      Atlas.ADMIT_UP       , Atlas.ADMIT_DOWN       );
-
-
-
-    //     public Atlas[] atlantes;
-    //     public int maps;
-    //     public boolean sticky;
-
-
-    //     private Type(                Atlas... atlantes) { this(false, atlantes); }
-    //     private Type(boolean sticky, Atlas... atlantes) {
-    //         this.atlantes = atlantes;
-    //         maps = atlantes.length;
-    //         this.sticky = sticky;
-    //     }
-    // }
-
-
     private String asset_path;
 
     private Atlas[] atlantes;
