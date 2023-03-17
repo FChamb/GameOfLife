@@ -131,7 +131,7 @@ public class Game implements Runnable {
         grid = new Grid(grid_x, grid_y, this.grid_w, this.grid_h, grid_width, grid_height);
 
         // Automatically turns off the grid lines when above 250 cells in either direction to increase visibility
-        if (new_grid_w > 200 || new_grid_h > 200) {
+        if (new_grid_w > 150 || new_grid_h > 150) {
             grid.draw_grid = !grid.draw_grid;
         }
     }
