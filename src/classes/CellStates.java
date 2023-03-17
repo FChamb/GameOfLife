@@ -52,11 +52,11 @@ public class CellStates {
     public byte newState(byte state, int[] neighbours) {
         switch(state){
             case 0:
-                if(neighbours[1] == yRule)
+                if(neighbours[1] == zRule)
                     return 1;
             
             case 1:
-                if(neighbours[1] < xRule || neighbours[1] > zRule)
+                if(neighbours[1] < xRule || neighbours[1] > yRule)
                     return 0;
             
             
