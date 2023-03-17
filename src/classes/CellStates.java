@@ -9,25 +9,20 @@ public class CellStates {
     private int yRule = 3;
     private int zRule = 3;
 
-    // public static final byte[][][] RULES = new byte[][][] {
-    //     {
-    //         {
-    //             ALIVE,              // turn into ALIVE if:
-    //             (byte)3, ALIVE      // 3 ALIVE neighbours
-    //         }
-    //     },
-    //     {
-    //         {
-    //             ALIVE,
-    //             (byte)3, 
-    //         }
-    //     }
-    // }
-
 
     public CellStates() {
         colors[0] = Color.WHITE;
         colors[1] = Color.BLACK;
+    }
+
+    public void swapColors() {
+        if (colors[0] == Color.WHITE) {
+            colors[0] = Color.BLACK;
+            colors[1] = Color.WHITE;
+        } else {
+            colors[0] = Color.WHITE;
+            colors[1] = Color.BLACK;
+        }
     }
 
     public void updateRules(int xRule, int yRule, int zRule) {

@@ -32,6 +32,8 @@ public enum Atlas {
          EJECT_MESSAGE(391,  44,  64,  44),
          ADMIT_MESSAGE(391,  88,  64,  44),
    UPDATE_RATE_MESSAGE(327, 168, 128,  36),
+     GRID_LINE_MESSAGE(327, 204, 64,   44),
+    SWAP_COLOUR_MESSAGE(391, 204, 64,  44),
 
 
                WHEEL_1(  0, 206,  73,  15),

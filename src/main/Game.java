@@ -132,8 +132,19 @@ public class Game implements Runnable {
 
         // Automatically turns off the grid lines when above 250 cells in either direction to increase visibility
         if (new_grid_w > 150 || new_grid_h > 150) {
-            grid.draw_grid = !grid.draw_grid;
+            gridLines();
+            gui.getButtons()[7].setFrame(1);
+        } else if (new_grid_w < 150 || new_grid_h < 150) {
+            gui.getButtons()[7].setFrame(0);
         }
+    }
+
+    public void gridLines() {
+        grid.draw_grid = !grid.draw_grid;
+    }
+
+    public void changeColors() {
+        grid.getCell_states().swapColors();
     }
 
 

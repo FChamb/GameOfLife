@@ -24,7 +24,7 @@ public class GUI {
     private Message[] messages;
 
     private final static int BUTTON_INDEX = 0,
-                              WHEEL_INDEX = 7;
+                              WHEEL_INDEX = 9;
     private final static int WHEEL_OFFSET = 35;
 
 
@@ -73,7 +73,7 @@ public class GUI {
         wheels[2] = new Wheel(asset_path, 654, 500, 2);
 
 
-        messages = new Message[10];
+        messages = new Message[12];
 
         messages[0] = new Message(asset_path, Message.Type.REWIND      ,  31, 579, 2);
         messages[1] = new Message(asset_path, Message.Type.STOP        , 131, 579, 2);
@@ -82,10 +82,12 @@ public class GUI {
         messages[4] = new Message(asset_path, Message.Type.FAST_FORWARD, 367, 599, 2);
         messages[5] = new Message(asset_path, Message.Type.EJECT       , 587, 579, 2);
         messages[6] = new Message(asset_path, Message.Type.ADMIT       , 699, 579, 2);
+        messages[7] = new Message(asset_path, Message.Type.GRID_LINE  , 613, 164, 2);
+        messages[8] = new Message(asset_path, Message.Type.SWAP_COLOUR, 713, 164, 2);
 
-        messages[7] = null;
-        messages[8] = null;
-        messages[9] = new Message(asset_path, Message.Type.UPDATE_RATE , 599, 424, 2);
+        messages[9] = null;
+        messages[10] = null;
+        messages[11] = new Message(asset_path, Message.Type.UPDATE_RATE , 599, 424, 2);
     }
 
 
@@ -110,6 +112,10 @@ public class GUI {
     private void mousePushButton(Button.Type type) {
         mouse_pressed = type;
         pushButton(type);
+    }
+
+    public Button[] getButtons() {
+        return this.buttons;
     }
 
     public void commitAction(Game game, Button.Type type                                  ) { commitAction(game, type, false); }
@@ -140,6 +146,11 @@ public class GUI {
             case ADMIT:
                 game.loadGame();
                 break;
+            case GRID_VISIBLE:
+                game.gridLines();
+                break;
+            case COLOUR_SWITCH:
+                game.changeColors();
             default:
                 return;
         }
@@ -243,7 +254,7 @@ public class GUI {
         graphics.drawImage(case_img, 0, 0, null);
 
         for(Button  b :  buttons) if(b != null) b.draw(graphics);
-        for(Message m : messages) if(m != null) m.draw(graphics);
         for(Wheel   w :   wheels) if(w != null) w.draw(graphics);
+        for(Message m : messages) if(m != null) m.draw(graphics);
     }
 }
