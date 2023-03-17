@@ -140,11 +140,11 @@ public class GUI {
     public void commitWheelAction(Game game, int wheel, int steps) {
         switch(wheel) {
             case 0:
-                game.changeWidth(steps);
+                game.changeHeight(steps);
                 break;
             
             case 1:
-                game.changeHeight(steps);
+                game.changeWidth(steps);
                 break;
             
             case 2:
