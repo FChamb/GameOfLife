@@ -57,7 +57,7 @@ public class Grid {
 
     private int fixX(int x) {
         // ----- MAP X-COORDANITE -----
-        x -= this.x;
+        x -= this.x + (area_width - cell_width*width)/2;
         if(x < 0) return -1;
 
         x /= cell_width;
@@ -66,7 +66,7 @@ public class Grid {
     }
     private int fixY(int y) {
         // ----- MAP Y-COORDANITE -----
-        y -= this.y;
+        y -= this.y + (area_height - cell_height*height)/2;
         if(y < 0) return -1;
 
         y /= cell_height;

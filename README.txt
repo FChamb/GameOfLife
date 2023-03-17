@@ -36,4 +36,4 @@ Grey Right Square + Line - step one generation
 Grey Two Right Arrows - fast-forward skip
 Grey Upwards Arrow + Line - save game state menu
 Grey Downwards Arrow + Line - load game state menu
-Blue Scroll Dial - change game speed {left side click for slow, right side click for fast}
+Blue Scroll Dial - change game speed or change height/width {left side click for slow, right side click for fast}
