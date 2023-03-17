@@ -24,7 +24,7 @@ public class GUI {
     private Message[] messages;
 
     private final static int BUTTON_INDEX = 0,
-                              WHEEL_INDEX = 9;
+                              WHEEL_INDEX = 11;
     private final static int WHEEL_OFFSET = 35;
 
 
@@ -50,18 +50,20 @@ public class GUI {
      * Then each button is set with a new Button object that corresponds to the correct function.
      */
     private void constructComponents() throws IOException {
-        buttons = new Button[9];
+        buttons = new Button[11];
 
-        buttons[0] = new Button(asset_path, Button.Type.REWIND      ,  50, 675, 2);
-        buttons[1] = new Button(asset_path, Button.Type.STOP        , 150, 675, 2);
-        buttons[2] = new Button(asset_path, Button.Type.PLAY        , 250, 675, 2);
-        buttons[3] = new Button(asset_path, Button.Type.STEP        , 350, 675, 2);
-        buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 450, 675, 2);
-        buttons[5] = new Button(asset_path, Button.Type.EJECT       , 600, 675, 2);
-        buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 712, 675, 2);
+        buttons[0]  = new Button(asset_path, Button.Type.REWIND      ,  50, 675, 2);
+        buttons[1]  = new Button(asset_path, Button.Type.STOP        , 150, 675, 2);
+        buttons[2]  = new Button(asset_path, Button.Type.PLAY        , 250, 675, 2);
+        buttons[3]  = new Button(asset_path, Button.Type.STEP        , 350, 675, 2);
+        buttons[4]  = new Button(asset_path, Button.Type.FAST_FORWARD, 450, 675, 2);
+        buttons[5]  = new Button(asset_path, Button.Type.EJECT       , 600, 675, 2);
+        buttons[6]  = new Button(asset_path, Button.Type.ADMIT       , 712, 675, 2);
 
-        buttons[7] = new Button(asset_path, Button.Type.GRID_VISIBLE     , 656, 255, 2);
-        buttons[8] = new Button(asset_path, Button.Type.COLOUR_SWITCH    , 756, 255, 2);
+        buttons[7]  = new Button(asset_path, Button.Type.GRID_VISIBLE     , 656, 255, 2);
+        buttons[8]  = new Button(asset_path, Button.Type.COLOUR_SWITCH    , 756, 255, 2);
+        buttons[9]  = new Button(asset_path, Button.Type.CLEAR            , 656, 390, 3);
+        buttons[10] = new Button(asset_path, Button.Type.RANDOM           , 756, 390, 3);
 
         pushButton(Button.Type.STOP);
 
@@ -73,7 +75,7 @@ public class GUI {
         wheels[2] = new Wheel(asset_path, 654, 500, 2);
 
 
-        messages = new Message[12];
+        messages = new Message[14];
 
         messages[0] = new Message(asset_path, Message.Type.REWIND      ,  31, 579, 2);
         messages[1] = new Message(asset_path, Message.Type.STOP        , 131, 579, 2);
@@ -82,12 +84,14 @@ public class GUI {
         messages[4] = new Message(asset_path, Message.Type.FAST_FORWARD, 367, 599, 2);
         messages[5] = new Message(asset_path, Message.Type.EJECT       , 587, 579, 2);
         messages[6] = new Message(asset_path, Message.Type.ADMIT       , 699, 579, 2);
-        messages[7] = new Message(asset_path, Message.Type.GRID_LINE  , 613, 164, 2);
-        messages[8] = new Message(asset_path, Message.Type.SWAP_COLOUR, 713, 164, 2);
-
+        messages[7] = new Message(asset_path, Message.Type.GRID_LINE   , 600, 164, 2);
+        messages[8] = new Message(asset_path, Message.Type.SWAP_COLOUR , 700, 164, 2);
         messages[9] = null;
         messages[10] = null;
-        messages[11] = new Message(asset_path, Message.Type.UPDATE_RATE , 599, 424, 2);
+
+        messages[11] = null;
+        messages[12] = null;
+        messages[13] = new Message(asset_path, Message.Type.UPDATE_RATE , 599, 424, 2);
     }
 
 
@@ -151,6 +155,12 @@ public class GUI {
                 break;
             case COLOUR_SWITCH:
                 game.changeColors();
+            case CLEAR:
+                game.getGrid().clear();
+                break;
+            case RANDOM:
+                game.getGrid().randomise();
+                break;
             default:
                 return;
         }

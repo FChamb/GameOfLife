@@ -21,6 +21,8 @@ public class Button {
                 STEP(        Atlas.STEP_UP        , Atlas.STEP_DOWN        ),
                EJECT(        Atlas.EJECT_UP       , Atlas.EJECT_DOWN       ),
                ADMIT(        Atlas.ADMIT_UP       , Atlas.ADMIT_DOWN       ),
+                CLEAR(       Atlas.PUSH_BUTTON_UP , Atlas.PUSH_BUTTON_DOWN ),
+               RANDOM(       Atlas.PUSH_BUTTON_UP , Atlas.PUSH_BUTTON_DOWN ),
         
          GRID_VISIBLE(TOGGLE, Atlas.TOGGLE_SWITCH_LEFT, Atlas.TOGGLE_SWITCH_RIGHT),
         COLOUR_SWITCH(TOGGLE, Atlas.TOGGLE_SWITCH_LEFT, Atlas.TOGGLE_SWITCH_RIGHT)

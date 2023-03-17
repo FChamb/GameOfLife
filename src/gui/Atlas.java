@@ -22,6 +22,8 @@ public enum Atlas {
  
               ADMIT_UP(276,   0,  51, 103),
             ADMIT_DOWN(276, 103,  51, 103),
+            PUSH_BUTTON_UP(45, 221, 22, 15),
+          PUSH_BUTTON_DOWN(67, 221, 22, 15),
  
  
           PLAY_MESSAGE(327,   0,  64,  44),
