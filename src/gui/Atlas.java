@@ -22,6 +22,8 @@ public enum Atlas {
  
               ADMIT_UP(276,   0,  51, 103),
             ADMIT_DOWN(276, 103,  51, 103),
+            PUSH_BUTTON_UP(45, 221, 22, 15),
+          PUSH_BUTTON_DOWN(67, 221, 22, 15),
  
  
           PLAY_MESSAGE(327,   0,  64,  44),
@@ -32,12 +34,17 @@ public enum Atlas {
          EJECT_MESSAGE(391,  44,  64,  44),
          ADMIT_MESSAGE(391,  88,  64,  44),
    UPDATE_RATE_MESSAGE(327, 168, 128,  36),
+     GRID_LINE_MESSAGE(327, 204, 64,   44),
+    SWAP_COLOUR_MESSAGE(391, 204, 64,  44),
 
 
                WHEEL_1(  0, 206,  73,  15),
                WHEEL_2( 73, 206,  73,  15),
                WHEEL_3(146, 206,  73,  15),
-               WHEEL_4(219, 206,  73,  15)
+               WHEEL_4(219, 206,  73,  15),
+
+    TOGGLE_SWITCH_LEFT(  0, 221,  22,  31),
+   TOGGLE_SWITCH_RIGHT( 22, 221,  22,  31),
   ;
 
 

@@ -16,7 +16,9 @@ public class Message {
                 STEP(Atlas.STEP_MESSAGE        ),
                EJECT(Atlas.EJECT_MESSAGE       ),
                ADMIT(Atlas.ADMIT_MESSAGE       ),
-         UPDATE_RATE(Atlas.UPDATE_RATE_MESSAGE )
+         UPDATE_RATE(Atlas.UPDATE_RATE_MESSAGE ),
+        GRID_LINE(Atlas.GRID_LINE_MESSAGE      ),
+        SWAP_COLOUR(Atlas.SWAP_COLOUR_MESSAGE  )
         ;
 
 

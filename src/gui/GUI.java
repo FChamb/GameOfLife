@@ -24,7 +24,8 @@ public class GUI {
     private Message[] messages;
 
     private final static int BUTTON_INDEX = 0,
-                              WHEEL_INDEX = 7;
+                              WHEEL_INDEX = 11;
+    private final static int WHEEL_OFFSET = 35;
 
 
     private Button.Type mouse_pressed = null;
@@ -49,25 +50,32 @@ public class GUI {
      * Then each button is set with a new Button object that corresponds to the correct function.
      */
     private void constructComponents() throws IOException {
-        buttons = new Button[7];
+        buttons = new Button[11];
 
-        buttons[0] = new Button(asset_path, Button.Type.REWIND      ,  50, 675, 2);
-        buttons[1] = new Button(asset_path, Button.Type.STOP        , 150, 675, 2);
-        buttons[2] = new Button(asset_path, Button.Type.PLAY        , 250, 675, 2);
-        buttons[3] = new Button(asset_path, Button.Type.STEP        , 350, 675, 2);
-        buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 450, 675, 2);
-        buttons[5] = new Button(asset_path, Button.Type.EJECT       , 600, 675, 2);
-        buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 712, 675, 2);
+        buttons[0]  = new Button(asset_path, Button.Type.REWIND      ,  50, 675, 2);
+        buttons[1]  = new Button(asset_path, Button.Type.STOP        , 150, 675, 2);
+        buttons[2]  = new Button(asset_path, Button.Type.PLAY        , 250, 675, 2);
+        buttons[3]  = new Button(asset_path, Button.Type.STEP        , 350, 675, 2);
+        buttons[4]  = new Button(asset_path, Button.Type.FAST_FORWARD, 450, 675, 2);
+        buttons[5]  = new Button(asset_path, Button.Type.EJECT       , 600, 675, 2);
+        buttons[6]  = new Button(asset_path, Button.Type.ADMIT       , 712, 675, 2);
+
+        buttons[7]  = new Button(asset_path, Button.Type.GRID_VISIBLE     , 656, 255, 2);
+        buttons[8]  = new Button(asset_path, Button.Type.COLOUR_SWITCH    , 756, 255, 2);
+        buttons[9]  = new Button(asset_path, Button.Type.CLEAR            , 656, 390, 3);
+        buttons[10] = new Button(asset_path, Button.Type.RANDOM           , 756, 390, 3);
 
         pushButton(Button.Type.STOP);
 
 
-        wheels = new Wheel[1];
+        wheels = new Wheel[3];
 
-        wheels[0] = new Wheel(asset_path, 654, 500, 2);
+        wheels[0] = new Wheel(asset_path, 654, 100, 2);
+        wheels[1] = new Wheel(asset_path, 654, 150, 2);
+        wheels[2] = new Wheel(asset_path, 654, 500, 2);
 
 
-        messages = new Message[8];
+        messages = new Message[14];
 
         messages[0] = new Message(asset_path, Message.Type.REWIND      ,  31, 579, 2);
         messages[1] = new Message(asset_path, Message.Type.STOP        , 131, 579, 2);
@@ -76,33 +84,48 @@ public class GUI {
         messages[4] = new Message(asset_path, Message.Type.FAST_FORWARD, 367, 599, 2);
         messages[5] = new Message(asset_path, Message.Type.EJECT       , 587, 579, 2);
         messages[6] = new Message(asset_path, Message.Type.ADMIT       , 699, 579, 2);
+        messages[7] = new Message(asset_path, Message.Type.GRID_LINE   , 600, 164, 2);
+        messages[8] = new Message(asset_path, Message.Type.SWAP_COLOUR , 700, 164, 2);
+        messages[9] = null;
+        messages[10] = null;
 
-        messages[7] = new Message(asset_path, Message.Type.UPDATE_RATE , 599, 424, 2);
+        messages[11] = null;
+        messages[12] = null;
+        messages[13] = new Message(asset_path, Message.Type.UPDATE_RATE , 599, 424, 2);
     }
 
 
     public void pushButton(Button.Type type) {
         for(Button b : buttons)
-            if(b != null && b.getType() == type)
-                b.setFrame(1);
+            if(b != null && b.getType() == type) {
+                if(type.special == Button.TOGGLE)
+                    b.setFrame(b.pointer == 1 ? 0 : 1);
+                else
+                    b.setFrame(1);
+            }
     }
     public void releaseButton(Button.Type type) {
-        // System.out.println(mouse_pressed);
         if(mouse_pressed == type) return;
 
         for(Button b : buttons)
-            if(b != null && b.getType() == type)
+            if(b != null && b.getType() == type) {
                 b.setFrame(0);
+            }
     }
 
     private void mousePushButton(Button.Type type) {
-        // System.out.println("pressed");
         mouse_pressed = type;
         pushButton(type);
     }
 
-    public void commitAction(Game game, Button.Type type) {
-        pushButton(type);
+    public Button[] getButtons() {
+        return this.buttons;
+    }
+
+    public void commitAction(Game game, Button.Type type                                  ) { commitAction(game, type, false); }
+    public void commitAction(Game game, Button.Type type, boolean ignore_animation_trigger) {
+        if(!ignore_animation_trigger) pushButton(type);
+
         switch (type) {
             case REWIND:
                 game.getGrid().getPrevious();
@@ -127,6 +150,17 @@ public class GUI {
             case ADMIT:
                 game.loadGame();
                 break;
+            case GRID_VISIBLE:
+                game.gridLines();
+                break;
+            case COLOUR_SWITCH:
+                game.changeColors();
+            case CLEAR:
+                game.getGrid().clear();
+                break;
+            case RANDOM:
+                game.getGrid().randomise();
+                break;
             default:
                 return;
         }
@@ -135,6 +169,14 @@ public class GUI {
     public void commitWheelAction(Game game, int wheel, int steps) {
         switch(wheel) {
             case 0:
+                game.changeHeight(steps);
+                break;
+            
+            case 1:
+                game.changeWidth(steps);
+                break;
+            
+            case 2:
                 game.changeUpdateRate(steps);
                 break;
             
@@ -167,13 +209,13 @@ public class GUI {
                         gotone = true;
                         if(mouse.isClicked(MouseEvent.BUTTON1)) {
                             mousePushButton(type);
-                            commitAction(game, type);
+                            commitAction(game, type, true);
                         }
-                    } else if(!type.sticky)
+                    } else if(type.special == Button.NORMAL)
                         releaseButton(type);
                 } else {
-                    if(messages[BUTTON_INDEX+b] != null) messages[BUTTON_INDEX+b].show = false;                                       // hide message
-                    if(!type.sticky)
+                    if(messages[BUTTON_INDEX+b] != null) messages[BUTTON_INDEX+b].show = false;             // hide message
+                    if(type.special == Button.NORMAL)
                         releaseButton(type);
                 }
             } if(!gotone) mouse_pressed = null;
@@ -184,15 +226,29 @@ public class GUI {
 
                 wheel = wheels[w]; wx = wheel.getX(); wy = wheel.getY(); ws = wheel.getScale();
                 area = wheel.getCurrentFrameSize();
-                if(x >= wx && y >= wy && x < wx+area.w*ws && y < wy+area.h*ws) {
-                    if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = true;                // show message
-                    if(mouse.isPressed(MouseEvent.BUTTON1)) {
+                if(y >= wy && y < wy+area.h*ws) {
+
+                    if(x >= wx              && x < wx+area.w*ws                                                    ) {       // if the mouse clicks on the wheel
+                        if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = true;                // show message
+                        if(mouse.isPressed(MouseEvent.BUTTON1)) {
+                            if(x < wx + (area.w*ws)/2) {
+                                commitWheelAction(game, w, -1);
+                            } else commitWheelAction(game, w, 1);
+                        }
+                    }
+
+                    else
+                    if(x >= wx-WHEEL_OFFSET && x < wx+area.w*ws+WHEEL_OFFSET && mouse.isClicked(MouseEvent.BUTTON1)) {      // if the mouse clicks next to wheel
                         if(x < wx + (area.w*ws)/2) {
                             commitWheelAction(game, w, -1);
                         } else commitWheelAction(game, w, 1);
                     }
+
+                    else {
+                        if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = false;               // hide message
+                    }
                 } else {
-                    if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = false;                                       // hide message
+                    if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = false;               // hide message
                 }
             }
         }
@@ -208,7 +264,7 @@ public class GUI {
         graphics.drawImage(case_img, 0, 0, null);
 
         for(Button  b :  buttons) if(b != null) b.draw(graphics);
-        for(Message m : messages) if(m != null) m.draw(graphics);
         for(Wheel   w :   wheels) if(w != null) w.draw(graphics);
+        for(Message m : messages) if(m != null) m.draw(graphics);
     }
 }

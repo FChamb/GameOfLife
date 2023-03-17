@@ -56,8 +56,8 @@ public class Game implements Runnable {
 
         grid_width = 500; grid_height = 500;
         grid_x = 100; grid_y = 100; grid_w = 50; grid_h = 50;
-        cell_w = grid_width/grid_w; cell_h = grid_height/grid_h;
-        grid = new Grid(grid_x, grid_y, grid_w, grid_h, cell_w, cell_h);
+        // cell_w = grid_width/grid_w; cell_h = grid_height/grid_h;
+        grid = new Grid(grid_x, grid_y, grid_w, grid_h, grid_width, grid_height);
 
         sellectedState = (byte)1;
         active = false;
@@ -121,26 +121,60 @@ public class Game implements Runnable {
         grid_width = 500; grid_height = 500;
 
         // Resizes the new width and height to a maximum of 250
-        if (new_grid_w > 250) {new_grid_w = 250;}
-        if (new_grid_h > 250) {new_grid_h = 250;}
+        if (new_grid_w > 250) new_grid_w = 250;
+        if (new_grid_w <   1) new_grid_w =   1;
+        if (new_grid_h > 250) new_grid_h = 250;
+        if (new_grid_h <   1) new_grid_h =   1;
 
         grid_x = 100; grid_y = 100; this.grid_w = new_grid_w; this.grid_h = new_grid_h;
-        cell_w = grid_width/this.grid_w; cell_h = grid_height/this.grid_h;
-        grid = new Grid(grid_x, grid_y, this.grid_w, this.grid_h, cell_w, cell_h);
+        // cell_w = grid_width/this.grid_w; cell_h = grid_height/this.grid_h;
+        grid = new Grid(grid_x, grid_y, this.grid_w, this.grid_h, grid_width, grid_height);
 
-        // Automatically turns off the grid lines when above 100 cells in either direction to increase visibility
-        if (new_grid_w > 100 || new_grid_h > 100) {
-            grid.draw_grid = !grid.draw_grid;
+        // Automatically turns off the grid lines when above 250 cells in either direction to increase visibility
+        if (new_grid_w > 150 || new_grid_h > 150) {
+            gridLines();
+            gui.getButtons()[7].setFrame(1);
+        } else if (new_grid_w < 150 || new_grid_h < 150) {
+            gui.getButtons()[7].setFrame(0);
         }
+    }
+
+    public void gridLines() {
+        grid.draw_grid = !grid.draw_grid;
+    }
+
+    public void changeColors() {
+        grid.getCell_states().swapColors();
+    }
+
+
+    public void changeWidth(int steps) {
+        grid_w += steps;
+             if(grid_w > 250) grid_w = 250;
+        else if(steps  >   0) gui.spinWheel(1, steps);
+             if(grid_w <   1) grid_w =   1;
+        else if(steps  <   0) gui.spinWheel(1, steps);
+
+        updateGrid(grid_w, grid_h);
+    }
+
+    public void changeHeight(int steps) {
+        grid_h += steps;
+             if(grid_h > 250) grid_h = 250;
+        else if(steps  >   0) gui.spinWheel(0, steps);
+             if(grid_h <   1) grid_h =   1;
+        else if(steps  <   0) gui.spinWheel(0, steps);
+
+        updateGrid(grid_w, grid_h);
     }
 
     public void changeUpdateRate(int steps) {
         ups += steps;
 
-             if(ups > fps) ups = (int)fps;
-        else if(steps > 0) gui.spinWheel(0    );
-             if(ups <   0) ups =        0;
-        else if(steps < 0) gui.spinWheel(0, -1);
+             if(ups   > fps) ups = (int)fps;
+        else if(steps >   0) gui.spinWheel(2, steps);
+             if(ups   <   0) ups =        0;
+        else if(steps <   0) gui.spinWheel(2, steps);
     }
 
 
@@ -416,7 +450,7 @@ public class Game implements Runnable {
     }
 
     /**
-     * Creates a new popup menu which provides the user with the a text area with definitions 
+     * Creates a new popup menu which provides the user with a text area with definitions
      * of each variable to edit the game rules. Also provides the user with 3 combo boxes, each
      * to edit a different rule: x, y, or z. A save button is created with an action listener
      * that gets the chosen value from the given boxes. grid.getCell_states.updateRules is called

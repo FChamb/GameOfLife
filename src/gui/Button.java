@@ -7,28 +7,39 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class Button {
+
+    public static final byte NORMAL = 0x00;
+    public static final byte STICKY = 0x01;
+    public static final byte TOGGLE = 0x02;
+
     
     public enum Type {
-                PLAY(true, Atlas.PLAY_UP        , Atlas.PLAY_DOWN        ),
-                STOP(true, Atlas.STOP_UP        , Atlas.STOP_DOWN        ),
-        FAST_FORWARD(      Atlas.FAST_FORWARD_UP, Atlas.FAST_FORWARD_DOWN),
-              REWIND(      Atlas.REWIND_UP      , Atlas.REWIND_DOWN      ),
-                STEP(      Atlas.STEP_UP        , Atlas.STEP_DOWN        ),
-               EJECT(      Atlas.EJECT_UP       , Atlas.EJECT_DOWN       ),
-               ADMIT(      Atlas.ADMIT_UP       , Atlas.ADMIT_DOWN       );
+                PLAY(STICKY, Atlas.PLAY_UP        , Atlas.PLAY_DOWN        ),
+                STOP(STICKY, Atlas.STOP_UP        , Atlas.STOP_DOWN        ),
+        FAST_FORWARD(        Atlas.FAST_FORWARD_UP, Atlas.FAST_FORWARD_DOWN),
+              REWIND(        Atlas.REWIND_UP      , Atlas.REWIND_DOWN      ),
+                STEP(        Atlas.STEP_UP        , Atlas.STEP_DOWN        ),
+               EJECT(        Atlas.EJECT_UP       , Atlas.EJECT_DOWN       ),
+               ADMIT(        Atlas.ADMIT_UP       , Atlas.ADMIT_DOWN       ),
+                CLEAR(       Atlas.PUSH_BUTTON_UP , Atlas.PUSH_BUTTON_DOWN ),
+               RANDOM(       Atlas.PUSH_BUTTON_UP , Atlas.PUSH_BUTTON_DOWN ),
+        
+         GRID_VISIBLE(TOGGLE, Atlas.TOGGLE_SWITCH_LEFT, Atlas.TOGGLE_SWITCH_RIGHT),
+        COLOUR_SWITCH(TOGGLE, Atlas.TOGGLE_SWITCH_LEFT, Atlas.TOGGLE_SWITCH_RIGHT)
+        ;
 
 
 
         public Atlas[] atlantes;
         public int maps;
-        public boolean sticky;
+        public byte special;
 
 
-        private Type(                Atlas... atlantes) { this(false, atlantes); }
-        private Type(boolean sticky, Atlas... atlantes) {
+        private Type(              Atlas... atlantes) { this(NORMAL, atlantes); }
+        private Type(byte special, Atlas... atlantes) {
             this.atlantes = atlantes;
             maps = atlantes.length;
-            this.sticky = sticky;
+            this.special = special;
         }
     }
 

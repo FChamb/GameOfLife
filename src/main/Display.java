@@ -34,7 +34,6 @@ public class Display extends JFrame{
      * @param mouse - A mouse object which tracks the players mouse placement.
      * @param keyboard - A keyboard object which tracks the players key inputs.
      */
-     
     public Display(int width, int height, Game game, Mouse mouse, Keyboard keyboard) {
         // ----- INITIALISE VARIABLES -----
         this.width = width; this.height = height;
