@@ -17,6 +17,7 @@ public class Grid {
 
     private int x, y;
     private int width, height;
+    private int area_width, area_height;
     private int cell_width, cell_height;
 
     private byte[][] cells;
@@ -40,11 +41,12 @@ public class Grid {
      * @param cell_width - cell width
      * @param cell_height - cell height
      */
-    public Grid(int x, int y, int width, int height, int cell_width, int cell_height) {
+    public Grid(int x, int y, int width, int height, int area_width, int area_height) {
         // ----- INITIALISE VARIABLES -----
         this.x = x; this.y = y;
         this.width = width; this.height = height;
-        this.cell_width = cell_width; this.cell_height = cell_height;
+        this.area_width = area_width; this.area_height = area_height;
+        this.cell_width = area_width/width; this.cell_height = area_height/height;
 
         cell_states = new CellStates();
 
@@ -56,6 +58,8 @@ public class Grid {
     private int fixX(int x) {
         // ----- MAP X-COORDANITE -----
         x -= this.x;
+        if(x < 0) return -1;
+
         x /= cell_width;
 
         return x;
@@ -63,6 +67,8 @@ public class Grid {
     private int fixY(int y) {
         // ----- MAP Y-COORDANITE -----
         y -= this.y;
+        if(y < 0) return -1;
+
         y /= cell_height;
 
         return y;
@@ -178,7 +184,8 @@ public class Grid {
      * @param graphics - Graphics containing all the assets for the game of life
      */
     public void draw(Graphics graphics) {
-        int off_x = x, off_y = y;
+        int off_x = x + (area_width - cell_width*width)/2, off_y = y + (area_height - cell_height*height)/2;
+        // int off_x = x, off_y = y;
         int x,y;
 
         // ----- DRAW CELLS -----

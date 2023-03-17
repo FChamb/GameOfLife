@@ -25,6 +25,7 @@ public class GUI {
 
     private final static int BUTTON_INDEX = 0,
                               WHEEL_INDEX = 7;
+    private final static int WHEEL_OFFSET = 35;
 
 
     private Button.Type mouse_pressed = null;
@@ -62,12 +63,14 @@ public class GUI {
         pushButton(Button.Type.STOP);
 
 
-        wheels = new Wheel[1];
+        wheels = new Wheel[3];
 
-        wheels[0] = new Wheel(asset_path, 654, 500, 2);
+        wheels[0] = new Wheel(asset_path, 654, 100, 2);
+        wheels[1] = new Wheel(asset_path, 654, 150, 2);
+        wheels[2] = new Wheel(asset_path, 654, 500, 2);
 
 
-        messages = new Message[8];
+        messages = new Message[10];
 
         messages[0] = new Message(asset_path, Message.Type.REWIND      ,  31, 579, 2);
         messages[1] = new Message(asset_path, Message.Type.STOP        , 131, 579, 2);
@@ -77,7 +80,9 @@ public class GUI {
         messages[5] = new Message(asset_path, Message.Type.EJECT       , 587, 579, 2);
         messages[6] = new Message(asset_path, Message.Type.ADMIT       , 699, 579, 2);
 
-        messages[7] = new Message(asset_path, Message.Type.UPDATE_RATE , 599, 424, 2);
+        messages[7] = null;
+        messages[8] = null;
+        messages[9] = new Message(asset_path, Message.Type.UPDATE_RATE , 599, 424, 2);
     }
 
 
@@ -135,6 +140,14 @@ public class GUI {
     public void commitWheelAction(Game game, int wheel, int steps) {
         switch(wheel) {
             case 0:
+                game.changeWidth(steps);
+                break;
+            
+            case 1:
+                game.changeHeight(steps);
+                break;
+            
+            case 2:
                 game.changeUpdateRate(steps);
                 break;
             
@@ -172,7 +185,7 @@ public class GUI {
                     } else if(!type.sticky)
                         releaseButton(type);
                 } else {
-                    if(messages[BUTTON_INDEX+b] != null) messages[BUTTON_INDEX+b].show = false;                                       // hide message
+                    if(messages[BUTTON_INDEX+b] != null) messages[BUTTON_INDEX+b].show = false;             // hide message
                     if(!type.sticky)
                         releaseButton(type);
                 }
@@ -184,15 +197,29 @@ public class GUI {
 
                 wheel = wheels[w]; wx = wheel.getX(); wy = wheel.getY(); ws = wheel.getScale();
                 area = wheel.getCurrentFrameSize();
-                if(x >= wx && y >= wy && x < wx+area.w*ws && y < wy+area.h*ws) {
-                    if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = true;                // show message
-                    if(mouse.isPressed(MouseEvent.BUTTON1)) {
+                if(y >= wy && y < wy+area.h*ws) {
+
+                    if(x >= wx              && x < wx+area.w*ws                                                    ) {       // if the mouse clicks on the wheel
+                        if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = true;                // show message
+                        if(mouse.isPressed(MouseEvent.BUTTON1)) {
+                            if(x < wx + (area.w*ws)/2) {
+                                commitWheelAction(game, w, -1);
+                            } else commitWheelAction(game, w, 1);
+                        }
+                    }
+
+                    else
+                    if(x >= wx-WHEEL_OFFSET && x < wx+area.w*ws+WHEEL_OFFSET && mouse.isClicked(MouseEvent.BUTTON1)) {      // if the mouse clicks next to wheel
                         if(x < wx + (area.w*ws)/2) {
                             commitWheelAction(game, w, -1);
                         } else commitWheelAction(game, w, 1);
                     }
+
+                    else {
+                        if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = false;               // hide message
+                    }
                 } else {
-                    if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = false;                                       // hide message
+                    if(messages[WHEEL_INDEX+w] != null) messages[WHEEL_INDEX+w].show = false;               // hide message
                 }
             }
         }
