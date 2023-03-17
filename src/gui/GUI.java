@@ -50,7 +50,7 @@ public class GUI {
      * Then each button is set with a new Button object that corresponds to the correct function.
      */
     private void constructComponents() throws IOException {
-        buttons = new Button[7];
+        buttons = new Button[9];
 
         buttons[0] = new Button(asset_path, Button.Type.REWIND      ,  50, 675, 2);
         buttons[1] = new Button(asset_path, Button.Type.STOP        , 150, 675, 2);
@@ -59,6 +59,9 @@ public class GUI {
         buttons[4] = new Button(asset_path, Button.Type.FAST_FORWARD, 450, 675, 2);
         buttons[5] = new Button(asset_path, Button.Type.EJECT       , 600, 675, 2);
         buttons[6] = new Button(asset_path, Button.Type.ADMIT       , 712, 675, 2);
+
+        buttons[7] = new Button(asset_path, Button.Type.GRID_VISIBLE     , 656, 255, 2);
+        buttons[8] = new Button(asset_path, Button.Type.COLOUR_SWITCH    , 756, 255, 2);
 
         pushButton(Button.Type.STOP);
 
@@ -88,26 +91,31 @@ public class GUI {
 
     public void pushButton(Button.Type type) {
         for(Button b : buttons)
-            if(b != null && b.getType() == type)
-                b.setFrame(1);
+            if(b != null && b.getType() == type) {
+                if(type.special == Button.TOGGLE)
+                    b.setFrame(b.pointer == 1 ? 0 : 1);
+                else
+                    b.setFrame(1);
+            }
     }
     public void releaseButton(Button.Type type) {
-        // System.out.println(mouse_pressed);
         if(mouse_pressed == type) return;
 
         for(Button b : buttons)
-            if(b != null && b.getType() == type)
+            if(b != null && b.getType() == type) {
                 b.setFrame(0);
+            }
     }
 
     private void mousePushButton(Button.Type type) {
-        // System.out.println("pressed");
         mouse_pressed = type;
         pushButton(type);
     }
 
-    public void commitAction(Game game, Button.Type type) {
-        pushButton(type);
+    public void commitAction(Game game, Button.Type type                                  ) { commitAction(game, type, false); }
+    public void commitAction(Game game, Button.Type type, boolean ignore_animation_trigger) {
+        if(!ignore_animation_trigger) pushButton(type);
+
         switch (type) {
             case REWIND:
                 game.getGrid().getPrevious();
@@ -180,13 +188,13 @@ public class GUI {
                         gotone = true;
                         if(mouse.isClicked(MouseEvent.BUTTON1)) {
                             mousePushButton(type);
-                            commitAction(game, type);
+                            commitAction(game, type, true);
                         }
-                    } else if(!type.sticky)
+                    } else if(type.special == Button.NORMAL)
                         releaseButton(type);
                 } else {
                     if(messages[BUTTON_INDEX+b] != null) messages[BUTTON_INDEX+b].show = false;             // hide message
-                    if(!type.sticky)
+                    if(type.special == Button.NORMAL)
                         releaseButton(type);
                 }
             } if(!gotone) mouse_pressed = null;

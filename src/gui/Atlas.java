@@ -37,7 +37,10 @@ public enum Atlas {
                WHEEL_1(  0, 206,  73,  15),
                WHEEL_2( 73, 206,  73,  15),
                WHEEL_3(146, 206,  73,  15),
-               WHEEL_4(219, 206,  73,  15)
+               WHEEL_4(219, 206,  73,  15),
+
+    TOGGLE_SWITCH_LEFT(  0, 221,  22,  31),
+   TOGGLE_SWITCH_RIGHT( 22, 221,  22,  31),
   ;
 
 
