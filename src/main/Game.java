@@ -240,16 +240,16 @@ public class Game implements Runnable {
 
 
         // Keyboard: r key clicked randomises the alive and dead cell on board
-        if(keyboard.isClicked(KeyEvent.VK_R)) {
-            grid.randomise();
+        if(keyboard.isPressed(KeyEvent.VK_R)) {
+            gui.commitAction(this, Button.Type.RANDOM);
         }
         // Keyboard: c key clicked clears the board
-        if(keyboard.isClicked(KeyEvent.VK_C)) {
-            grid.clear();
+        if(keyboard.isPressed(KeyEvent.VK_C)) {
+            gui.commitAction(this, Button.Type.CLEAR);
         }
         // Keyboard: g key clicked toggles grid lines
         if(keyboard.isClicked(KeyEvent.VK_G)) {
-            grid.draw_grid = !grid.draw_grid;
+            gui.commitAction(this, Button.Type.GRID_VISIBLE);
         }
 
 
